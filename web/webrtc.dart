@@ -1,37 +1,13 @@
 import 'dart:html';
-import 'dart:mirrors';
-import 'dart:async';
-import 'dart:js';
-
-class PeerProxyConnection implements RtcPeerConnection{
-  final RtcPeerConnection _peerConnection;
-  
-  PeerProxyConnection(Map<dynamic, dynamic> rtcIceServers,[ Map<dynamic, dynamic> mediaConstraints]):
-    _peerConnection = new RtcPeerConnection(rtcIceServers, mediaConstraints);
-
-  noSuchMethod(Invocation invocation) =>
-      reflect(_peerConnection).delegate(invocation);
-  
-  Stream<RtcIceCandidateEvent> onIceCandidatePatch(){
-    //do something
-  }
-  
-  /*
-  PeerProxyConnection(Map<dynamic, dynamic> rtcIceServers, Map<dynamic, dynamic> mediaConstraints){
-    //super(rtcIceServers, mediaConstraints);
-  }*/
-    
-  
-}
 
 
 void main() {
   
-  RtcPeerConnection alice = new PeerProxyConnection(
+  RtcPeerConnection alice = new RtcPeerConnection(
       {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]}
   );
   
-  RtcPeerConnection bob = new PeerProxyConnection(
+  RtcPeerConnection bob = new RtcPeerConnection(
       {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]}
   );
   
