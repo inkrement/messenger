@@ -32,26 +32,13 @@ void main() {
         {"optional" : [{"RtpDataChannels": true}]}
   );
   
-  alice.onNegotiationNeeded.listen((var data){
+  /*alice.onNegotiationNeeded.listen((var data){
     log.info("1# alice: onnegotiation needed");
     
-    alice.createOffer({}).then((var sdp_alice){
-      log.info('2# alice: created offer');
-      //got offer
-      alice.setLocalDescription(sdp_alice);
-      bob.setRemoteDescription(sdp_alice);
-      
-      bob.createAnswer().then((RtcSessionDescription sdp_bob) {
-        bob.setLocalDescription(sdp_bob);
-        alice.setRemoteDescription(sdp_bob);
-        
-        log.info("desciptions set");
-        
-        
-      });
+    
       
     }); 
-  });
+  });*/
 
   bob.onIceCandidate.listen((evt) {
     if (evt.candidate)
@@ -110,6 +97,23 @@ void main() {
   
   alice_dc.onClose.listen((var data){
     log.info("alice dc closed");
+  });
+ 
+  
+  alice.createOffer({}).then((var sdp_alice){
+    log.info('2# alice: created offer');
+    //got offer
+    alice.setLocalDescription(sdp_alice);
+    bob.setRemoteDescription(sdp_alice);
+    
+    bob.createAnswer().then((RtcSessionDescription sdp_bob) {
+      bob.setLocalDescription(sdp_bob);
+      alice.setRemoteDescription(sdp_bob);
+      
+      log.info("desciptions set");
+      
+      
+    });
   });
  
   

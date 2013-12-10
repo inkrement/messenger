@@ -4692,7 +4692,7 @@ $$.Closure$20 = [P, {
     static: {"": "ListQueue__INITIAL_CAPACITY"}
   },
   _ListQueueIterator: {
-    "": "Object;_queue,_end,_modificationCount,_collection$_position,_collection$_current",
+    "": "Object;_queue,_end,_modificationCount,_position,_collection$_current",
     get$current: function() {
       return this._collection$_current;
     },
@@ -4701,7 +4701,7 @@ $$.Closure$20 = [P, {
       t1 = this._queue;
       if (this._modificationCount !== t1._modificationCount)
         H.throwExpression(P.ConcurrentModificationError$(t1));
-      t2 = this._collection$_position;
+      t2 = this._position;
       if (t2 === this._end) {
         this._collection$_current = null;
         return false;
@@ -4711,7 +4711,7 @@ $$.Closure$20 = [P, {
       if (t2 >= t3)
         return H.ioore(t1, t2);
       this._collection$_current = t1[t2];
-      this._collection$_position = (t2 + 1 & t3 - 1) >>> 0;
+      this._position = (t2 + 1 & t3 - 1) >>> 0;
       return true;
     }
   }
@@ -5617,18 +5617,18 @@ $$.Closure$20 = [P, {
     $asList: null
   },
   FixedSizeListIterator: {
-    "": "Object;_array,_html$_length,_position,_html$_current",
+    "": "Object;_array,_html$_length,_html$_position,_html$_current",
     moveNext$0: function() {
       var nextPosition, t1;
-      nextPosition = this._position + 1;
+      nextPosition = this._html$_position + 1;
       t1 = this._html$_length;
       if (nextPosition < t1) {
         this._html$_current = J.$index$asx(this._array, nextPosition);
-        this._position = nextPosition;
+        this._html$_position = nextPosition;
         return true;
       }
       this._html$_current = null;
-      this._position = t1;
+      this._html$_position = t1;
       return false;
     },
     get$current: function() {
@@ -6063,29 +6063,28 @@ $$.Closure$20 = [P, {
     log.info$1("start webrtc");
     alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
     bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
-    t2 = H.setRuntimeTypeInfo(new W._EventStream(alice, C.EventStreamProvider_negotiationneeded._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure0(log, alice, bob)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t2 = C.EventStreamProvider_icecandidate._eventType;
     t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, t2, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure1()), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure0()), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
     t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure2(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure1(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
     t2 = H.setRuntimeTypeInfo(new W._EventStream(alice, t2, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure3(log, bob)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure2(log, bob)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
     alice_dc = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false, "protocol", "text/chat", "negotiated", null], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
     t1.alice_dc_1 = alice_dc;
     alice_dc.toString;
     t2 = H.setRuntimeTypeInfo(new W._EventStream(alice_dc, C.EventStreamProvider_message._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure3(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t2 = t1.alice_dc_1;
     t2.toString;
     t2 = H.setRuntimeTypeInfo(new W._EventStream(t2, C.EventStreamProvider_open._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure5(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t1 = t1.alice_dc_1;
     t1.toString;
     t1 = H.setRuntimeTypeInfo(new W._EventStream(t1, C.EventStreamProvider_close._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure6(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure5(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+    C.RtcPeerConnection_methods.createOffer$1(alice, H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))).then$1(new Y.main_closure6(log, alice, bob));
   },
   main_closure: {
     "": "Closure;",
@@ -6101,51 +6100,17 @@ $$.Closure$20 = [P, {
     $is_args1: true
   },
   main_closure0: {
-    "": "Closure;log_1,alice_2,bob_3",
-    call$1: function(data) {
-      var t1, t2;
-      t1 = this.log_1;
-      t1.log$4(C.Level_INFO_800, "1# alice: onnegotiation needed", null, null);
-      t2 = this.alice_2;
-      C.RtcPeerConnection_methods.createOffer$1(t2, H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))).then$1(new Y.main__closure(t1, t2, this.bob_3));
-    },
-    $is_args1: true
-  },
-  main__closure: {
-    "": "Closure;log_4,alice_5,bob_6",
-    call$1: function(sdp_alice) {
-      var t1, t2, t3;
-      t1 = this.log_4;
-      t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
-      t2 = this.alice_5;
-      C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
-      t3 = this.bob_6;
-      C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
-      C.RtcPeerConnection_methods.createAnswer$0(t3).then$1(new Y.main___closure(t1, t2, t3));
-    },
-    $is_args1: true
-  },
-  main___closure: {
-    "": "Closure;log_7,alice_8,bob_9",
-    call$1: function(sdp_bob) {
-      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_9, sdp_bob);
-      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_8, sdp_bob);
-      this.log_7.log$4(C.Level_INFO_800, "desciptions set", null, null);
-    },
-    $is_args1: true
-  },
-  main_closure1: {
     "": "Closure;",
     call$1: function(evt) {
       J.get$candidate$x(evt);
     },
     $is_args1: true
   },
-  main_closure2: {
-    "": "Closure;box_0,log_10",
+  main_closure1: {
+    "": "Closure;box_0,log_1",
     call$1: function(dc) {
       var t1, bob_dc, t2;
-      t1 = this.log_10;
+      t1 = this.log_1;
       t1.log$4(C.Level_INFO_800, "#3 bob got datachannel!", null, null);
       bob_dc = J.get$channel$x(dc);
       t2 = this.box_0;
@@ -6154,61 +6119,84 @@ $$.Closure$20 = [P, {
       t2 = t2.bob_dc_0;
       t2.toString;
       t2 = H.setRuntimeTypeInfo(new W._EventStream(t2, C.EventStreamProvider_message._eventType, false), [null]);
-      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main__closure0(t1)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main__closure(t1)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
       t1.log$4(C.Level_INFO_800, "bob: send", null, null);
       dc.channel.send("hallo von bob");
     },
     $is_args1: true
   },
-  main__closure0: {
-    "": "Closure;log_11",
+  main__closure: {
+    "": "Closure;log_2",
     call$1: function(data) {
-      this.log_11.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
+      this.log_2.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
     },
     $is_args1: true
   },
-  main_closure3: {
-    "": "Closure;log_12,bob_13",
+  main_closure2: {
+    "": "Closure;log_3,bob_4",
     call$1: function(evt) {
       var t1 = J.get$candidate$x(evt);
       if (t1 != null)
-        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_13, t1, new Y.main__closure1(this.log_12), new Y.main__closure2());
+        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_4, t1, new Y.main__closure0(this.log_3), new Y.main__closure1());
     },
     $is_args1: true
   },
-  main__closure1: {
-    "": "Closure;log_14",
+  main__closure0: {
+    "": "Closure;log_5",
     call$0: function() {
-      this.log_14.log$4(C.Level_INFO_800, "seems to work", null, null);
+      this.log_5.log$4(C.Level_INFO_800, "seems to work", null, null);
     }
   },
-  main__closure2: {
+  main__closure1: {
     "": "Closure;",
     call$1: function(error) {
       P.print(J.toString$0(error));
     },
     $is_args1: true
   },
-  main_closure4: {
-    "": "Closure;box_0,log_15",
+  main_closure3: {
+    "": "Closure;box_0,log_6",
     call$1: function(data) {
-      this.log_15.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
+      this.log_6.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
       this.box_0.alice_dc_1.send(data);
     },
     $is_args1: true
   },
-  main_closure5: {
-    "": "Closure;box_0,log_16",
+  main_closure4: {
+    "": "Closure;box_0,log_7",
     call$1: function(data) {
-      this.log_16.log$4(C.Level_INFO_800, "alice dc opened", null, null);
+      this.log_7.log$4(C.Level_INFO_800, "alice dc opened", null, null);
       this.box_0.alice_dc_1.send("test von alice");
     },
     $is_args1: true
   },
-  main_closure6: {
-    "": "Closure;log_17",
+  main_closure5: {
+    "": "Closure;log_8",
     call$1: function(data) {
-      this.log_17.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+      this.log_8.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure6: {
+    "": "Closure;log_9,alice_10,bob_11",
+    call$1: function(sdp_alice) {
+      var t1, t2, t3;
+      t1 = this.log_9;
+      t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
+      t2 = this.alice_10;
+      C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
+      t3 = this.bob_11;
+      C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
+      C.RtcPeerConnection_methods.createAnswer$0(t3).then$1(new Y.main__closure2(t1, t2, t3));
+    },
+    $is_args1: true
+  },
+  main__closure2: {
+    "": "Closure;log_12,alice_13,bob_14",
+    call$1: function(sdp_bob) {
+      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_14, sdp_bob);
+      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_13, sdp_bob);
+      this.log_12.log$4(C.Level_INFO_800, "desciptions set", null, null);
     },
     $is_args1: true
   }
@@ -6242,13 +6230,13 @@ N.Level.$isObject = true;
 J.JSNumber.$isObject = true;
 P.Duration.$isDuration = true;
 P.Duration.$isObject = true;
-W.Event.$isObject = true;
 W.RtcIceCandidateEvent.$isObject = true;
 W.RtcDataChannelEvent.$isObject = true;
 W.MessageEvent.$isObject = true;
-N.Logger.$isObject = true;
+W.Event.$isObject = true;
 W.RtcSessionDescription.$isRtcSessionDescription = true;
 W.RtcSessionDescription.$isObject = true;
+N.Logger.$isObject = true;
 N.LogRecord.$isLogRecord = true;
 N.LogRecord.$isObject = true;
 H.RawReceivePortImpl.$isObject = true;
@@ -6272,10 +6260,10 @@ P.Future.$isFuture = true;
 P.Future.$isObject = true;
 P._DelayedEvent.$is_DelayedEvent = true;
 P._DelayedEvent.$isObject = true;
-P.StreamSubscription.$isStreamSubscription = true;
-P.StreamSubscription.$isObject = true;
 P._EventSink.$is_EventSink = true;
 P._EventSink.$isObject = true;
+P.StreamSubscription.$isStreamSubscription = true;
+P.StreamSubscription.$isObject = true;
 P.DateTime.$isDateTime = true;
 P.DateTime.$isObject = true;
 // getInterceptor methods
@@ -6428,7 +6416,6 @@ C.EventStreamProvider_close = new W.EventStreamProvider("close");
 C.EventStreamProvider_datachannel = new W.EventStreamProvider("datachannel");
 C.EventStreamProvider_icecandidate = new W.EventStreamProvider("icecandidate");
 C.EventStreamProvider_message = new W.EventStreamProvider("message");
-C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
 C.EventStreamProvider_open = new W.EventStreamProvider("open");
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
