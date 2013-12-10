@@ -9,3 +9,11 @@ packages:
     description: json
     source: hosted
     version: "0.9.0"
+  logging:
+    description: logging
+    source: hosted
+    version: "0.9.0"
+  unmodifiable_collection:
+    description: unmodifiable_collection
+    source: hosted
+    version: "0.9.0"
