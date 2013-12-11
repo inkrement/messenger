@@ -20,6 +20,14 @@ void main() {
   RtcDataChannel bob_dc;
   RtcDataChannel alice_dc;
   
+  var mediaConstraints = {
+                        /*  "optional": [],
+                          "mandatory": {
+                            "OfferToReceiveAudio": false, // Hmm!!
+                            "OfferToReceiveVideo": false // Hmm!!
+                          }*/
+  };
+  
   log.info("start webrtc");
   
   RtcPeerConnection alice = new RtcPeerConnection(
@@ -31,6 +39,24 @@ void main() {
       {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]},  
         {"optional" : [{"RtpDataChannels": true}]}
   );
+  
+  alice.onIceConnectionStateChange.listen((event){
+    log.info("alice: iceConnectionStateChange");
+  });
+  
+  alice.onSignalingStateChange.listen((event){
+    log.info("alice: signalingChange event");
+  });
+  
+  bob.onIceConnectionStateChange.listen((event){
+    log.info("bob: iceConnectionStateChange");
+  });
+  
+  bob.onSignalingStateChange.listen((event){
+    log.info("bob: signalingChange event");
+  });
+  
+  
   
   /*alice.onNegotiationNeeded.listen((var data){
     log.info("1# alice: onnegotiation needed");
@@ -61,6 +87,9 @@ void main() {
       
       
       log.info("bob: send");
+      
+      log.info(dc.channel.negotiated.toString());
+      log.info(dc.channel.readyState);
       dc.channel.sendString("hallo von bob");
     //});
     
@@ -79,7 +108,9 @@ void main() {
   
   log.info("alice: create dc");
   
-  alice_dc = alice.createDataChannel("somelablel", {"reliable": false, "protocol":"text/chat", "negotiated": null}); //fires onnegotiation needed
+  alice_dc = alice.createDataChannel("somelablel", {"reliable": false}); //fires onnegotiation needed
+  
+  log.info("alice set handler");
   
   alice_dc.onMessage.listen((var data){
     log.info("alice: received " + data);
@@ -100,21 +131,27 @@ void main() {
   });
  
   
-  alice.createOffer({}).then((var sdp_alice){
+  alice.createOffer(mediaConstraints).then((var sdp_alice){
     log.info('2# alice: created offer');
     //got offer
     alice.setLocalDescription(sdp_alice);
     bob.setRemoteDescription(sdp_alice);
     
-    bob.createAnswer().then((RtcSessionDescription sdp_bob) {
+    bob.createAnswer(mediaConstraints).then((RtcSessionDescription sdp_bob) {
+      log.info('3# bob: created answer');
       bob.setLocalDescription(sdp_bob);
       alice.setRemoteDescription(sdp_bob);
       
       log.info("desciptions set");
       
+      bob_dc.sendString("tesst");
+      alice_dc.sendString("rest");
+      
       
     });
+    
   });
+
  
   
 }

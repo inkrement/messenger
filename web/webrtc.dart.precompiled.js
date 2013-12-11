@@ -5426,18 +5426,15 @@ $$.Closure$20 = [P, {
       this._createAnswer$3(receiver, new W.RtcPeerConnection_createAnswer_closure(completer), new W.RtcPeerConnection_createAnswer_closure0(completer), mediaConstraints);
       return completer.future;
     },
-    createAnswer$0: function($receiver) {
-      return this.createAnswer$1($receiver, null);
-    },
     addIceCandidate$3: function(receiver, candidate, successCallback, failureCallback) {
       return receiver.addIceCandidate(candidate, H.convertDartClosureToJS(successCallback, 0), H.convertDartClosureToJS(failureCallback, 1));
     },
     _createAnswer$3: function(receiver, successCallback, failureCallback, mediaConstraints) {
-      this._createAnswer_2$2(receiver, successCallback, failureCallback);
+      this._createAnswer_1$3(receiver, successCallback, failureCallback, P.convertDartToNative_Dictionary(mediaConstraints));
       return;
     },
-    _createAnswer_2$2: function(receiver, successCallback, failureCallback) {
-      return receiver.createAnswer(H.convertDartClosureToJS(successCallback, 1), H.convertDartClosureToJS(failureCallback, 1));
+    _createAnswer_1$3: function(receiver, successCallback, failureCallback, mediaConstraints) {
+      return receiver.createAnswer(H.convertDartClosureToJS(successCallback, 1), H.convertDartClosureToJS(failureCallback, 1), mediaConstraints);
     },
     createDataChannel$2: function(receiver, label, options) {
       return receiver.createDataChannel(label, P.convertDartToNative_Dictionary(options));
@@ -5733,10 +5730,7 @@ $$.Closure$20 = [P, {
 }],
 ["html_common", "dart:html_common", , P, {
   convertDartToNative_Dictionary: function(dict) {
-    var object;
-    if (dict == null)
-      return;
-    object = {};
+    var object = {};
     dict.forEach$1(dict, new P.convertDartToNative_Dictionary_closure(object));
     return object;
   },
@@ -6053,38 +6047,50 @@ $$.Closure$20 = [P, {
 }],
 ["", "webrtc.dart", , Y, {
   main: function() {
-    var t1, log, alice, bob, t2, t3, alice_dc;
+    var t1, log, mediaConstraints, alice, bob, t2, t3, t4;
     t1 = {};
     N.Logger_Logger("").set$level(C.Level_ALL_0);
     N.Logger_Logger("").get$onRecord().listen$1(new Y.main_closure());
     log = N.Logger_Logger("main");
     t1.bob_dc_0 = null;
     t1.alice_dc_1 = null;
+    mediaConstraints = H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null));
     log.info$1("start webrtc");
     alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
     bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
-    t2 = C.EventStreamProvider_icecandidate._eventType;
-    t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, t2, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure0()), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
-    t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure1(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
-    t2 = H.setRuntimeTypeInfo(new W._EventStream(alice, t2, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure2(log, bob)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t2 = C.EventStreamProvider_iceconnectionstatechange._eventType;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure0(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_signalingstatechange._eventType;
+    t4 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t4._target, t4._eventType, W._wrapZone(new Y.main_closure1(log)), t4._useCapture), [H.getTypeArgumentByIndex(t4, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure2(log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure3(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_icecandidate._eventType;
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4()), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure5(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure6(log, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
     log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
-    alice_dc = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false, "protocol", "text/chat", "negotiated", null], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
-    t1.alice_dc_1 = alice_dc;
-    alice_dc.toString;
-    t2 = H.setRuntimeTypeInfo(new W._EventStream(alice_dc, C.EventStreamProvider_message._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure3(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
-    t2 = t1.alice_dc_1;
-    t2.toString;
-    t2 = H.setRuntimeTypeInfo(new W._EventStream(t2, C.EventStreamProvider_open._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
-    t1 = t1.alice_dc_1;
-    t1.toString;
-    t1 = H.setRuntimeTypeInfo(new W._EventStream(t1, C.EventStreamProvider_close._eventType, false), [null]);
-    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure5(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
-    C.RtcPeerConnection_methods.createOffer$1(alice, H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))).then$1(new Y.main_closure6(log, alice, bob));
+    t1.alice_dc_1 = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    log.log$4(C.Level_INFO_800, "alice set handler", null, null);
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_message._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure7(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_open._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure8(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_close._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure9(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    C.RtcPeerConnection_methods.createOffer$1(alice, mediaConstraints).then$1(new Y.main_closure10(t1, log, mediaConstraints, alice, bob));
   },
   main_closure: {
     "": "Closure;",
@@ -6100,17 +6106,45 @@ $$.Closure$20 = [P, {
     $is_args1: true
   },
   main_closure0: {
+    "": "Closure;log_1",
+    call$1: function($event) {
+      this.log_1.log$4(C.Level_INFO_800, "alice: iceConnectionStateChange", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure1: {
+    "": "Closure;log_2",
+    call$1: function($event) {
+      this.log_2.log$4(C.Level_INFO_800, "alice: signalingChange event", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure2: {
+    "": "Closure;log_3",
+    call$1: function($event) {
+      this.log_3.log$4(C.Level_INFO_800, "bob: iceConnectionStateChange", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure3: {
+    "": "Closure;log_4",
+    call$1: function($event) {
+      this.log_4.log$4(C.Level_INFO_800, "bob: signalingChange event", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure4: {
     "": "Closure;",
     call$1: function(evt) {
       J.get$candidate$x(evt);
     },
     $is_args1: true
   },
-  main_closure1: {
-    "": "Closure;box_0,log_1",
+  main_closure5: {
+    "": "Closure;box_0,log_5",
     call$1: function(dc) {
       var t1, bob_dc, t2;
-      t1 = this.log_1;
+      t1 = this.log_5;
       t1.log$4(C.Level_INFO_800, "#3 bob got datachannel!", null, null);
       bob_dc = J.get$channel$x(dc);
       t2 = this.box_0;
@@ -6121,30 +6155,32 @@ $$.Closure$20 = [P, {
       t2 = H.setRuntimeTypeInfo(new W._EventStream(t2, C.EventStreamProvider_message._eventType, false), [null]);
       H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main__closure(t1)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
       t1.log$4(C.Level_INFO_800, "bob: send", null, null);
+      t1.log$4(C.Level_INFO_800, J.toString$0(dc.channel.negotiated), null, null);
+      t1.log$4(C.Level_INFO_800, dc.channel.readyState, null, null);
       dc.channel.send("hallo von bob");
     },
     $is_args1: true
   },
   main__closure: {
-    "": "Closure;log_2",
+    "": "Closure;log_6",
     call$1: function(data) {
-      this.log_2.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
+      this.log_6.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
     },
     $is_args1: true
   },
-  main_closure2: {
-    "": "Closure;log_3,bob_4",
+  main_closure6: {
+    "": "Closure;log_7,bob_8",
     call$1: function(evt) {
       var t1 = J.get$candidate$x(evt);
       if (t1 != null)
-        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_4, t1, new Y.main__closure0(this.log_3), new Y.main__closure1());
+        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_8, t1, new Y.main__closure0(this.log_7), new Y.main__closure1());
     },
     $is_args1: true
   },
   main__closure0: {
-    "": "Closure;log_5",
+    "": "Closure;log_9",
     call$0: function() {
-      this.log_5.log$4(C.Level_INFO_800, "seems to work", null, null);
+      this.log_9.log$4(C.Level_INFO_800, "seems to work", null, null);
     }
   },
   main__closure1: {
@@ -6154,49 +6190,54 @@ $$.Closure$20 = [P, {
     },
     $is_args1: true
   },
-  main_closure3: {
-    "": "Closure;box_0,log_6",
+  main_closure7: {
+    "": "Closure;box_0,log_10",
     call$1: function(data) {
-      this.log_6.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
+      this.log_10.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
       this.box_0.alice_dc_1.send(data);
     },
     $is_args1: true
   },
-  main_closure4: {
-    "": "Closure;box_0,log_7",
+  main_closure8: {
+    "": "Closure;box_0,log_11",
     call$1: function(data) {
-      this.log_7.log$4(C.Level_INFO_800, "alice dc opened", null, null);
+      this.log_11.log$4(C.Level_INFO_800, "alice dc opened", null, null);
       this.box_0.alice_dc_1.send("test von alice");
     },
     $is_args1: true
   },
-  main_closure5: {
-    "": "Closure;log_8",
+  main_closure9: {
+    "": "Closure;log_12",
     call$1: function(data) {
-      this.log_8.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+      this.log_12.log$4(C.Level_INFO_800, "alice dc closed", null, null);
     },
     $is_args1: true
   },
-  main_closure6: {
-    "": "Closure;log_9,alice_10,bob_11",
+  main_closure10: {
+    "": "Closure;box_0,log_13,mediaConstraints_14,alice_15,bob_16",
     call$1: function(sdp_alice) {
       var t1, t2, t3;
-      t1 = this.log_9;
+      t1 = this.log_13;
       t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
-      t2 = this.alice_10;
+      t2 = this.alice_15;
       C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
-      t3 = this.bob_11;
+      t3 = this.bob_16;
       C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
-      C.RtcPeerConnection_methods.createAnswer$0(t3).then$1(new Y.main__closure2(t1, t2, t3));
+      C.RtcPeerConnection_methods.createAnswer$1(t3, this.mediaConstraints_14).then$1(new Y.main__closure2(this.box_0, t1, t2, t3));
     },
     $is_args1: true
   },
   main__closure2: {
-    "": "Closure;log_12,alice_13,bob_14",
+    "": "Closure;box_0,log_17,alice_18,bob_19",
     call$1: function(sdp_bob) {
-      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_14, sdp_bob);
-      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_13, sdp_bob);
-      this.log_12.log$4(C.Level_INFO_800, "desciptions set", null, null);
+      var t1 = this.log_17;
+      t1.log$4(C.Level_INFO_800, "3# bob: created answer", null, null);
+      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_19, sdp_bob);
+      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_18, sdp_bob);
+      t1.log$4(C.Level_INFO_800, "desciptions set", null, null);
+      t1 = this.box_0;
+      t1.bob_dc_0.send("tesst");
+      t1.alice_dc_1.send("rest");
     },
     $is_args1: true
   }
@@ -6230,10 +6271,10 @@ N.Level.$isObject = true;
 J.JSNumber.$isObject = true;
 P.Duration.$isDuration = true;
 P.Duration.$isObject = true;
+W.Event.$isObject = true;
 W.RtcIceCandidateEvent.$isObject = true;
 W.RtcDataChannelEvent.$isObject = true;
 W.MessageEvent.$isObject = true;
-W.Event.$isObject = true;
 W.RtcSessionDescription.$isRtcSessionDescription = true;
 W.RtcSessionDescription.$isObject = true;
 N.Logger.$isObject = true;
@@ -6415,8 +6456,10 @@ C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_close = new W.EventStreamProvider("close");
 C.EventStreamProvider_datachannel = new W.EventStreamProvider("datachannel");
 C.EventStreamProvider_icecandidate = new W.EventStreamProvider("icecandidate");
+C.EventStreamProvider_iceconnectionstatechange = new W.EventStreamProvider("iceconnectionstatechange");
 C.EventStreamProvider_message = new W.EventStreamProvider("message");
 C.EventStreamProvider_open = new W.EventStreamProvider("open");
+C.EventStreamProvider_signalingstatechange = new W.EventStreamProvider("signalingstatechange");
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSString_methods = J.JSString.prototype;
@@ -11609,7 +11652,8 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure.prototype = $desc;
-  function main_closure0() {
+  function main_closure0(log_1) {
+    this.log_1 = log_1;
   }
   main_closure0.builtin$cls = "main_closure0";
   if (!"name" in main_closure0)
@@ -11618,9 +11662,8 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure0.prototype = $desc;
-  function main_closure1(box_0, log_1) {
-    this.box_0 = box_0;
-    this.log_1 = log_1;
+  function main_closure1(log_2) {
+    this.log_2 = log_2;
   }
   main_closure1.builtin$cls = "main_closure1";
   if (!"name" in main_closure1)
@@ -11629,19 +11672,8 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure1.prototype = $desc;
-  function main__closure(log_2) {
-    this.log_2 = log_2;
-  }
-  main__closure.builtin$cls = "main__closure";
-  if (!"name" in main__closure)
-    main__closure.name = "main__closure";
-  $desc = $collectedClasses.main__closure;
-  if ($desc instanceof Array)
-    $desc = $desc[1];
-  main__closure.prototype = $desc;
-  function main_closure2(log_3, bob_4) {
+  function main_closure2(log_3) {
     this.log_3 = log_3;
-    this.bob_4 = bob_4;
   }
   main_closure2.builtin$cls = "main_closure2";
   if (!"name" in main_closure2)
@@ -11650,8 +11682,59 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure2.prototype = $desc;
-  function main__closure0(log_5) {
+  function main_closure3(log_4) {
+    this.log_4 = log_4;
+  }
+  main_closure3.builtin$cls = "main_closure3";
+  if (!"name" in main_closure3)
+    main_closure3.name = "main_closure3";
+  $desc = $collectedClasses.main_closure3;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure3.prototype = $desc;
+  function main_closure4() {
+  }
+  main_closure4.builtin$cls = "main_closure4";
+  if (!"name" in main_closure4)
+    main_closure4.name = "main_closure4";
+  $desc = $collectedClasses.main_closure4;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure4.prototype = $desc;
+  function main_closure5(box_0, log_5) {
+    this.box_0 = box_0;
     this.log_5 = log_5;
+  }
+  main_closure5.builtin$cls = "main_closure5";
+  if (!"name" in main_closure5)
+    main_closure5.name = "main_closure5";
+  $desc = $collectedClasses.main_closure5;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure5.prototype = $desc;
+  function main__closure(log_6) {
+    this.log_6 = log_6;
+  }
+  main__closure.builtin$cls = "main__closure";
+  if (!"name" in main__closure)
+    main__closure.name = "main__closure";
+  $desc = $collectedClasses.main__closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main__closure.prototype = $desc;
+  function main_closure6(log_7, bob_8) {
+    this.log_7 = log_7;
+    this.bob_8 = bob_8;
+  }
+  main_closure6.builtin$cls = "main_closure6";
+  if (!"name" in main_closure6)
+    main_closure6.name = "main_closure6";
+  $desc = $collectedClasses.main_closure6;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure6.prototype = $desc;
+  function main__closure0(log_9) {
+    this.log_9 = log_9;
   }
   main__closure0.builtin$cls = "main__closure0";
   if (!"name" in main__closure0)
@@ -11669,54 +11752,57 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main__closure1.prototype = $desc;
-  function main_closure3(box_0, log_6) {
+  function main_closure7(box_0, log_10) {
     this.box_0 = box_0;
-    this.log_6 = log_6;
+    this.log_10 = log_10;
   }
-  main_closure3.builtin$cls = "main_closure3";
-  if (!"name" in main_closure3)
-    main_closure3.name = "main_closure3";
-  $desc = $collectedClasses.main_closure3;
+  main_closure7.builtin$cls = "main_closure7";
+  if (!"name" in main_closure7)
+    main_closure7.name = "main_closure7";
+  $desc = $collectedClasses.main_closure7;
   if ($desc instanceof Array)
     $desc = $desc[1];
-  main_closure3.prototype = $desc;
-  function main_closure4(box_0, log_7) {
+  main_closure7.prototype = $desc;
+  function main_closure8(box_0, log_11) {
     this.box_0 = box_0;
-    this.log_7 = log_7;
+    this.log_11 = log_11;
   }
-  main_closure4.builtin$cls = "main_closure4";
-  if (!"name" in main_closure4)
-    main_closure4.name = "main_closure4";
-  $desc = $collectedClasses.main_closure4;
+  main_closure8.builtin$cls = "main_closure8";
+  if (!"name" in main_closure8)
+    main_closure8.name = "main_closure8";
+  $desc = $collectedClasses.main_closure8;
   if ($desc instanceof Array)
     $desc = $desc[1];
-  main_closure4.prototype = $desc;
-  function main_closure5(log_8) {
-    this.log_8 = log_8;
-  }
-  main_closure5.builtin$cls = "main_closure5";
-  if (!"name" in main_closure5)
-    main_closure5.name = "main_closure5";
-  $desc = $collectedClasses.main_closure5;
-  if ($desc instanceof Array)
-    $desc = $desc[1];
-  main_closure5.prototype = $desc;
-  function main_closure6(log_9, alice_10, bob_11) {
-    this.log_9 = log_9;
-    this.alice_10 = alice_10;
-    this.bob_11 = bob_11;
-  }
-  main_closure6.builtin$cls = "main_closure6";
-  if (!"name" in main_closure6)
-    main_closure6.name = "main_closure6";
-  $desc = $collectedClasses.main_closure6;
-  if ($desc instanceof Array)
-    $desc = $desc[1];
-  main_closure6.prototype = $desc;
-  function main__closure2(log_12, alice_13, bob_14) {
+  main_closure8.prototype = $desc;
+  function main_closure9(log_12) {
     this.log_12 = log_12;
-    this.alice_13 = alice_13;
-    this.bob_14 = bob_14;
+  }
+  main_closure9.builtin$cls = "main_closure9";
+  if (!"name" in main_closure9)
+    main_closure9.name = "main_closure9";
+  $desc = $collectedClasses.main_closure9;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure9.prototype = $desc;
+  function main_closure10(box_0, log_13, mediaConstraints_14, alice_15, bob_16) {
+    this.box_0 = box_0;
+    this.log_13 = log_13;
+    this.mediaConstraints_14 = mediaConstraints_14;
+    this.alice_15 = alice_15;
+    this.bob_16 = bob_16;
+  }
+  main_closure10.builtin$cls = "main_closure10";
+  if (!"name" in main_closure10)
+    main_closure10.name = "main_closure10";
+  $desc = $collectedClasses.main_closure10;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure10.prototype = $desc;
+  function main__closure2(box_0, log_17, alice_18, bob_19) {
+    this.box_0 = box_0;
+    this.log_17 = log_17;
+    this.alice_18 = alice_18;
+    this.bob_19 = bob_19;
   }
   main__closure2.builtin$cls = "main__closure2";
   if (!"name" in main__closure2)
@@ -11770,5 +11856,5 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Closure$20.prototype = $desc;
-  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DocumentType, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlDocument, HtmlHtmlElement, IFrameElement, ImageElement, InputElement, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannel, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidate, RtcIceCandidateEvent, RtcPeerConnection, RtcSessionDescription, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, _Attr, _Entity, _HTMLAppletElement, _HTMLBaseFontElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _Notation, _XMLHttpRequestProgressEvent, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedNumberList, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgDocument, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGAnimateColorElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, TypedData, Uint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, RawReceivePortImpl, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, FixedLengthListMixin, _AsyncError, _BroadcastStream, _BroadcastSubscription, BoundClosure$0, _BroadcastStreamController, _SyncBroadcastStreamController, _SyncBroadcastStreamController__sendData_closure, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, BoundClosure$i1, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, DateTime, DateTime_toString_fourDigits, DateTime_toString_threeDigits, DateTime_toString_twoDigits, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, RtcPeerConnection_createOffer_closure, RtcPeerConnection_createOffer_closure0, RtcPeerConnection_createAnswer_closure, RtcPeerConnection_createAnswer_closure0, RtcPeerConnection_setLocalDescription_closure, RtcPeerConnection_setLocalDescription_closure0, RtcPeerConnection_setRemoteDescription_closure, RtcPeerConnection_setRemoteDescription_closure0, EventStreamProvider, _EventStream, _EventStreamSubscription, ImmutableListMixin, FixedSizeListIterator, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, convertDartToNative_Dictionary_closure, _convertDartToNative_PrepareForStructuredClone_findSlot, _convertDartToNative_PrepareForStructuredClone_readSlot, _convertDartToNative_PrepareForStructuredClone_writeSlot, _convertDartToNative_PrepareForStructuredClone_cleanupSlots, _convertDartToNative_PrepareForStructuredClone_walk, _convertDartToNative_PrepareForStructuredClone_walk_closure, Logger, Logger_Logger_closure, Level, LogRecord, UnmodifiableMapView, main_closure, main_closure0, main_closure1, main__closure, main_closure2, main__closure0, main__closure1, main_closure3, main_closure4, main_closure5, main_closure6, main__closure2, Closure$2, Closure$0, Closure$7, Closure$1, Closure$20];
+  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DocumentType, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlDocument, HtmlHtmlElement, IFrameElement, ImageElement, InputElement, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannel, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidate, RtcIceCandidateEvent, RtcPeerConnection, RtcSessionDescription, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, _Attr, _Entity, _HTMLAppletElement, _HTMLBaseFontElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _Notation, _XMLHttpRequestProgressEvent, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedNumberList, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgDocument, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGAnimateColorElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, TypedData, Uint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, RawReceivePortImpl, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, FixedLengthListMixin, _AsyncError, _BroadcastStream, _BroadcastSubscription, BoundClosure$0, _BroadcastStreamController, _SyncBroadcastStreamController, _SyncBroadcastStreamController__sendData_closure, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, BoundClosure$i1, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, DateTime, DateTime_toString_fourDigits, DateTime_toString_threeDigits, DateTime_toString_twoDigits, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, RtcPeerConnection_createOffer_closure, RtcPeerConnection_createOffer_closure0, RtcPeerConnection_createAnswer_closure, RtcPeerConnection_createAnswer_closure0, RtcPeerConnection_setLocalDescription_closure, RtcPeerConnection_setLocalDescription_closure0, RtcPeerConnection_setRemoteDescription_closure, RtcPeerConnection_setRemoteDescription_closure0, EventStreamProvider, _EventStream, _EventStreamSubscription, ImmutableListMixin, FixedSizeListIterator, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, convertDartToNative_Dictionary_closure, _convertDartToNative_PrepareForStructuredClone_findSlot, _convertDartToNative_PrepareForStructuredClone_readSlot, _convertDartToNative_PrepareForStructuredClone_writeSlot, _convertDartToNative_PrepareForStructuredClone_cleanupSlots, _convertDartToNative_PrepareForStructuredClone_walk, _convertDartToNative_PrepareForStructuredClone_walk_closure, Logger, Logger_Logger_closure, Level, LogRecord, UnmodifiableMapView, main_closure, main_closure0, main_closure1, main_closure2, main_closure3, main_closure4, main_closure5, main__closure, main_closure6, main__closure0, main__closure1, main_closure7, main_closure8, main_closure9, main_closure10, main__closure2, Closure$2, Closure$0, Closure$7, Closure$1, Closure$20];
 }
