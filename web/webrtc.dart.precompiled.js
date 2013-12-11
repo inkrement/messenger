@@ -4473,7 +4473,7 @@ $$.Closure$20 = [P, {
     static: {"": "ListQueue__INITIAL_CAPACITY"}
   },
   _ListQueueIterator: {
-    "": "Object;_queue,_end,_modificationCount,_position,_collection$_current",
+    "": "Object;_queue,_end,_modificationCount,_collection$_position,_collection$_current",
     get$current: function() {
       return this._collection$_current;
     },
@@ -4482,7 +4482,7 @@ $$.Closure$20 = [P, {
       t1 = this._queue;
       if (this._modificationCount !== t1._modificationCount)
         H.throwExpression(P.ConcurrentModificationError$(t1));
-      t2 = this._position;
+      t2 = this._collection$_position;
       if (t2 === this._end) {
         this._collection$_current = null;
         return false;
@@ -4492,7 +4492,7 @@ $$.Closure$20 = [P, {
       if (t2 >= t3)
         return H.ioore(t1, t2);
       this._collection$_current = t1[t2];
-      this._position = (t2 + 1 & t3 - 1) >>> 0;
+      this._collection$_position = (t2 + 1 & t3 - 1) >>> 0;
       return true;
     }
   }
@@ -5090,6 +5090,45 @@ $$.Closure$20 = [P, {
         J.removeEventListener$3$x(this._target, this._eventType, t1, this._useCapture);
     },
     $asStreamSubscription: null
+<<<<<<< Updated upstream
+=======
+  },
+  ImmutableListMixin: {
+    "": "Object;",
+    get$iterator: function(receiver) {
+      return new W.FixedSizeListIterator(receiver, this.get$length(receiver), -1, null);
+    },
+    $isList: true,
+    $asList: null
+  },
+  FixedSizeListIterator: {
+    "": "Object;_array,_html$_length,_position,_html$_current",
+    moveNext$0: function() {
+      var nextPosition, t1;
+      nextPosition = this._position + 1;
+      t1 = this._html$_length;
+      if (nextPosition < t1) {
+        this._html$_current = J.$index$asx(this._array, nextPosition);
+        this._position = nextPosition;
+        return true;
+      }
+      this._html$_current = null;
+      this._position = t1;
+      return false;
+    },
+    get$current: function() {
+      return this._html$_current;
+    }
+  }
+}],
+["dart.dom.svg", "dart:svg", , P, {
+  SvgElement: {
+    "": "Element;",
+    insertAdjacentText$2: function(receiver, where, text) {
+      throw H.wrapException(P.UnsupportedError$("Cannot invoke insertAdjacentText on SVG."));
+    },
+    "%": "SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphElement|SVGAltGlyphItemElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGGraphicsElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRadialGradientElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement"
+>>>>>>> Stashed changes
   }
 }],
 ["dart.isolate", "dart:isolate", , P, {
@@ -5312,6 +5351,7 @@ $$.Closure$20 = [P, {
 }],
 ["", "webrtc.dart", , Y, {
   main: function() {
+<<<<<<< Updated upstream
     var alice, bob, t1, t2;
     alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), null);
     bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), null);
@@ -5323,6 +5363,53 @@ $$.Closure$20 = [P, {
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure0()), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t1 = H.setRuntimeTypeInfo(new W._EventStream(alice, t1, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure1(bob)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+=======
+    var t1, log, mediaConstraints, alice, bob, t2, t3, t4;
+    t1 = {};
+    N.Logger_Logger("").set$level(C.Level_ALL_0);
+    N.Logger_Logger("").get$onRecord().listen$1(new Y.main_closure());
+    log = N.Logger_Logger("main");
+    t1.bob_dc_0 = null;
+    t1.alice_dc_1 = null;
+    mediaConstraints = H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null));
+    log.info$1("start webrtc");
+    alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    t2 = C.EventStreamProvider_iceconnectionstatechange._eventType;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure0(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_signalingstatechange._eventType;
+    t4 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t4._target, t4._eventType, W._wrapZone(new Y.main_closure1(log)), t4._useCapture), [H.getTypeArgumentByIndex(t4, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure2(log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure3(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_icecandidate._eventType;
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(log, alice)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure5(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure6(log, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, C.EventStreamProvider_negotiationneeded._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure7(t1, log, mediaConstraints, alice, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
+    t1.alice_dc_1 = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    log.log$4(C.Level_INFO_800, "alice: set handler", null, null);
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_message._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure8(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_open._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure9(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t1 = t1.alice_dc_1;
+    t1.toString;
+    t1 = H.setRuntimeTypeInfo(new W._EventStream(t1, C.EventStreamProvider_close._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure10(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+>>>>>>> Stashed changes
   },
   main_closure: {
     "": "Closure;alice_0,bob_1",
@@ -5342,6 +5429,7 @@ $$.Closure$20 = [P, {
     },
     $is_args1: true
   },
+<<<<<<< Updated upstream
   main_closure0: {
     "": "Closure;",
     call$1: function(evt) {
@@ -5361,14 +5449,145 @@ $$.Closure$20 = [P, {
   main__closure0: {
     "": "Closure;",
     call$0: function() {
-    }
-  },
-  main__closure1: {
-    "": "Closure;",
-    call$1: function(error) {
-      P.print(J.toString$0(error));
+=======
+  main_closure4: {
+    "": "Closure;log_5,alice_6",
+    call$1: function($event) {
+      var t1 = this.log_5;
+      t1.log$4(C.Level_WARNING_900, "bob: new ice candidate", null, null);
+      C.RtcPeerConnection_methods.addIceCandidate$3(this.alice_6, J.get$candidate$x($event), new Y.main__closure(t1), new Y.main__closure0(t1));
     },
     $is_args1: true
+  },
+  main__closure: {
+    "": "Closure;log_7",
+    call$0: function() {
+      this.log_7.log$4(C.Level_INFO_800, "alice: ice candidate added", null, null);
+    }
+  },
+  main__closure0: {
+    "": "Closure;log_8",
+    call$1: function(error) {
+      this.log_8.log$4(C.Level_WARNING_900, "alice: could not add ice candidate", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure5: {
+    "": "Closure;box_0,log_9",
+    call$1: function(dc) {
+      var t1, bob_dc, t2, t3;
+      t1 = this.log_9;
+      t1.log$4(C.Level_INFO_800, "#3 bob got datachannel!", null, null);
+      bob_dc = J.get$channel$x(dc);
+      t2 = this.box_0;
+      t2.bob_dc_0 = bob_dc;
+      bob_dc.toString;
+      t3 = H.setRuntimeTypeInfo(new W._EventStream(bob_dc, C.EventStreamProvider_message._eventType, false), [null]);
+      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main__closure1(t1)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+      t1.log$4(C.Level_INFO_800, "bob: send", null, null);
+      t2.bob_dc_0.send("hallo von bob");
+    },
+    $is_args1: true
+  },
+  main__closure1: {
+    "": "Closure;log_10",
+    call$1: function(data) {
+      this.log_10.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
+    },
+    $is_args1: true
+  },
+  main_closure6: {
+    "": "Closure;log_11,bob_12",
+    call$1: function($event) {
+      var t1, t2;
+      t1 = J.getInterceptor$x($event);
+      if (t1.get$candidate($event) != null) {
+        t2 = this.log_11;
+        t2.log$4(C.Level_INFO_800, "alice: new ice candidate", null, null);
+        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_12, t1.get$candidate($event), new Y.main__closure2(t2), new Y.main__closure3(t2));
+      }
+    },
+    $is_args1: true
+  },
+  main__closure2: {
+    "": "Closure;log_13",
+    call$0: function() {
+      this.log_13.log$4(C.Level_INFO_800, "bob: ice candidate added", null, null);
+>>>>>>> Stashed changes
+    }
+  },
+  main__closure3: {
+    "": "Closure;log_14",
+    call$1: function(error) {
+      this.log_14.log$4(C.Level_WARNING_900, "bob: could not add ice candidate", null, null);
+    },
+    $is_args1: true
+<<<<<<< Updated upstream
+=======
+  },
+  main_closure7: {
+    "": "Closure;box_0,log_15,mediaConstraints_16,alice_17,bob_18",
+    call$1: function($event) {
+      var t1, t2, t3;
+      t1 = this.log_15;
+      t1.log$4(C.Level_WARNING_900, "alice: onNegotiation needed!", null, null);
+      t2 = this.alice_17;
+      t3 = this.mediaConstraints_16;
+      C.RtcPeerConnection_methods.createOffer$1(t2, t3).then$1(new Y.main__closure4(this.box_0, t1, t3, t2, this.bob_18));
+    },
+    $is_args1: true
+  },
+  main__closure4: {
+    "": "Closure;box_0,log_19,mediaConstraints_20,alice_21,bob_22",
+    call$1: function(sdp_alice) {
+      var t1, t2, t3;
+      t1 = this.log_19;
+      t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
+      t2 = this.alice_21;
+      C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
+      t3 = this.bob_22;
+      C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
+      C.RtcPeerConnection_methods.createAnswer$1(t3, this.mediaConstraints_20).then$1(new Y.main___closure(this.box_0, t1, t2, t3));
+    },
+    $is_args1: true
+  },
+  main___closure: {
+    "": "Closure;box_0,log_23,alice_24,bob_25",
+    call$1: function(sdp_bob) {
+      var t1 = this.log_23;
+      t1.log$4(C.Level_INFO_800, "3# bob: created answer", null, null);
+      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_25, sdp_bob);
+      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_24, sdp_bob);
+      t1.log$4(C.Level_INFO_800, "desciptions set", null, null);
+      t1 = this.box_0;
+      t1.bob_dc_0.send("tesst");
+      t1.alice_dc_1.send("rest");
+    },
+    $is_args1: true
+  },
+  main_closure8: {
+    "": "Closure;box_0,log_26",
+    call$1: function(data) {
+      this.log_26.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
+      this.box_0.alice_dc_1.send(data);
+    },
+    $is_args1: true
+  },
+  main_closure9: {
+    "": "Closure;box_0,log_27",
+    call$1: function(data) {
+      this.log_27.log$4(C.Level_INFO_800, "alice dc opened", null, null);
+      this.box_0.alice_dc_1.send("test von alice");
+    },
+    $is_args1: true
+  },
+  main_closure10: {
+    "": "Closure;log_28",
+    call$1: function(data) {
+      this.log_28.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+    },
+    $is_args1: true
+>>>>>>> Stashed changes
   }
 },
 1],
@@ -5396,9 +5615,24 @@ J.JSString.$isString = true;
 J.JSString.$isObject = true;
 J.JSNumber.$isObject = true;
 P.Duration.$isObject = true;
+W.Event.$isEvent = true;
 W.Event.$isObject = true;
+W.RtcIceCandidateEvent.$isRtcIceCandidateEvent = true;
+W.RtcIceCandidateEvent.$isEvent = true;
 W.RtcIceCandidateEvent.$isObject = true;
+<<<<<<< Updated upstream
 W.RtcSessionDescription.$isObject = true;
+=======
+W.RtcDataChannelEvent.$isEvent = true;
+W.RtcDataChannelEvent.$isObject = true;
+W.MessageEvent.$isEvent = true;
+W.MessageEvent.$isObject = true;
+N.Logger.$isObject = true;
+W.RtcSessionDescription.$isRtcSessionDescription = true;
+W.RtcSessionDescription.$isObject = true;
+N.LogRecord.$isLogRecord = true;
+N.LogRecord.$isObject = true;
+>>>>>>> Stashed changes
 H.RawReceivePortImpl.$isObject = true;
 H._IsolateEvent.$isObject = true;
 H._IsolateContext.$isObject = true;
@@ -5420,6 +5654,11 @@ P.StreamSubscription.$isStreamSubscription = true;
 P.StreamSubscription.$isObject = true;
 P._EventSink.$is_EventSink = true;
 P._EventSink.$isObject = true;
+<<<<<<< Updated upstream
+=======
+P.DateTime.$isDateTime = true;
+P.DateTime.$isObject = true;
+>>>>>>> Stashed changes
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
@@ -5552,7 +5791,15 @@ C.C__DelayedDone = new P._DelayedDone();
 C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_icecandidate = new W.EventStreamProvider("icecandidate");
+<<<<<<< Updated upstream
 C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
+=======
+C.EventStreamProvider_iceconnectionstatechange = new W.EventStreamProvider("iceconnectionstatechange");
+C.EventStreamProvider_message = new W.EventStreamProvider("message");
+C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
+C.EventStreamProvider_open = new W.EventStreamProvider("open");
+C.EventStreamProvider_signalingstatechange = new W.EventStreamProvider("signalingstatechange");
+>>>>>>> Stashed changes
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSString_methods = J.JSString.prototype;
@@ -5681,6 +5928,12 @@ C.JS_CONST_rr7 = function(hooks) {
   hooks.getTag = getTagFixed;
   hooks.prototypeForTag = prototypeForTagFixed;
 };
+<<<<<<< Updated upstream
+=======
+C.Level_ALL_0 = new N.Level("ALL", 0);
+C.Level_INFO_800 = new N.Level("INFO", 800);
+C.Level_WARNING_900 = new N.Level("WARNING", 900);
+>>>>>>> Stashed changes
 Isolate.makeConstantList = function(list) {
   list.immutable$list = init;
   list.fixed$length = init;
@@ -8373,11 +8626,11 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ListQueue.prototype = $desc;
-  function _ListQueueIterator(_queue, _end, _modificationCount, _position, _collection$_current) {
+  function _ListQueueIterator(_queue, _end, _modificationCount, _collection$_position, _collection$_current) {
     this._queue = _queue;
     this._end = _end;
     this._modificationCount = _modificationCount;
-    this._position = _position;
+    this._collection$_position = _collection$_position;
     this._collection$_current = _collection$_current;
   }
   _ListQueueIterator.builtin$cls = "_ListQueueIterator";
@@ -8705,6 +8958,31 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   _EventStreamSubscription.prototype = $desc;
+<<<<<<< Updated upstream
+=======
+  function ImmutableListMixin() {
+  }
+  ImmutableListMixin.builtin$cls = "ImmutableListMixin";
+  if (!"name" in ImmutableListMixin)
+    ImmutableListMixin.name = "ImmutableListMixin";
+  $desc = $collectedClasses.ImmutableListMixin;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  ImmutableListMixin.prototype = $desc;
+  function FixedSizeListIterator(_array, _html$_length, _position, _html$_current) {
+    this._array = _array;
+    this._html$_length = _html$_length;
+    this._position = _position;
+    this._html$_current = _html$_current;
+  }
+  FixedSizeListIterator.builtin$cls = "FixedSizeListIterator";
+  if (!"name" in FixedSizeListIterator)
+    FixedSizeListIterator.name = "FixedSizeListIterator";
+  $desc = $collectedClasses.FixedSizeListIterator;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  FixedSizeListIterator.prototype = $desc;
+>>>>>>> Stashed changes
   function TypedData_ListMixin() {
   }
   TypedData_ListMixin.builtin$cls = "TypedData_ListMixin";
@@ -8837,7 +9115,52 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure1.prototype = $desc;
+<<<<<<< Updated upstream
   function main__closure0() {
+=======
+  function main_closure2(log_3) {
+    this.log_3 = log_3;
+  }
+  main_closure2.builtin$cls = "main_closure2";
+  if (!"name" in main_closure2)
+    main_closure2.name = "main_closure2";
+  $desc = $collectedClasses.main_closure2;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure2.prototype = $desc;
+  function main_closure3(log_4) {
+    this.log_4 = log_4;
+  }
+  main_closure3.builtin$cls = "main_closure3";
+  if (!"name" in main_closure3)
+    main_closure3.name = "main_closure3";
+  $desc = $collectedClasses.main_closure3;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure3.prototype = $desc;
+  function main_closure4(log_5, alice_6) {
+    this.log_5 = log_5;
+    this.alice_6 = alice_6;
+  }
+  main_closure4.builtin$cls = "main_closure4";
+  if (!"name" in main_closure4)
+    main_closure4.name = "main_closure4";
+  $desc = $collectedClasses.main_closure4;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure4.prototype = $desc;
+  function main__closure(log_7) {
+    this.log_7 = log_7;
+  }
+  main__closure.builtin$cls = "main__closure";
+  if (!"name" in main__closure)
+    main__closure.name = "main__closure";
+  $desc = $collectedClasses.main__closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main__closure.prototype = $desc;
+  function main__closure0(log_8) {
+    this.log_8 = log_8;
   }
   main__closure0.builtin$cls = "main__closure0";
   if (!"name" in main__closure0)
@@ -8846,7 +9169,19 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main__closure0.prototype = $desc;
-  function main__closure1() {
+  function main_closure5(box_0, log_9) {
+    this.box_0 = box_0;
+    this.log_9 = log_9;
+  }
+  main_closure5.builtin$cls = "main_closure5";
+  if (!"name" in main_closure5)
+    main_closure5.name = "main_closure5";
+  $desc = $collectedClasses.main_closure5;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure5.prototype = $desc;
+  function main__closure1(log_10) {
+    this.log_10 = log_10;
   }
   main__closure1.builtin$cls = "main__closure1";
   if (!"name" in main__closure1)
@@ -8855,6 +9190,115 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main__closure1.prototype = $desc;
+  function main_closure6(log_11, bob_12) {
+    this.log_11 = log_11;
+    this.bob_12 = bob_12;
+  }
+  main_closure6.builtin$cls = "main_closure6";
+  if (!"name" in main_closure6)
+    main_closure6.name = "main_closure6";
+  $desc = $collectedClasses.main_closure6;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure6.prototype = $desc;
+  function main__closure2(log_13) {
+    this.log_13 = log_13;
+>>>>>>> Stashed changes
+  }
+  main__closure2.builtin$cls = "main__closure2";
+  if (!"name" in main__closure2)
+    main__closure2.name = "main__closure2";
+  $desc = $collectedClasses.main__closure2;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main__closure2.prototype = $desc;
+  function main__closure3(log_14) {
+    this.log_14 = log_14;
+  }
+  main__closure3.builtin$cls = "main__closure3";
+  if (!"name" in main__closure3)
+    main__closure3.name = "main__closure3";
+  $desc = $collectedClasses.main__closure3;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+<<<<<<< Updated upstream
+  main__closure1.prototype = $desc;
+=======
+  main__closure3.prototype = $desc;
+  function main_closure7(box_0, log_15, mediaConstraints_16, alice_17, bob_18) {
+    this.box_0 = box_0;
+    this.log_15 = log_15;
+    this.mediaConstraints_16 = mediaConstraints_16;
+    this.alice_17 = alice_17;
+    this.bob_18 = bob_18;
+  }
+  main_closure7.builtin$cls = "main_closure7";
+  if (!"name" in main_closure7)
+    main_closure7.name = "main_closure7";
+  $desc = $collectedClasses.main_closure7;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure7.prototype = $desc;
+  function main__closure4(box_0, log_19, mediaConstraints_20, alice_21, bob_22) {
+    this.box_0 = box_0;
+    this.log_19 = log_19;
+    this.mediaConstraints_20 = mediaConstraints_20;
+    this.alice_21 = alice_21;
+    this.bob_22 = bob_22;
+  }
+  main__closure4.builtin$cls = "main__closure4";
+  if (!"name" in main__closure4)
+    main__closure4.name = "main__closure4";
+  $desc = $collectedClasses.main__closure4;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main__closure4.prototype = $desc;
+  function main___closure(box_0, log_23, alice_24, bob_25) {
+    this.box_0 = box_0;
+    this.log_23 = log_23;
+    this.alice_24 = alice_24;
+    this.bob_25 = bob_25;
+  }
+  main___closure.builtin$cls = "main___closure";
+  if (!"name" in main___closure)
+    main___closure.name = "main___closure";
+  $desc = $collectedClasses.main___closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main___closure.prototype = $desc;
+  function main_closure8(box_0, log_26) {
+    this.box_0 = box_0;
+    this.log_26 = log_26;
+  }
+  main_closure8.builtin$cls = "main_closure8";
+  if (!"name" in main_closure8)
+    main_closure8.name = "main_closure8";
+  $desc = $collectedClasses.main_closure8;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure8.prototype = $desc;
+  function main_closure9(box_0, log_27) {
+    this.box_0 = box_0;
+    this.log_27 = log_27;
+  }
+  main_closure9.builtin$cls = "main_closure9";
+  if (!"name" in main_closure9)
+    main_closure9.name = "main_closure9";
+  $desc = $collectedClasses.main_closure9;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure9.prototype = $desc;
+  function main_closure10(log_28) {
+    this.log_28 = log_28;
+  }
+  main_closure10.builtin$cls = "main_closure10";
+  if (!"name" in main_closure10)
+    main_closure10.name = "main_closure10";
+  $desc = $collectedClasses.main_closure10;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  main_closure10.prototype = $desc;
+>>>>>>> Stashed changes
   function Closure$2(call$2, $name) {
     this.call$2 = call$2;
     this.$name = $name;
@@ -8900,5 +9344,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Closure$20.prototype = $desc;
+<<<<<<< Updated upstream
   return [AnimationEvent, AutocompleteErrorEvent, BeforeLoadEvent, BeforeUnloadEvent, CloseEvent, CompositionEvent, CssFontFaceLoadEvent, CustomEvent, DeviceMotionEvent, DeviceOrientationEvent, DomError, DomException, ErrorEvent, Event, EventTarget, FileError, FocusEvent, HashChangeEvent, KeyboardEvent, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MessageEvent, MidiConnectionEvent, MidiMessageEvent, MouseEvent, Navigator, NavigatorUserMediaError, OverflowEvent, PageTransitionEvent, PopStateEvent, PositionError, ProgressEvent, ResourceProgressEvent, RtcDataChannel, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidate, RtcIceCandidateEvent, RtcPeerConnection, RtcSessionDescription, SecurityPolicyViolationEvent, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, TextEvent, TouchEvent, TrackEvent, TransitionEvent, UIEvent, WheelEvent, Window, _MutationEvent, _XMLHttpRequestProgressEvent, VersionChangeEvent, ZoomEvent, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, TypedData, Uint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, RawReceivePortImpl, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, FixedLengthListMixin, _AsyncError, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, BoundClosure$i1, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, BoundClosure$0, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, RtcPeerConnection_createOffer_closure, RtcPeerConnection_createOffer_closure0, RtcPeerConnection_setLocalDescription_closure, RtcPeerConnection_setLocalDescription_closure0, RtcPeerConnection_setRemoteDescription_closure, RtcPeerConnection_setRemoteDescription_closure0, EventStreamProvider, _EventStream, _EventStreamSubscription, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, convertDartToNative_Dictionary_closure, _convertDartToNative_PrepareForStructuredClone_findSlot, _convertDartToNative_PrepareForStructuredClone_readSlot, _convertDartToNative_PrepareForStructuredClone_writeSlot, _convertDartToNative_PrepareForStructuredClone_cleanupSlots, _convertDartToNative_PrepareForStructuredClone_walk, _convertDartToNative_PrepareForStructuredClone_walk_closure, main_closure, main__closure, main_closure0, main_closure1, main__closure0, main__closure1, Closure$2, Closure$0, Closure$7, Closure$1, Closure$20];
+=======
+  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DocumentType, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlDocument, HtmlHtmlElement, IFrameElement, ImageElement, InputElement, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannel, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidate, RtcIceCandidateEvent, RtcPeerConnection, RtcSessionDescription, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, _Attr, _Entity, _HTMLAppletElement, _HTMLBaseFontElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _Notation, _XMLHttpRequestProgressEvent, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedNumberList, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgDocument, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGAnimateColorElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, TypedData, Uint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, RawReceivePortImpl, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, FixedLengthListMixin, _AsyncError, _BroadcastStream, _BroadcastSubscription, BoundClosure$0, _BroadcastStreamController, _SyncBroadcastStreamController, _SyncBroadcastStreamController__sendData_closure, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, BoundClosure$i1, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, DateTime, DateTime_toString_fourDigits, DateTime_toString_threeDigits, DateTime_toString_twoDigits, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, RtcPeerConnection_createOffer_closure, RtcPeerConnection_createOffer_closure0, RtcPeerConnection_createAnswer_closure, RtcPeerConnection_createAnswer_closure0, RtcPeerConnection_setLocalDescription_closure, RtcPeerConnection_setLocalDescription_closure0, RtcPeerConnection_setRemoteDescription_closure, RtcPeerConnection_setRemoteDescription_closure0, EventStreamProvider, _EventStream, _EventStreamSubscription, ImmutableListMixin, FixedSizeListIterator, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, convertDartToNative_Dictionary_closure, _convertDartToNative_PrepareForStructuredClone_findSlot, _convertDartToNative_PrepareForStructuredClone_readSlot, _convertDartToNative_PrepareForStructuredClone_writeSlot, _convertDartToNative_PrepareForStructuredClone_cleanupSlots, _convertDartToNative_PrepareForStructuredClone_walk, _convertDartToNative_PrepareForStructuredClone_walk_closure, Logger, Logger_Logger_closure, Level, LogRecord, UnmodifiableMapView, main_closure, main_closure0, main_closure1, main_closure2, main_closure3, main_closure4, main__closure, main__closure0, main_closure5, main__closure1, main_closure6, main__closure2, main__closure3, main_closure7, main__closure4, main___closure, main_closure8, main_closure9, main_closure10, Closure$2, Closure$0, Closure$7, Closure$1, Closure$20];
+>>>>>>> Stashed changes
 }

@@ -4473,7 +4473,7 @@ $$.Closure$20 = [P, {
     static: {"": "ListQueue__INITIAL_CAPACITY"}
   },
   _ListQueueIterator: {
-    "": "Object;_queue,_end,_modificationCount,_position,_collection$_current",
+    "": "Object;_queue,_end,_modificationCount,_collection$_position,_collection$_current",
     get$current: function() {
       return this._collection$_current;
     },
@@ -4482,7 +4482,7 @@ $$.Closure$20 = [P, {
       t1 = this._queue;
       if (this._modificationCount !== t1._modificationCount)
         H.throwExpression(P.ConcurrentModificationError$(t1));
-      t2 = this._position;
+      t2 = this._collection$_position;
       if (t2 === this._end) {
         this._collection$_current = null;
         return false;
@@ -4492,7 +4492,7 @@ $$.Closure$20 = [P, {
       if (t2 >= t3)
         return H.ioore(t1, t2);
       this._collection$_current = t1[t2];
-      this._position = (t2 + 1 & t3 - 1) >>> 0;
+      this._collection$_position = (t2 + 1 & t3 - 1) >>> 0;
       return true;
     }
   }
@@ -5090,6 +5090,45 @@ $$.Closure$20 = [P, {
         J.removeEventListener$3$x(this._target, this._eventType, t1, this._useCapture);
     },
     $asStreamSubscription: null
+<<<<<<< Updated upstream
+=======
+  },
+  ImmutableListMixin: {
+    "": "Object;",
+    get$iterator: function(receiver) {
+      return new W.FixedSizeListIterator(receiver, this.get$length(receiver), -1, null);
+    },
+    $isList: true,
+    $asList: null
+  },
+  FixedSizeListIterator: {
+    "": "Object;_array,_html$_length,_position,_html$_current",
+    moveNext$0: function() {
+      var nextPosition, t1;
+      nextPosition = this._position + 1;
+      t1 = this._html$_length;
+      if (nextPosition < t1) {
+        this._html$_current = J.$index$asx(this._array, nextPosition);
+        this._position = nextPosition;
+        return true;
+      }
+      this._html$_current = null;
+      this._position = t1;
+      return false;
+    },
+    get$current: function() {
+      return this._html$_current;
+    }
+  }
+}],
+["dart.dom.svg", "dart:svg", , P, {
+  SvgElement: {
+    "": "Element;",
+    insertAdjacentText$2: function(receiver, where, text) {
+      throw H.wrapException(P.UnsupportedError$("Cannot invoke insertAdjacentText on SVG."));
+    },
+    "%": "SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphElement|SVGAltGlyphItemElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGGraphicsElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRadialGradientElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement"
+>>>>>>> Stashed changes
   }
 }],
 ["dart.isolate", "dart:isolate", , P, {
@@ -5312,6 +5351,7 @@ $$.Closure$20 = [P, {
 }],
 ["", "webrtc.dart", , Y, {
   main: function() {
+<<<<<<< Updated upstream
     var alice, bob, t1, t2;
     alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), null);
     bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), null);
@@ -5323,6 +5363,53 @@ $$.Closure$20 = [P, {
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure0()), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t1 = H.setRuntimeTypeInfo(new W._EventStream(alice, t1, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure1(bob)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+=======
+    var t1, log, mediaConstraints, alice, bob, t2, t3, t4;
+    t1 = {};
+    N.Logger_Logger("").set$level(C.Level_ALL_0);
+    N.Logger_Logger("").get$onRecord().listen$1(new Y.main_closure());
+    log = N.Logger_Logger("main");
+    t1.bob_dc_0 = null;
+    t1.alice_dc_1 = null;
+    mediaConstraints = H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null));
+    log.info$1("start webrtc");
+    alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    bob = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), H.fillLiteralMap(["optional", [H.fillLiteralMap(["RtpDataChannels", true], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    t2 = C.EventStreamProvider_iceconnectionstatechange._eventType;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure0(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_signalingstatechange._eventType;
+    t4 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t4._target, t4._eventType, W._wrapZone(new Y.main_closure1(log)), t4._useCapture), [H.getTypeArgumentByIndex(t4, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t2, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure2(log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure3(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = C.EventStreamProvider_icecandidate._eventType;
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(log, alice)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure5(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure6(log, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, C.EventStreamProvider_negotiationneeded._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure7(t1, log, mediaConstraints, alice, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
+    t1.alice_dc_1 = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    log.log$4(C.Level_INFO_800, "alice: set handler", null, null);
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_message._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure8(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_open._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure9(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t1 = t1.alice_dc_1;
+    t1.toString;
+    t1 = H.setRuntimeTypeInfo(new W._EventStream(t1, C.EventStreamProvider_close._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure10(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
+>>>>>>> Stashed changes
   },
   main_closure: {
     "": "Closure;alice_0,bob_1",
@@ -5342,6 +5429,7 @@ $$.Closure$20 = [P, {
     },
     $is_args1: true
   },
+<<<<<<< Updated upstream
   main_closure0: {
     "": "Closure;",
     call$1: function(evt) {
@@ -5361,14 +5449,145 @@ $$.Closure$20 = [P, {
   main__closure0: {
     "": "Closure;",
     call$0: function() {
-    }
-  },
-  main__closure1: {
-    "": "Closure;",
-    call$1: function(error) {
-      P.print(J.toString$0(error));
+=======
+  main_closure4: {
+    "": "Closure;log_5,alice_6",
+    call$1: function($event) {
+      var t1 = this.log_5;
+      t1.log$4(C.Level_WARNING_900, "bob: new ice candidate", null, null);
+      C.RtcPeerConnection_methods.addIceCandidate$3(this.alice_6, J.get$candidate$x($event), new Y.main__closure(t1), new Y.main__closure0(t1));
     },
     $is_args1: true
+  },
+  main__closure: {
+    "": "Closure;log_7",
+    call$0: function() {
+      this.log_7.log$4(C.Level_INFO_800, "alice: ice candidate added", null, null);
+    }
+  },
+  main__closure0: {
+    "": "Closure;log_8",
+    call$1: function(error) {
+      this.log_8.log$4(C.Level_WARNING_900, "alice: could not add ice candidate", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure5: {
+    "": "Closure;box_0,log_9",
+    call$1: function(dc) {
+      var t1, bob_dc, t2, t3;
+      t1 = this.log_9;
+      t1.log$4(C.Level_INFO_800, "#3 bob got datachannel!", null, null);
+      bob_dc = J.get$channel$x(dc);
+      t2 = this.box_0;
+      t2.bob_dc_0 = bob_dc;
+      bob_dc.toString;
+      t3 = H.setRuntimeTypeInfo(new W._EventStream(bob_dc, C.EventStreamProvider_message._eventType, false), [null]);
+      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main__closure1(t1)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+      t1.log$4(C.Level_INFO_800, "bob: send", null, null);
+      t2.bob_dc_0.send("hallo von bob");
+    },
+    $is_args1: true
+  },
+  main__closure1: {
+    "": "Closure;log_10",
+    call$1: function(data) {
+      this.log_10.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
+    },
+    $is_args1: true
+  },
+  main_closure6: {
+    "": "Closure;log_11,bob_12",
+    call$1: function($event) {
+      var t1, t2;
+      t1 = J.getInterceptor$x($event);
+      if (t1.get$candidate($event) != null) {
+        t2 = this.log_11;
+        t2.log$4(C.Level_INFO_800, "alice: new ice candidate", null, null);
+        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_12, t1.get$candidate($event), new Y.main__closure2(t2), new Y.main__closure3(t2));
+      }
+    },
+    $is_args1: true
+  },
+  main__closure2: {
+    "": "Closure;log_13",
+    call$0: function() {
+      this.log_13.log$4(C.Level_INFO_800, "bob: ice candidate added", null, null);
+>>>>>>> Stashed changes
+    }
+  },
+  main__closure3: {
+    "": "Closure;log_14",
+    call$1: function(error) {
+      this.log_14.log$4(C.Level_WARNING_900, "bob: could not add ice candidate", null, null);
+    },
+    $is_args1: true
+<<<<<<< Updated upstream
+=======
+  },
+  main_closure7: {
+    "": "Closure;box_0,log_15,mediaConstraints_16,alice_17,bob_18",
+    call$1: function($event) {
+      var t1, t2, t3;
+      t1 = this.log_15;
+      t1.log$4(C.Level_WARNING_900, "alice: onNegotiation needed!", null, null);
+      t2 = this.alice_17;
+      t3 = this.mediaConstraints_16;
+      C.RtcPeerConnection_methods.createOffer$1(t2, t3).then$1(new Y.main__closure4(this.box_0, t1, t3, t2, this.bob_18));
+    },
+    $is_args1: true
+  },
+  main__closure4: {
+    "": "Closure;box_0,log_19,mediaConstraints_20,alice_21,bob_22",
+    call$1: function(sdp_alice) {
+      var t1, t2, t3;
+      t1 = this.log_19;
+      t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
+      t2 = this.alice_21;
+      C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
+      t3 = this.bob_22;
+      C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
+      C.RtcPeerConnection_methods.createAnswer$1(t3, this.mediaConstraints_20).then$1(new Y.main___closure(this.box_0, t1, t2, t3));
+    },
+    $is_args1: true
+  },
+  main___closure: {
+    "": "Closure;box_0,log_23,alice_24,bob_25",
+    call$1: function(sdp_bob) {
+      var t1 = this.log_23;
+      t1.log$4(C.Level_INFO_800, "3# bob: created answer", null, null);
+      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_25, sdp_bob);
+      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_24, sdp_bob);
+      t1.log$4(C.Level_INFO_800, "desciptions set", null, null);
+      t1 = this.box_0;
+      t1.bob_dc_0.send("tesst");
+      t1.alice_dc_1.send("rest");
+    },
+    $is_args1: true
+  },
+  main_closure8: {
+    "": "Closure;box_0,log_26",
+    call$1: function(data) {
+      this.log_26.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
+      this.box_0.alice_dc_1.send(data);
+    },
+    $is_args1: true
+  },
+  main_closure9: {
+    "": "Closure;box_0,log_27",
+    call$1: function(data) {
+      this.log_27.log$4(C.Level_INFO_800, "alice dc opened", null, null);
+      this.box_0.alice_dc_1.send("test von alice");
+    },
+    $is_args1: true
+  },
+  main_closure10: {
+    "": "Closure;log_28",
+    call$1: function(data) {
+      this.log_28.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+    },
+    $is_args1: true
+>>>>>>> Stashed changes
   }
 },
 1],
@@ -5396,9 +5615,24 @@ J.JSString.$isString = true;
 J.JSString.$isObject = true;
 J.JSNumber.$isObject = true;
 P.Duration.$isObject = true;
+W.Event.$isEvent = true;
 W.Event.$isObject = true;
+W.RtcIceCandidateEvent.$isRtcIceCandidateEvent = true;
+W.RtcIceCandidateEvent.$isEvent = true;
 W.RtcIceCandidateEvent.$isObject = true;
+<<<<<<< Updated upstream
 W.RtcSessionDescription.$isObject = true;
+=======
+W.RtcDataChannelEvent.$isEvent = true;
+W.RtcDataChannelEvent.$isObject = true;
+W.MessageEvent.$isEvent = true;
+W.MessageEvent.$isObject = true;
+N.Logger.$isObject = true;
+W.RtcSessionDescription.$isRtcSessionDescription = true;
+W.RtcSessionDescription.$isObject = true;
+N.LogRecord.$isLogRecord = true;
+N.LogRecord.$isObject = true;
+>>>>>>> Stashed changes
 H.RawReceivePortImpl.$isObject = true;
 H._IsolateEvent.$isObject = true;
 H._IsolateContext.$isObject = true;
@@ -5420,6 +5654,11 @@ P.StreamSubscription.$isStreamSubscription = true;
 P.StreamSubscription.$isObject = true;
 P._EventSink.$is_EventSink = true;
 P._EventSink.$isObject = true;
+<<<<<<< Updated upstream
+=======
+P.DateTime.$isDateTime = true;
+P.DateTime.$isObject = true;
+>>>>>>> Stashed changes
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
@@ -5552,7 +5791,15 @@ C.C__DelayedDone = new P._DelayedDone();
 C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_icecandidate = new W.EventStreamProvider("icecandidate");
+<<<<<<< Updated upstream
 C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
+=======
+C.EventStreamProvider_iceconnectionstatechange = new W.EventStreamProvider("iceconnectionstatechange");
+C.EventStreamProvider_message = new W.EventStreamProvider("message");
+C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
+C.EventStreamProvider_open = new W.EventStreamProvider("open");
+C.EventStreamProvider_signalingstatechange = new W.EventStreamProvider("signalingstatechange");
+>>>>>>> Stashed changes
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSString_methods = J.JSString.prototype;
@@ -5681,6 +5928,12 @@ C.JS_CONST_rr7 = function(hooks) {
   hooks.getTag = getTagFixed;
   hooks.prototypeForTag = prototypeForTagFixed;
 };
+<<<<<<< Updated upstream
+=======
+C.Level_ALL_0 = new N.Level("ALL", 0);
+C.Level_INFO_800 = new N.Level("INFO", 800);
+C.Level_WARNING_900 = new N.Level("WARNING", 900);
+>>>>>>> Stashed changes
 Isolate.makeConstantList = function(list) {
   list.immutable$list = init;
   list.fixed$length = init;
