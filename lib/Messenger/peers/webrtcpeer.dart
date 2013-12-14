@@ -1,55 +1,4 @@
-library peer;
-
-import 'dart:async';
-
-
-class Message{
-  
-}
-
-
-abstract class Peer{
-  List<Peer> _connections;
-  StreamController fetchDoneController = new StreamController.broadcast();
-  
-  connect(Peer other);
-  
-  send(Peer to);
-  
-  broadcast(List<Peer> to){
-    to.forEach((Peer p){
-      this.send(p);
-    });
-  }
-  
-  multicast() => broadcast(_connections);
-  
-  Stream get onReceive => fetchDoneController.stream;
-  
-  close();
-}
-
-
-
-
-
-class MessagePassingPeer extends Peer{
-  connect(MessagePassingPeer p){
-    //TODO: connect?!
-    _connections.add(p);
-  }
-  
-  send(MessagePassingPeer p){
-    
-  }
-  
-}
-
-
-//class JsWebRtcPeer extends Peer
-
-
-class WebRtcPeer extends Peer{
+//class WebRtcPeer extends Peer{
   /*
   RtcDataChannel bob_dc;
    
@@ -187,19 +136,4 @@ class WebRtcPeer extends Peer{
     
   });
    */
-}
-
-class Chart{
-  
-}
-
-class GroupChat{
-  
-}
-
-
-abstract class Network{
-  List<Peer> _peers;
-  
-  
-}
+//}

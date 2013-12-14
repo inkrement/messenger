@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'package:logging/logging.dart';
 //import 'lib/peer.dart';
-import "package:webrtc/peer.dart";
+import "package:webrtc/messenger.dart";
 
 void main() {
   
@@ -20,8 +20,15 @@ void main() {
   
   //webrtc
   
-  Peer alice = new MessagePassingPeer();
-
+  MessagePassingPeer alice = new MessagePassingPeer();
+  
+  MessagePassingPeer bob = new MessagePassingPeer();
+  
+  bob.onReceive.listen((NewMessageEvent data){
+    log.info("bob hat Nachricht erhalten!");
+  });
+  
+  alice.sendString(bob, "something new");
  
   
 }
