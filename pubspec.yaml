@@ -1,6 +1,12 @@
 name: webrtc
 description: A sample web application
+version: 0.0.1
+authors:
+- Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
 dependencies:
   browser: any
   json: any
   logging: any
+  unittest: any
+environment:
+  sdk: '>0.8.7'
