@@ -80,6 +80,13 @@ $$.BoundClosure$1 = [H, {
   $is_args1: true
 }];
 
+$$.BoundClosure$0 = [P, {
+  "": "BoundClosure;_self,__js_helper$_target,_receiver,__js_helper$_name",
+  call$0: function() {
+    return this.__js_helper$_target.call(this._self);
+  }
+}];
+
 $$.BoundClosure$2 = [P, {
   "": "BoundClosure;_self,__js_helper$_target,_receiver,__js_helper$_name",
   call$2: function(p0, p1) {
@@ -98,13 +105,6 @@ $$.BoundClosure$i1 = [P, {
     return this.__js_helper$_target.call(this._self, this._receiver, p0);
   },
   $is_args1: true
-}];
-
-$$.BoundClosure$0 = [P, {
-  "": "BoundClosure;_self,__js_helper$_target,_receiver,__js_helper$_name",
-  call$0: function() {
-    return this.__js_helper$_target.call(this._self);
-  }
 }];
 
 $$.Closure$2 = [H, {
@@ -266,7 +266,7 @@ $$.Closure$20 = [P, {
     toString$0: function(receiver) {
       return H.Primitives_objectToString(receiver);
     },
-    "%": "DOMError|FileError|MediaError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError"
+    "%": "MediaError|MediaKeyError|Navigator|PositionError|SQLError|SVGAnimatedNumberList"
   },
   JSBool: {
     "": "bool/Interceptor;",
@@ -364,6 +364,9 @@ $$.Closure$20 = [P, {
     remainder$1: function(receiver, b) {
       return receiver % b;
     },
+    abs$0: function(receiver) {
+      return Math.abs(receiver);
+    },
     toInt$0: function(receiver) {
       var t1;
       if (receiver >= -2147483648 && receiver <= 2147483647)
@@ -437,6 +440,23 @@ $$.Closure$20 = [P, {
         throw H.wrapException(P.RangeError$value(index));
       return receiver.charCodeAt(index);
     },
+    $add: function(receiver, other) {
+      if (typeof other !== "string")
+        throw H.wrapException(new P.ArgumentError(other));
+      return receiver + other;
+    },
+    startsWith$2: function(receiver, pattern, index) {
+      var endIndex;
+      if (index > receiver.length)
+        throw H.wrapException(P.RangeError$range(index, 0, receiver.length));
+      endIndex = index + pattern.length;
+      if (endIndex > receiver.length)
+        return false;
+      return pattern === receiver.substring(index, endIndex);
+    },
+    startsWith$1: function($receiver, pattern) {
+      return this.startsWith$2($receiver, pattern, 0);
+    },
     substring$2: function(receiver, startIndex, endIndex) {
       if (endIndex == null)
         endIndex = receiver.length;
@@ -459,6 +479,20 @@ $$.Closure$20 = [P, {
       if (start < 0 || start > receiver.length)
         throw H.wrapException(P.RangeError$range(start, 0, receiver.length));
       return receiver.indexOf(pattern, start);
+    },
+    lastIndexOf$2: function(receiver, pattern, start) {
+      var t1, t2;
+      start = receiver.length;
+      t1 = pattern.length;
+      if (typeof start !== "number")
+        return start.$add();
+      t2 = receiver.length;
+      if (start + t1 > t2)
+        start = t2 - t1;
+      return receiver.lastIndexOf(pattern, start);
+    },
+    lastIndexOf$1: function($receiver, pattern) {
+      return this.lastIndexOf$2($receiver, pattern, null);
     },
     contains$2: function(receiver, other, startIndex) {
       if (startIndex > receiver.length)
@@ -721,7 +755,7 @@ $$.Closure$20 = [P, {
       var t1 = this.ports;
       return t1.$index(t1, portId);
     },
-    register$2: function(portId, port) {
+    register$2: function(_, portId, port) {
       var t1;
       if (this.ports.containsKey$1(portId))
         throw H.wrapException(P.Exception_Exception("Registry: ports must be registered only once."));
@@ -971,16 +1005,16 @@ $$.Closure$20 = [P, {
     static: {"": "RawReceivePortImpl__nextFreeId"}
   },
   ReceivePortImpl: {
-    "": "Stream;_rawPort,_controller",
+    "": "Stream;_rawPort,__isolate_helper$_controller",
     listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
-      var t1 = this._controller;
+      var t1 = this.__isolate_helper$_controller;
       t1.toString;
       return H.setRuntimeTypeInfo(new P._ControllerStream(t1), [null]).listen$4$cancelOnError$onDone$onError(onData, cancelOnError, onDone, onError);
     },
     close$0: function(_) {
       var t1 = this._rawPort;
       t1.close$0(t1);
-      t1 = this._controller;
+      t1 = this.__isolate_helper$_controller;
       t1.close$0(t1);
     },
     get$close: function(_receiver) {
@@ -988,7 +1022,7 @@ $$.Closure$20 = [P, {
     },
     ReceivePortImpl$fromRawReceivePort$1: function(_rawPort) {
       var t1 = P.StreamController_StreamController(this.get$close(this), null, null, null, true, null);
-      this._controller = t1;
+      this.__isolate_helper$_controller = t1;
       this._rawPort._handler = t1.get$add(t1);
     }
   },
@@ -1017,7 +1051,7 @@ $$.Closure$20 = [P, {
         return;
       t1 = this._visited;
       t1.$indexSet(t1, map, true);
-      t1 = map.get$values();
+      t1 = map.get$values(map);
       t1.forEach$1(t1, this.get$_dispatch());
     },
     visitSendPort$1: function(port) {
@@ -1076,7 +1110,7 @@ $$.Closure$20 = [P, {
       this.tagged.push(object);
       object.__MessageTraverser__attached_info__ = info;
     },
-    reset$0: function() {
+    reset$0: function(_) {
       this.tagged = Array();
     },
     cleanup$0: function() {
@@ -1097,8 +1131,7 @@ $$.Closure$20 = [P, {
     },
     $indexSet: function(_, object, info) {
     },
-    reset$0: function() {
-      return;
+    reset$0: function(_) {
     },
     cleanup$0: function() {
       return;
@@ -1107,10 +1140,11 @@ $$.Closure$20 = [P, {
   _MessageTraverser: {
     "": "Object;",
     traverse$1: function(x) {
-      var result;
+      var result, t1;
       if (H._MessageTraverser_isPrimitive(x))
         return this.visitPrimitive$1(x);
-      this._visited.reset$0();
+      t1 = this._visited;
+      t1.reset$0(t1);
       result = null;
       try {
         result = this._dispatch$1(x);
@@ -1145,21 +1179,19 @@ $$.Closure$20 = [P, {
       return x;
     },
     visitList$1: function(list) {
-      var t1, copy, len, i;
+      var t1, copy, len, t2, i;
       t1 = this._visited;
       copy = t1.$index(t1, list);
       if (copy != null)
         return copy;
-      len = J.get$length$asx(list);
+      t1 = J.getInterceptor$asx(list);
+      len = t1.get$length(list);
       copy = Array(len);
       copy.fixed$length = init;
-      t1 = this._visited;
-      t1.$indexSet(t1, list, copy);
-      for (i = 0; i < len; ++i) {
-        if (i >= list.length)
-          return H.ioore(list, i);
-        copy[i] = this._dispatch$1(list[i]);
-      }
+      t2 = this._visited;
+      t2.$indexSet(t2, list, copy);
+      for (i = 0; i < len; ++i)
+        copy[i] = this._dispatch$1(t1.$index(list, i));
       return copy;
     },
     visitMap$1: function(map) {
@@ -1218,21 +1250,20 @@ $$.Closure$20 = [P, {
       t1.$indexSet(t1, map, id);
       t1 = map.get$keys();
       keys = this._serializeList$1(P.List_List$from(t1, true, H.getRuntimeTypeArgument(t1, "IterableBase", 0)));
-      t1 = map.get$values();
+      t1 = map.get$values(map);
       return ["map", id, keys, this._serializeList$1(P.List_List$from(t1, true, H.getRuntimeTypeArgument(t1, "IterableBase", 0)))];
     },
     _serializeList$1: function(list) {
-      var len, result, i, t1;
-      len = J.get$length$asx(list);
+      var t1, len, result, i, t2;
+      t1 = J.getInterceptor$asx(list);
+      len = t1.get$length(list);
       result = Array();
       C.JSArray_methods.set$length(result, len);
       for (i = 0; i < len; ++i) {
-        if (i >= list.length)
-          return H.ioore(list, i);
-        t1 = this._dispatch$1(list[i]);
+        t2 = this._dispatch$1(t1.$index(list, i));
         if (i >= result.length)
           return H.ioore(result, i);
-        result[i] = t1;
+        result[i] = t2;
       }
       return result;
     },
@@ -1451,6 +1482,11 @@ $$.Closure$20 = [P, {
         return H.Primitives_stringFromCodePoints(charCodes);
     }
     return H.Primitives__fromCharCodeApply(charCodes);
+  },
+  Primitives_lazyAsJsDate: function(receiver) {
+    if (receiver.date === void 0)
+      receiver.date = new Date(receiver.millisecondsSinceEpoch);
+    return receiver.date;
   },
   Primitives_getProperty: function(object, key) {
     if (object == null || typeof object === "boolean" || typeof object === "number" || typeof object === "string")
@@ -2376,6 +2412,161 @@ $$.Closure$20 = [P, {
     "": "Object;error>,stackTrace<",
     $isError: true
   },
+  _BroadcastStream: {
+    "": "_ControllerStream;_async$_controller",
+    $as_ControllerStream: null
+  },
+  _BroadcastSubscription: {
+    "": "_ControllerSubscription;_eventState,_async$_next@,_async$_previous?,_async$_controller,_async$_onData,_onError,_onDone,_zone,_state,_cancelFuture,_pending",
+    get$_async$_controller: function() {
+      return this._async$_controller;
+    },
+    _expectsEvent$1: function(eventId) {
+      var t1 = this._eventState;
+      if (typeof t1 !== "number")
+        return t1.$and();
+      return (t1 & 1) === eventId;
+    },
+    _onPause$0: function() {
+      return;
+    },
+    get$_onPause: function() {
+      return new P.BoundClosure$0(this, P._BroadcastSubscription.prototype._onPause$0, null, "_onPause$0");
+    },
+    _onResume$0: function() {
+      return;
+    },
+    get$_onResume: function() {
+      return new P.BoundClosure$0(this, P._BroadcastSubscription.prototype._onResume$0, null, "_onResume$0");
+    },
+    $as_ControllerSubscription: null,
+    static: {"": "_BroadcastSubscription__STATE_EVENT_ID,_BroadcastSubscription__STATE_FIRING,_BroadcastSubscription__STATE_REMOVE_AFTER_FIRING"}
+  },
+  _BroadcastStreamController: {
+    "": "Object;_async$_next@,_async$_previous?",
+    _removeListener$1: function(subscription) {
+      var previous, next;
+      previous = subscription._async$_previous;
+      next = subscription._async$_next;
+      previous.set$_async$_next(next);
+      next.set$_async$_previous(previous);
+      subscription._async$_previous = subscription;
+      subscription._async$_next = subscription;
+    },
+    _subscribe$1: function(cancelOnError) {
+      var t1, t2, subscription;
+      if ((this._state & 4) !== 0)
+        throw H.wrapException(P.StateError$("Subscribing to closed stream"));
+      t1 = $.Zone__current;
+      t2 = cancelOnError ? 1 : 0;
+      subscription = new P._BroadcastSubscription(null, null, null, this, null, null, null, t1, t2, null, null);
+      subscription.$builtinTypeInfo = this.$builtinTypeInfo;
+      subscription._async$_previous = subscription;
+      subscription._async$_next = subscription;
+      t2 = this._async$_previous;
+      subscription._async$_previous = t2;
+      subscription._async$_next = this;
+      t2.set$_async$_next(subscription);
+      this._async$_previous = subscription;
+      subscription._eventState = this._state & 1;
+      if (this._async$_next === subscription)
+        P._runGuarded(this._onListen);
+      return subscription;
+    },
+    _recordCancel$1: function(subscription) {
+      var t1;
+      if (subscription.get$_async$_next() === subscription)
+        return;
+      t1 = subscription._eventState;
+      if (typeof t1 !== "number")
+        return t1.$and();
+      if ((t1 & 2) !== 0)
+        subscription._eventState = t1 | 4;
+      else {
+        this._removeListener$1(subscription);
+        if ((this._state & 2) === 0 && this._async$_next === this)
+          this._callOnCancel$0();
+      }
+    },
+    _recordPause$1: function(subscription) {
+    },
+    _recordResume$1: function(subscription) {
+    },
+    _addEventError$0: function() {
+      if ((this._state & 4) !== 0)
+        return new P.StateError("Cannot add new events after calling close");
+      return new P.StateError("Cannot add new events while doing an addStream");
+    },
+    _async$_add$1: function(data) {
+      this._sendData$1(data);
+    },
+    _forEachListener$1: function(action) {
+      var t1, link, id, link0;
+      t1 = this._state;
+      if ((t1 & 2) !== 0)
+        throw H.wrapException(new P.StateError("Cannot fire new event. Controller is already firing an event"));
+      link = this._async$_next;
+      if (link === this)
+        return;
+      id = t1 & 1;
+      this._state = t1 ^ 3;
+      for (; link !== this;)
+        if (link._expectsEvent$1(id)) {
+          t1 = link._eventState;
+          if (typeof t1 !== "number")
+            return t1.$or();
+          link._eventState = t1 | 2;
+          action.call$1(link);
+          t1 = link._eventState;
+          if (typeof t1 !== "number")
+            return t1.$xor();
+          t1 ^= 1;
+          link._eventState = t1;
+          link0 = link._async$_next;
+          if ((t1 & 4) !== 0)
+            this._removeListener$1(link);
+          t1 = link._eventState;
+          if (typeof t1 !== "number")
+            return t1.$and();
+          link._eventState = t1 & 4294967293;
+          link = link0;
+        } else
+          link = link._async$_next;
+      this._state = this._state & 4294967293;
+      if (this._async$_next === this)
+        this._callOnCancel$0();
+    },
+    _callOnCancel$0: function() {
+      if ((this._state & 4) !== 0 && this._doneFuture._state === 0)
+        this._doneFuture._asyncComplete$1(null);
+      P._runGuarded(this._onCancel);
+    }
+  },
+  _SyncBroadcastStreamController: {
+    "": "_BroadcastStreamController;_onListen,_onCancel,_state,_async$_next,_async$_previous,_addStreamState,_doneFuture",
+    _sendData$1: function(data) {
+      var t1 = this._async$_next;
+      if (t1 === this)
+        return;
+      if (t1.get$_async$_next() === this) {
+        this._state = this._state | 2;
+        t1._async$_add$1(data);
+        this._state = this._state & 4294967293;
+        if (this._async$_next === this)
+          this._callOnCancel$0();
+        return;
+      }
+      this._forEachListener$1(new P._SyncBroadcastStreamController__sendData_closure(this, data));
+    },
+    $as_BroadcastStreamController: null
+  },
+  _SyncBroadcastStreamController__sendData_closure: {
+    "": "Closure;this_0,data_1",
+    call$1: function(subscription) {
+      subscription._async$_add$1(this.data_1);
+    },
+    $is_args1: true
+  },
   Future: {
     "": "Object;",
     $isFuture: true
@@ -2417,7 +2608,7 @@ $$.Closure$20 = [P, {
         if (remaining === 0) {
           t1 = t1.completer_0.future;
           if (t1._state !== 0)
-            H.throwExpression(P.StateError$("Future already completed"));
+            H.throwExpression(new P.StateError("Future already completed"));
           t1._asyncComplete$1(t2);
         }
       } else if (remaining === 0 && !this.eagerError_2)
@@ -2931,15 +3122,9 @@ $$.Closure$20 = [P, {
       return new P.StateError("Cannot add event while adding a stream");
     },
     add$1: function(_, value) {
-      var t1 = this._state;
-      if (t1 >= 4)
+      if (this._state >= 4)
         throw H.wrapException(this._badEventState$0());
-      if ((t1 & 1) !== 0)
-        this._sendData$1(value);
-      else if ((t1 & 3) === 0) {
-        t1 = this._ensurePendingEvents$0();
-        t1.add$1(t1, new P._DelayedData(value, null));
-      }
+      this._async$_add$1(value);
     },
     get$add: function(_receiver) {
       return new P.BoundClosure$i1(this, P._StreamController.prototype.add$1, _receiver, "add$1");
@@ -2967,6 +3152,15 @@ $$.Closure$20 = [P, {
         t1.add$1(t1, C.C__DelayedDone);
       }
       return this._doneFuture;
+    },
+    _async$_add$1: function(value) {
+      var t1 = this._state;
+      if ((t1 & 1) !== 0)
+        this._sendData$1(value);
+      else if ((t1 & 3) === 0) {
+        t1 = this._ensurePendingEvents$0();
+        t1.add$1(t1, new P._DelayedData(value, null));
+      }
     },
     _subscribe$1: function(cancelOnError) {
       var t1, t2, subscription, pendingEvents, addState;
@@ -3001,6 +3195,19 @@ $$.Closure$20 = [P, {
       else
         t1.call$0();
       return future;
+    },
+    _recordPause$1: function(subscription) {
+      var addState;
+      if ((this._state & 8) !== 0) {
+        addState = this._varData;
+        addState.pause$0(addState);
+      }
+      P._runGuarded(this.get$_onPause());
+    },
+    _recordResume$1: function(subscription) {
+      if ((this._state & 8) !== 0)
+        this._varData.resume$0();
+      P._runGuarded(this.get$_onResume());
     }
   },
   _StreamController__subscribe_closure: {
@@ -3070,24 +3277,18 @@ $$.Closure$20 = [P, {
     $as_StreamImpl: null
   },
   _ControllerSubscription: {
-    "": "_BufferingStreamSubscription;_async$_controller,_async$_onData,_onError,_onDone,_zone,_state,_cancelFuture,_pending",
+    "": "_BufferingStreamSubscription;_async$_controller<,_async$_onData,_onError,_onDone,_zone,_state,_cancelFuture,_pending",
     _onCancel$0: function() {
-      return this._async$_controller._recordCancel$1(this);
+      return this.get$_async$_controller()._recordCancel$1(this);
     },
     _onPause$0: function() {
-      var t1 = this._async$_controller;
-      if ((t1._state & 8) !== 0)
-        t1._varData.pause$0();
-      P._runGuarded(t1.get$_onPause());
+      this.get$_async$_controller()._recordPause$1(this);
     },
     get$_onPause: function() {
       return new P.BoundClosure$0(this, P._ControllerSubscription.prototype._onPause$0, null, "_onPause$0");
     },
     _onResume$0: function() {
-      var t1 = this._async$_controller;
-      if ((t1._state & 8) !== 0)
-        t1._varData.resume$0();
-      P._runGuarded(t1.get$_onResume());
+      this.get$_async$_controller()._recordResume$1(this);
     },
     get$_onResume: function() {
       return new P.BoundClosure$0(this, P._ControllerSubscription.prototype._onResume$0, null, "_onResume$0");
@@ -3113,13 +3314,17 @@ $$.Closure$20 = [P, {
       this._async$_onData = handleData;
     },
     onError$1: function(_, handleError) {
+      if (handleError == null)
+        handleError = P._nullErrorHandler$closure;
       this._onError = P._registerErrorHandler(handleError, $.Zone__current);
     },
     onDone$1: function(handleDone) {
+      if (handleDone == null)
+        handleDone = P._nullDoneHandler$closure;
       $.Zone__current.toString;
       this._onDone = handleDone;
     },
-    pause$1: function(resumeSignal) {
+    pause$1: function(_, resumeSignal) {
       var t1 = this._state;
       if ((t1 & 8) !== 0)
         return;
@@ -3129,8 +3334,8 @@ $$.Closure$20 = [P, {
       if ((t1 & 4) === 0 && (this._state & 32) === 0)
         this._guardCallback$1(this.get$_onPause());
     },
-    pause$0: function() {
-      return this.pause$1(null);
+    pause$0: function($receiver) {
+      return this.pause$1($receiver, null);
     },
     resume$0: function() {
       var t1, t2;
@@ -3314,6 +3519,9 @@ $$.Closure$20 = [P, {
       subscription.onDone$1(onDone);
       return subscription;
     },
+    listen$1: function(onData) {
+      return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
+    },
     _createSubscription$1: function(cancelOnError) {
       var t1, t2;
       t1 = $.Zone__current;
@@ -3340,7 +3548,7 @@ $$.Closure$20 = [P, {
       return;
     },
     set$next: function(_) {
-      throw H.wrapException(P.StateError$("No events after a done."));
+      throw H.wrapException(new P.StateError("No events after a done."));
     }
   },
   _PendingEvents: {
@@ -3682,7 +3890,7 @@ $$.Closure$20 = [P, {
     get$keys: function() {
       return H.setRuntimeTypeInfo(new P.HashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]);
     },
-    get$values: function() {
+    get$values: function(_) {
       return H.MappedIterable_MappedIterable(H.setRuntimeTypeInfo(new P.HashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]), new P._HashMap_values_closure(this), H.getTypeArgumentByIndex(this, 0), H.getTypeArgumentByIndex(this, 1));
     },
     $index: function(_, key) {
@@ -3898,12 +4106,17 @@ $$.Closure$20 = [P, {
     get$keys: function() {
       return H.setRuntimeTypeInfo(new P.LinkedHashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]);
     },
-    get$values: function() {
+    get$values: function(_) {
       return H.MappedIterable_MappedIterable(H.setRuntimeTypeInfo(new P.LinkedHashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]), new P._LinkedHashMap_values_closure(this), H.getTypeArgumentByIndex(this, 0), H.getTypeArgumentByIndex(this, 1));
     },
     containsKey$1: function(key) {
-      var nums, rest;
-      if ((key & 0x3ffffff) === key) {
+      var strings, nums, rest;
+      if (typeof key === "string" && key !== "__proto__") {
+        strings = this._strings;
+        if (strings == null)
+          return false;
+        return strings[key] != null;
+      } else if (typeof key === "number" && (key & 0x3ffffff) === key) {
         nums = this._nums;
         if (nums == null)
           return false;
@@ -3974,6 +4187,14 @@ $$.Closure$20 = [P, {
             bucket.push(this._newLinkedCell$2(key, value));
         }
       }
+    },
+    putIfAbsent$2: function(key, ifAbsent) {
+      var value;
+      if (this.containsKey$1(key))
+        return this.$index(this, key);
+      value = ifAbsent.call$0();
+      this.$indexSet(this, key, value);
+      return value;
     },
     remove$1: function(_, key) {
       var rest, bucket, index, cell;
@@ -4355,13 +4576,11 @@ $$.Closure$20 = [P, {
       return this.$index(receiver, index);
     },
     forEach$1: function(receiver, action) {
-      var $length, t1, t2, i;
+      var $length, i;
       $length = this.get$length(receiver);
-      for (t1 = receiver.length, t2 = $length !== t1, i = 0; i < $length; ++i) {
-        if (i >= t1)
-          return H.ioore(receiver, i);
-        action.call$1(receiver[i]);
-        if (t2)
+      for (i = 0; i < $length; ++i) {
+        action.call$1(this.$index(receiver, i));
+        if ($length !== this.get$length(receiver))
           throw H.wrapException(P.ConcurrentModificationError$(receiver));
       }
     },
@@ -4599,6 +4818,81 @@ $$.Closure$20 = [P, {
     },
     $is_args2: true
   },
+  DateTime: {
+    "": "Object;millisecondsSinceEpoch,isUtc",
+    $eq: function(_, other) {
+      var t1;
+      if (other == null)
+        return false;
+      t1 = J.getInterceptor(other);
+      if (typeof other !== "object" || other === null || !t1.$isDateTime)
+        return false;
+      return this.millisecondsSinceEpoch === other.millisecondsSinceEpoch && this.isUtc === other.isUtc;
+    },
+    get$hashCode: function(_) {
+      return this.millisecondsSinceEpoch;
+    },
+    toString$0: function(_) {
+      var t1, t2, t3, y, m, d, h, min, sec, ms;
+      t1 = new P.DateTime_toString_twoDigits();
+      t2 = this.isUtc;
+      t3 = t2 ? H.Primitives_lazyAsJsDate(this).getUTCFullYear() + 0 : H.Primitives_lazyAsJsDate(this).getFullYear() + 0;
+      y = new P.DateTime_toString_fourDigits().call$1(t3);
+      m = t1.call$1(t2 ? H.Primitives_lazyAsJsDate(this).getUTCMonth() + 1 : H.Primitives_lazyAsJsDate(this).getMonth() + 1);
+      d = t1.call$1(t2 ? H.Primitives_lazyAsJsDate(this).getUTCDate() + 0 : H.Primitives_lazyAsJsDate(this).getDate() + 0);
+      h = t1.call$1(t2 ? H.Primitives_lazyAsJsDate(this).getUTCHours() + 0 : H.Primitives_lazyAsJsDate(this).getHours() + 0);
+      min = t1.call$1(t2 ? H.Primitives_lazyAsJsDate(this).getUTCMinutes() + 0 : H.Primitives_lazyAsJsDate(this).getMinutes() + 0);
+      sec = t1.call$1(t2 ? H.Primitives_lazyAsJsDate(this).getUTCSeconds() + 0 : H.Primitives_lazyAsJsDate(this).getSeconds() + 0);
+      t1 = t2 ? H.Primitives_lazyAsJsDate(this).getUTCMilliseconds() + 0 : H.Primitives_lazyAsJsDate(this).getMilliseconds() + 0;
+      ms = new P.DateTime_toString_threeDigits().call$1(t1);
+      if (t2)
+        return H.S(y) + "-" + H.S(m) + "-" + H.S(d) + " " + H.S(h) + ":" + H.S(min) + ":" + H.S(sec) + "." + H.S(ms) + "Z";
+      else
+        return H.S(y) + "-" + H.S(m) + "-" + H.S(d) + " " + H.S(h) + ":" + H.S(min) + ":" + H.S(sec) + "." + H.S(ms);
+    },
+    DateTime$_now$0: function() {
+      H.Primitives_lazyAsJsDate(this);
+    },
+    $isDateTime: true,
+    static: {"": "DateTime_MONDAY,DateTime_TUESDAY,DateTime_WEDNESDAY,DateTime_THURSDAY,DateTime_FRIDAY,DateTime_SATURDAY,DateTime_SUNDAY,DateTime_DAYS_PER_WEEK,DateTime_JANUARY,DateTime_FEBRUARY,DateTime_MARCH,DateTime_APRIL,DateTime_MAY,DateTime_JUNE,DateTime_JULY,DateTime_AUGUST,DateTime_SEPTEMBER,DateTime_OCTOBER,DateTime_NOVEMBER,DateTime_DECEMBER,DateTime_MONTHS_PER_YEAR,DateTime__MAX_MILLISECONDS_SINCE_EPOCH"}
+  },
+  DateTime_toString_fourDigits: {
+    "": "Closure;",
+    call$1: function(n) {
+      var absN, sign;
+      absN = J.abs$0$n(n);
+      sign = n < 0 ? "-" : "";
+      if (absN >= 1000)
+        return H.S(n);
+      if (absN >= 100)
+        return sign + "0" + H.S(absN);
+      if (absN >= 10)
+        return sign + "00" + H.S(absN);
+      return sign + "000" + H.S(absN);
+    },
+    $is_args1: true
+  },
+  DateTime_toString_threeDigits: {
+    "": "Closure;",
+    call$1: function(n) {
+      var t1 = J.getInterceptor$n(n);
+      if (t1.$ge(n, 100))
+        return H.S(n);
+      if (t1.$ge(n, 10))
+        return "0" + H.S(n);
+      return "00" + H.S(n);
+    },
+    $is_args1: true
+  },
+  DateTime_toString_twoDigits: {
+    "": "Closure;",
+    call$1: function(n) {
+      if (J.$ge$n(n, 10))
+        return H.S(n);
+      return "0" + H.S(n);
+    },
+    $is_args1: true
+  },
   Duration: {
     "": "Object;_duration",
     $lt: function(_, other) {
@@ -4771,7 +5065,7 @@ $$.Closure$20 = [P, {
     }
   },
   Expando: {
-    "": "Object;name",
+    "": "Object;name>",
     toString$0: function(_) {
       return "Expando:" + H.S(this.name);
     },
@@ -4905,7 +5199,7 @@ $$.Closure$20 = [P, {
       }
     }
     constructorName = window[t1 + "RTCPeerConnection"];
-    return new constructorName(P._convertDartToNative_PrepareForStructuredClone(rtcIceServers));
+    return new constructorName(P._convertDartToNative_PrepareForStructuredClone(rtcIceServers), P._convertDartToNative_PrepareForStructuredClone(mediaConstraints));
   },
   _wrapZone: function(callback) {
     var t1 = $.Zone__current;
@@ -4913,12 +5207,85 @@ $$.Closure$20 = [P, {
       return callback;
     return t1.bindUnaryCallback$2$runGuarded(callback, true);
   },
+  HtmlElement: {
+    "": "Element;",
+    "%": "HTMLAppletElement|HTMLAreaElement|HTMLBRElement|HTMLBaseElement|HTMLBaseFontElement|HTMLBodyElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLFontElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLImageElement|HTMLLIElement|HTMLLabelElement|HTMLLegendElement|HTMLLinkElement|HTMLMarqueeElement|HTMLMenuElement|HTMLMeterElement|HTMLModElement|HTMLOListElement|HTMLOptGroupElement|HTMLOptionElement|HTMLParagraphElement|HTMLPreElement|HTMLProgressElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableElement|HTMLTableHeaderCellElement|HTMLTableRowElement|HTMLTableSectionElement|HTMLTemplateElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"
+  },
+  AnchorElement: {
+    "": "HtmlElement;",
+    toString$0: function(receiver) {
+      return receiver.toString();
+    },
+    "%": "HTMLAnchorElement"
+  },
+  ButtonElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLButtonElement"
+  },
+  CharacterData: {
+    "": "Node;length=",
+    "%": "CDATASection|CharacterData|Comment|ProcessingInstruction|Text"
+  },
+  DomError: {
+    "": "Interceptor;name=",
+    "%": "DOMError|FileError"
+  },
   DomException: {
     "": "Interceptor;",
+    get$name: function(receiver) {
+      var errorName = receiver.name;
+      if (P.Device_isWebKit() === true && errorName === "SECURITY_ERR")
+        return "SecurityError";
+      if (P.Device_isWebKit() === true && errorName === "SYNTAX_ERR")
+        return "SyntaxError";
+      return errorName;
+    },
     toString$0: function(receiver) {
       return receiver.toString();
     },
     "%": "DOMException"
+  },
+  Element: {
+    "": "Node;",
+    toString$0: function(receiver) {
+      return receiver.localName;
+    },
+    insertAdjacentText$2: function(receiver, where, text) {
+      var t1, t2, first;
+      if (!!receiver.insertAdjacentText)
+        receiver.insertAdjacentText(where, text);
+      else {
+        t1 = document.createTextNode(text);
+        switch (where.toLowerCase()) {
+          case "beforebegin":
+            receiver.parentNode.insertBefore(t1, receiver);
+            break;
+          case "afterbegin":
+            if (receiver.childNodes.length > 0) {
+              t2 = receiver.childNodes;
+              if (0 >= t2.length)
+                return H.ioore(t2, 0);
+              first = t2[0];
+            } else
+              first = null;
+            receiver.insertBefore(t1, first);
+            break;
+          case "beforeend":
+            receiver.appendChild(t1);
+            break;
+          case "afterend":
+            receiver.parentNode.insertBefore(t1, receiver.nextSibling);
+            break;
+          default:
+            H.throwExpression(new P.ArgumentError("Invalid position " + where));
+        }
+      }
+    },
+    "%": ";Element"
+  },
+  EmbedElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLEmbedElement"
   },
   ErrorEvent: {
     "": "Event;error=",
@@ -4926,7 +5293,7 @@ $$.Closure$20 = [P, {
   },
   Event: {
     "": "Interceptor;",
-    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CompositionEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|DragEvent|FocusEvent|HashChangeEvent|IDBVersionChangeEvent|KeyboardEvent|MIDIConnectionEvent|MIDIMessageEvent|MSPointerEvent|MediaKeyEvent|MediaKeyMessageEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MessageEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PointerEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|ResourceProgressEvent|SVGZoomEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|SpeechSynthesisEvent|StorageEvent|TextEvent|TouchEvent|TrackEvent|TransitionEvent|UIEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|WheelEvent|XMLHttpRequestProgressEvent;Event"
+    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CompositionEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|DragEvent|FocusEvent|HashChangeEvent|IDBVersionChangeEvent|KeyboardEvent|MIDIConnectionEvent|MIDIMessageEvent|MSPointerEvent|MediaKeyEvent|MediaKeyMessageEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PointerEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|ResourceProgressEvent|SVGZoomEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|StorageEvent|TextEvent|TouchEvent|TrackEvent|TransitionEvent|UIEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|WheelEvent|XMLHttpRequestProgressEvent;Event"
   },
   EventTarget: {
     "": "Interceptor;",
@@ -4938,12 +5305,102 @@ $$.Closure$20 = [P, {
     },
     "%": "MediaStream;EventTarget"
   },
+  FieldSetElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLFieldSetElement"
+  },
+  FormElement: {
+    "": "HtmlElement;length=,name=",
+    "%": "HTMLFormElement"
+  },
+  IFrameElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLIFrameElement"
+  },
+  InputElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLInputElement"
+  },
+  KeygenElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLKeygenElement"
+  },
+  MapElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLMapElement"
+  },
+  MediaElement: {
+    "": "HtmlElement;error=",
+    "%": "HTMLAudioElement|HTMLMediaElement|HTMLVideoElement"
+  },
+  MessageEvent: {
+    "": "Event;",
+    "%": "MessageEvent"
+  },
+  MetaElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLMetaElement"
+  },
+  NavigatorUserMediaError: {
+    "": "Interceptor;name=",
+    "%": "NavigatorUserMediaError"
+  },
+  Node: {
+    "": "EventTarget;",
+    toString$0: function(receiver) {
+      var t1 = receiver.nodeValue;
+      return t1 == null ? J.Interceptor.prototype.toString$0.call(this, receiver) : t1;
+    },
+    "%": "Document|DocumentFragment|DocumentType|Entity|HTMLDocument|Notation|SVGDocument|ShadowRoot;Node"
+  },
+  NodeList: {
+    "": "Interceptor_ListMixin_ImmutableListMixin;",
+    get$length: function(receiver) {
+      return receiver.length;
+    },
+    $index: function(receiver, index) {
+      var t1 = receiver.length;
+      if (index >>> 0 !== index || index >= t1)
+        throw H.wrapException(P.RangeError$range(index, 0, t1));
+      return receiver[index];
+    },
+    $indexSet: function(receiver, index, value) {
+      throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
+    },
+    elementAt$1: function(receiver, index) {
+      if (index < 0 || index >= receiver.length)
+        return H.ioore(receiver, index);
+      return receiver[index];
+    },
+    $asList: function() {
+      return [W.Node];
+    },
+    $isList: true,
+    $isJavaScriptIndexingBehavior: true,
+    "%": "NodeList|RadioNodeList"
+  },
+  ObjectElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLObjectElement"
+  },
+  OutputElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLOutputElement"
+  },
+  ParamElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLParamElement"
+  },
   RtcDataChannel: {
     "": "EventTarget;",
     send$1: function(receiver, data) {
       return receiver.send(data);
     },
     "%": "DataChannel|RTCDataChannel"
+  },
+  RtcDataChannelEvent: {
+    "": "Event;channel=",
+    "%": "RTCDataChannelEvent"
   },
   RtcIceCandidate: {
     "": "Interceptor;candidate=",
@@ -4962,8 +5419,22 @@ $$.Closure$20 = [P, {
       this._createOffer$3(receiver, new W.RtcPeerConnection_createOffer_closure(completer), new W.RtcPeerConnection_createOffer_closure0(completer), mediaConstraints);
       return completer.future;
     },
+    createAnswer$1: function(receiver, mediaConstraints) {
+      var t1, completer;
+      t1 = W.RtcSessionDescription;
+      completer = H.setRuntimeTypeInfo(new P._AsyncCompleter(P._Future$(t1)), [t1]);
+      this._createAnswer$3(receiver, new W.RtcPeerConnection_createAnswer_closure(completer), new W.RtcPeerConnection_createAnswer_closure0(completer), mediaConstraints);
+      return completer.future;
+    },
     addIceCandidate$3: function(receiver, candidate, successCallback, failureCallback) {
       return receiver.addIceCandidate(candidate, H.convertDartClosureToJS(successCallback, 0), H.convertDartClosureToJS(failureCallback, 1));
+    },
+    _createAnswer$3: function(receiver, successCallback, failureCallback, mediaConstraints) {
+      this._createAnswer_1$3(receiver, successCallback, failureCallback, P.convertDartToNative_Dictionary(mediaConstraints));
+      return;
+    },
+    _createAnswer_1$3: function(receiver, successCallback, failureCallback, mediaConstraints) {
+      return receiver.createAnswer(H.convertDartClosureToJS(successCallback, 1), H.convertDartClosureToJS(failureCallback, 1), mediaConstraints);
     },
     createDataChannel$2: function(receiver, label, options) {
       return receiver.createDataChannel(label, P.convertDartToNative_Dictionary(options));
@@ -4997,16 +5468,42 @@ $$.Closure$20 = [P, {
     "": "Interceptor;",
     "%": "RTCSessionDescription|mozRTCSessionDescription"
   },
+  SelectElement: {
+    "": "HtmlElement;length=,name=",
+    "%": "HTMLSelectElement"
+  },
   SpeechRecognitionError: {
     "": "Event;error=",
     "%": "SpeechRecognitionError"
   },
+  SpeechSynthesisEvent: {
+    "": "Event;name=",
+    "%": "SpeechSynthesisEvent"
+  },
+  TextAreaElement: {
+    "": "HtmlElement;name=",
+    "%": "HTMLTextAreaElement"
+  },
   Window: {
-    "": "EventTarget;",
+    "": "EventTarget;name=",
     toString$0: function(receiver) {
       return receiver.toString();
     },
     "%": "DOMWindow|Window"
+  },
+  _Attr: {
+    "": "Node;name=",
+    "%": "Attr"
+  },
+  Interceptor_ListMixin: {
+    "": "Interceptor+ListMixin;",
+    $isList: true,
+    $asList: null
+  },
+  Interceptor_ListMixin_ImmutableListMixin: {
+    "": "Interceptor_ListMixin+ImmutableListMixin;",
+    $asList: null,
+    $isList: true
   },
   RtcPeerConnection_createOffer_closure: {
     "": "Closure;completer_0",
@@ -5019,6 +5516,23 @@ $$.Closure$20 = [P, {
     $is_args1: true
   },
   RtcPeerConnection_createOffer_closure0: {
+    "": "Closure;completer_1",
+    call$1: function(error) {
+      this.completer_1.completeError$1(error);
+    },
+    $is_args1: true
+  },
+  RtcPeerConnection_createAnswer_closure: {
+    "": "Closure;completer_0",
+    call$1: function(value) {
+      var t1 = this.completer_0.future;
+      if (t1._state !== 0)
+        H.throwExpression(P.StateError$("Future already completed"));
+      t1._asyncComplete$1(value);
+    },
+    $is_args1: true
+  },
+  RtcPeerConnection_createAnswer_closure0: {
     "": "Closure;completer_1",
     call$1: function(error) {
       this.completer_1.completeError$1(error);
@@ -5090,8 +5604,11 @@ $$.Closure$20 = [P, {
         J.removeEventListener$3$x(this._target, this._eventType, t1, this._useCapture);
     },
     $asStreamSubscription: null
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> dirty
   },
   ImmutableListMixin: {
     "": "Object;",
@@ -5102,6 +5619,7 @@ $$.Closure$20 = [P, {
     $asList: null
   },
   FixedSizeListIterator: {
+<<<<<<< HEAD
     "": "Object;_array,_html$_length,_position,_html$_current",
     moveNext$0: function() {
       var nextPosition, t1;
@@ -5114,6 +5632,20 @@ $$.Closure$20 = [P, {
       }
       this._html$_current = null;
       this._position = t1;
+=======
+    "": "Object;_array,_html$_length,_html$_position,_html$_current",
+    moveNext$0: function() {
+      var nextPosition, t1;
+      nextPosition = this._html$_position + 1;
+      t1 = this._html$_length;
+      if (nextPosition < t1) {
+        this._html$_current = J.$index$asx(this._array, nextPosition);
+        this._html$_position = nextPosition;
+        return true;
+      }
+      this._html$_current = null;
+      this._html$_position = t1;
+>>>>>>> dirty
       return false;
     },
     get$current: function() {
@@ -5128,16 +5660,20 @@ $$.Closure$20 = [P, {
       throw H.wrapException(P.UnsupportedError$("Cannot invoke insertAdjacentText on SVG."));
     },
     "%": "SVGAElement|SVGAltGlyphDefElement|SVGAltGlyphElement|SVGAltGlyphItemElement|SVGAnimateColorElement|SVGAnimateElement|SVGAnimateMotionElement|SVGAnimateTransformElement|SVGAnimationElement|SVGCircleElement|SVGClipPathElement|SVGComponentTransferFunctionElement|SVGCursorElement|SVGDefsElement|SVGDescElement|SVGElement|SVGEllipseElement|SVGFEBlendElement|SVGFEColorMatrixElement|SVGFEComponentTransferElement|SVGFECompositeElement|SVGFEConvolveMatrixElement|SVGFEDiffuseLightingElement|SVGFEDisplacementMapElement|SVGFEDistantLightElement|SVGFEDropShadowElement|SVGFEFloodElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEGaussianBlurElement|SVGFEImageElement|SVGFEMergeElement|SVGFEMergeNodeElement|SVGFEMorphologyElement|SVGFEOffsetElement|SVGFEPointLightElement|SVGFESpecularLightingElement|SVGFESpotLightElement|SVGFETileElement|SVGFETurbulenceElement|SVGFilterElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGForeignObjectElement|SVGGElement|SVGGlyphElement|SVGGlyphRefElement|SVGGradientElement|SVGGraphicsElement|SVGHKernElement|SVGImageElement|SVGLineElement|SVGLinearGradientElement|SVGMPathElement|SVGMarkerElement|SVGMaskElement|SVGMetadataElement|SVGMissingGlyphElement|SVGPathElement|SVGPatternElement|SVGPolygonElement|SVGPolylineElement|SVGRadialGradientElement|SVGRectElement|SVGSVGElement|SVGScriptElement|SVGSetElement|SVGStopElement|SVGStyleElement|SVGSwitchElement|SVGSymbolElement|SVGTSpanElement|SVGTextContentElement|SVGTextElement|SVGTextPathElement|SVGTextPositioningElement|SVGTitleElement|SVGUseElement|SVGVKernElement|SVGViewElement"
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> dirty
   }
 }],
 ["dart.isolate", "dart:isolate", , P, {
   ReceivePort_ReceivePort: function() {
-    var t1, t2;
+    var t1, t2, t3;
     t1 = $.RawReceivePortImpl__nextFreeId;
     $.RawReceivePortImpl__nextFreeId = t1 + 1;
     t2 = new H.RawReceivePortImpl(t1, null, false);
-    init.globalState.currentContext.register$2(t1, t2);
+    t3 = init.globalState.currentContext;
+    t3.register$2(t3, t1, t2);
     t1 = new H.ReceivePortImpl(t2, null);
     t1.ReceivePortImpl$fromRawReceivePort$1(t2);
     return t1;
@@ -5237,6 +5773,14 @@ $$.Closure$20 = [P, {
     }
     return t1;
   },
+  Device_isWebKit: function() {
+    var t1 = $.Device__isWebKit;
+    if (t1 == null) {
+      t1 = P.Device_isOpera() !== true && J.contains$2$asx(window.navigator.userAgent, "WebKit", 0);
+      $.Device__isWebKit = t1;
+    }
+    return t1;
+  },
   convertDartToNative_Dictionary_closure: {
     "": "Closure;object_0",
     call$2: function(key, value) {
@@ -5300,6 +5844,8 @@ $$.Closure$20 = [P, {
       if (typeof e === "string")
         return e;
       t2 = J.getInterceptor(e);
+      if (typeof e === "object" && e !== null && !!t2.$isDateTime)
+        return new Date(e.millisecondsSinceEpoch);
       if (typeof e === "object" && e !== null && !!t2.$isTypedData)
         return e;
       if (typeof e === "object" && e !== null && !!t2.$isMap) {
@@ -5328,9 +5874,7 @@ $$.Closure$20 = [P, {
         copy = new Array($length);
         this.writeSlot_7.call$2(slot, copy);
         for (i = 0; i < $length; ++i) {
-          if (i >= e.length)
-            return H.ioore(e, i);
-          t1 = this.call$1(e[i]);
+          t1 = this.call$1(t2.$index(e, i));
           if (i >= copy.length)
             return H.ioore(copy, i);
           copy[i] = t1;
@@ -5349,8 +5893,185 @@ $$.Closure$20 = [P, {
     $is_args2: true
   }
 }],
+["logging", "package:logging/logging.dart", , N, {
+  Logger: {
+    "": "Object;name>,parent,_level,_children>,children,_controller",
+    get$fullName: function() {
+      var t1, t2, t3;
+      t1 = this.parent;
+      t2 = t1 == null || J.get$name$x(t1) === "";
+      t3 = this.name;
+      return t2 ? t3 : t1.get$fullName() + "." + t3;
+    },
+    get$level: function() {
+      if ($.hierarchicalLoggingEnabled) {
+        var t1 = this._level;
+        if (t1 != null)
+          return t1;
+        t1 = this.parent;
+        if (t1 != null)
+          return t1.get$level();
+      }
+      return $._rootLevel;
+    },
+    set$level: function(value) {
+      if ($.hierarchicalLoggingEnabled && this.parent != null)
+        this._level = value;
+      else {
+        if (this.parent != null)
+          throw H.wrapException(P.UnsupportedError$("Please set \"hierarchicalLoggingEnabled\" to true if you want to change the level on a non-root logger."));
+        $._rootLevel = value;
+      }
+    },
+    get$onRecord: function() {
+      return this._getStream$0();
+    },
+    log$4: function(logLevel, message, error, stackTrace) {
+      var t1, t2, t3, record, target;
+      if (logLevel.value >= this.get$level().value) {
+        t1 = this.get$fullName();
+        t2 = new P.DateTime(Date.now(), false);
+        t2.DateTime$_now$0();
+        t3 = $.LogRecord__nextNumber;
+        $.LogRecord__nextNumber = t3 + 1;
+        record = new N.LogRecord(logLevel, message, t1, t2, t3, error, stackTrace);
+        if ($.hierarchicalLoggingEnabled)
+          for (target = this; target != null;) {
+            target._publish$1(record);
+            target = target.parent;
+          }
+        else
+          N.Logger_Logger("")._publish$1(record);
+      }
+    },
+    info$3: function(message, error, stackTrace) {
+      return this.log$4(C.Level_INFO_800, message, error, stackTrace);
+    },
+    info$1: function(message) {
+      return this.info$3(message, null, null);
+    },
+    _getStream$0: function() {
+      if ($.hierarchicalLoggingEnabled || this.parent == null) {
+        var t1 = this._controller;
+        if (t1 == null) {
+          t1 = H.setRuntimeTypeInfo(new P._SyncBroadcastStreamController(null, null, 0, null, null, null, null), [N.LogRecord]);
+          t1._async$_previous = t1;
+          t1._async$_next = t1;
+          this._controller = t1;
+        }
+        t1.toString;
+        return H.setRuntimeTypeInfo(new P._BroadcastStream(t1), [H.getTypeArgumentByIndex(t1, 0)]);
+      } else
+        return N.Logger_Logger("")._getStream$0();
+    },
+    _publish$1: function(record) {
+      var t1 = this._controller;
+      if (t1 != null) {
+        if (t1._state >= 4)
+          H.throwExpression(t1._addEventError$0());
+        t1._sendData$1(record);
+      }
+    },
+    Logger$_internal$3: function($name, $parent, children) {
+      var t1 = this.parent;
+      if (t1 != null) {
+        t1 = J.get$_children$x(t1);
+        t1.$indexSet(t1, this.name, this);
+      }
+    },
+    static: {"": "Logger__loggers", Logger_Logger: function($name) {
+        return $.get$Logger__loggers().putIfAbsent$2($name, new N.Logger_Logger_closure($name));
+      }}
+  },
+  Logger_Logger_closure: {
+    "": "Closure;name_0",
+    call$0: function() {
+      var thisName, dot, $parent, t1, t2;
+      thisName = this.name_0;
+      if (C.JSString_methods.startsWith$1(thisName, "."))
+        H.throwExpression(new P.ArgumentError("name shouldn't start with a '.'"));
+      dot = C.JSString_methods.lastIndexOf$1(thisName, ".");
+      if (dot === -1)
+        $parent = thisName !== "" ? N.Logger_Logger("") : null;
+      else {
+        $parent = N.Logger_Logger(C.JSString_methods.substring$2(thisName, 0, dot));
+        thisName = C.JSString_methods.substring$1(thisName, dot + 1);
+      }
+      t1 = P.LinkedHashMap_LinkedHashMap(null, null, null, J.JSString, N.Logger);
+      t2 = new N.Logger(thisName, $parent, null, t1, H.setRuntimeTypeInfo(new F.UnmodifiableMapView(t1), [null, null]), null);
+      t2.Logger$_internal$3(thisName, $parent, t1);
+      return t2;
+    }
+  },
+  Level: {
+    "": "Object;name>,value>",
+    $eq: function(_, other) {
+      var t1;
+      if (other == null)
+        return false;
+      t1 = J.getInterceptor(other);
+      return typeof other === "object" && other !== null && !!t1.$isLevel && this.value === other.value;
+    },
+    $lt: function(_, other) {
+      return C.JSInt_methods.$lt(this.value, other.get$value(other));
+    },
+    $gt: function(_, other) {
+      return C.JSInt_methods.$gt(this.value, other.get$value(other));
+    },
+    $ge: function(_, other) {
+      return this.value >= other.get$value(other);
+    },
+    get$hashCode: function(_) {
+      return this.value;
+    },
+    toString$0: function(_) {
+      return this.name;
+    },
+    $isLevel: true,
+    static: {"": "Level_ALL,Level_OFF,Level_FINEST,Level_FINER,Level_FINE,Level_CONFIG,Level_INFO,Level_WARNING,Level_SEVERE,Level_SHOUT"}
+  },
+  LogRecord: {
+    "": "Object;level<,message,loggerName,time<,sequenceNumber,error>,stackTrace<",
+    toString$0: function(_) {
+      return "[" + this.level.name + "] " + this.loggerName + ": " + this.message;
+    },
+    static: {"": "LogRecord__nextNumber"}
+  }
+}],
+["unmodifiable_collection", "package:unmodifiable_collection/unmodifiable_collection.dart", , F, {
+  UnmodifiableMapView: {
+    "": "Object;_source",
+    get$length: function(_) {
+      return this._source._collection$_length;
+    },
+    $index: function(_, key) {
+      var t1 = this._source;
+      return t1.$index(t1, key);
+    },
+    forEach$1: function(_, f) {
+      var t1 = this._source;
+      return t1.forEach$1(t1, f);
+    },
+    get$keys: function() {
+      var t1 = this._source;
+      return H.setRuntimeTypeInfo(new P.LinkedHashMapKeyIterable(t1), [H.getTypeArgumentByIndex(t1, 0)]);
+    },
+    get$values: function(_) {
+      var t1 = this._source;
+      return t1.get$values(t1);
+    },
+    $indexSet: function(_, key, value) {
+      return F.UnmodifiableMapView__throw();
+    },
+    $isMap: true,
+    static: {UnmodifiableMapView__throw: function() {
+        throw H.wrapException(P.UnsupportedError$("Cannot modify an unmodifiable Map"));
+      }}
+  }
+}],
 ["", "webrtc.dart", , Y, {
   main: function() {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     var alice, bob, t1, t2;
     alice = W.RtcPeerConnection_RtcPeerConnection(H.fillLiteralMap(["iceServers", [H.fillLiteralMap(["url", "stun:stun.l.google.com:19302"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))]], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), null);
@@ -5364,6 +6085,8 @@ $$.Closure$20 = [P, {
     t1 = H.setRuntimeTypeInfo(new W._EventStream(alice, t1, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure1(bob)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
 =======
+=======
+>>>>>>> dirty
     var t1, log, mediaConstraints, alice, bob, t2, t3, t4;
     t1 = {};
     N.Logger_Logger("").set$level(C.Level_ALL_0);
@@ -5387,11 +6110,16 @@ $$.Closure$20 = [P, {
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure3(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
     t3 = C.EventStreamProvider_icecandidate._eventType;
     t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, t3, false), [null]);
+<<<<<<< HEAD
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4(log, alice)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+=======
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure4()), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+>>>>>>> dirty
     t2 = H.setRuntimeTypeInfo(new W._EventStream(bob, C.EventStreamProvider_datachannel._eventType, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main_closure5(t1, log)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
     t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, t3, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure6(log, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+<<<<<<< HEAD
     t3 = H.setRuntimeTypeInfo(new W._EventStream(alice, C.EventStreamProvider_negotiationneeded._eventType, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure7(t1, log, mediaConstraints, alice, bob)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
     log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
@@ -5410,45 +6138,119 @@ $$.Closure$20 = [P, {
     t1 = H.setRuntimeTypeInfo(new W._EventStream(t1, C.EventStreamProvider_close._eventType, false), [null]);
     H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new Y.main_closure10(log)), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
 >>>>>>> Stashed changes
+=======
+    log.log$4(C.Level_INFO_800, "alice: create dc", null, null);
+    t1.alice_dc_1 = C.RtcPeerConnection_methods.createDataChannel$2(alice, "somelablel", H.fillLiteralMap(["reliable", false], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+    log.log$4(C.Level_INFO_800, "alice set handler", null, null);
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_message._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure7(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_open._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure8(t1, log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    t3 = t1.alice_dc_1;
+    t3.toString;
+    t3 = H.setRuntimeTypeInfo(new W._EventStream(t3, C.EventStreamProvider_close._eventType, false), [null]);
+    H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new Y.main_closure9(log)), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)])._tryResume$0();
+    C.RtcPeerConnection_methods.createOffer$1(alice, mediaConstraints).then$1(new Y.main_closure10(t1, log, mediaConstraints, alice, bob));
+>>>>>>> dirty
   },
   main_closure: {
-    "": "Closure;alice_0,bob_1",
-    call$1: function(data) {
-      var t1;
-      P.print("fired: onnegotiation needed");
-      t1 = this.alice_0;
-      C.RtcPeerConnection_methods.createOffer$1(t1, H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null))).then$1(new Y.main__closure(t1, this.bob_1));
+    "": "Closure;",
+    call$1: function(rec) {
+      var t1, t2, p;
+      t1 = rec.get$level().name + ": " + H.S(rec.get$time()) + ": ";
+      t2 = rec.message;
+      P.print(t1 + t2);
+      p = document.createElement("p", null);
+      J.insertAdjacentText$2$x(p, "beforeend", rec.level.name + ": " + H.S(rec.time) + ": " + t2);
+      document.querySelector("#sample_container_id").appendChild(p);
     },
     $is_args1: true
   },
-  main__closure: {
-    "": "Closure;alice_2,bob_3",
-    call$1: function(offer) {
-      C.RtcPeerConnection_methods.setLocalDescription$1(this.alice_2, offer);
-      C.RtcPeerConnection_methods.setRemoteDescription$1(this.bob_3, offer);
+  main_closure0: {
+    "": "Closure;log_1",
+    call$1: function($event) {
+      this.log_1.log$4(C.Level_INFO_800, "alice: iceConnectionStateChange", null, null);
     },
     $is_args1: true
   },
+<<<<<<< HEAD
 <<<<<<< Updated upstream
   main_closure0: {
+=======
+  main_closure1: {
+    "": "Closure;log_2",
+    call$1: function($event) {
+      this.log_2.log$4(C.Level_INFO_800, "alice: signalingChange event", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure2: {
+    "": "Closure;log_3",
+    call$1: function($event) {
+      this.log_3.log$4(C.Level_INFO_800, "bob: iceConnectionStateChange", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure3: {
+    "": "Closure;log_4",
+    call$1: function($event) {
+      this.log_4.log$4(C.Level_INFO_800, "bob: signalingChange event", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure4: {
+>>>>>>> dirty
     "": "Closure;",
     call$1: function(evt) {
       J.get$candidate$x(evt);
     },
     $is_args1: true
   },
-  main_closure1: {
-    "": "Closure;bob_4",
+  main_closure5: {
+    "": "Closure;box_0,log_5",
+    call$1: function(dc) {
+      var t1, bob_dc, t2;
+      t1 = this.log_5;
+      t1.log$4(C.Level_INFO_800, "#3 bob got datachannel!", null, null);
+      bob_dc = J.get$channel$x(dc);
+      t2 = this.box_0;
+      t2.bob_dc_0 = bob_dc;
+      t1.log$4(C.Level_INFO_800, bob_dc.readyState, null, null);
+      t2 = t2.bob_dc_0;
+      t2.toString;
+      t2 = H.setRuntimeTypeInfo(new W._EventStream(t2, C.EventStreamProvider_message._eventType, false), [null]);
+      H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new Y.main__closure(t1)), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)])._tryResume$0();
+      t1.log$4(C.Level_INFO_800, "bob: send", null, null);
+      t1.log$4(C.Level_INFO_800, J.toString$0(dc.channel.negotiated), null, null);
+      t1.log$4(C.Level_INFO_800, dc.channel.readyState, null, null);
+      dc.channel.send("hallo von bob");
+    },
+    $is_args1: true
+  },
+  main__closure: {
+    "": "Closure;log_6",
+    call$1: function(data) {
+      this.log_6.log$4(C.Level_INFO_800, C.JSString_methods.$add("bob: ", data), null, null);
+    },
+    $is_args1: true
+  },
+  main_closure6: {
+    "": "Closure;log_7,bob_8",
     call$1: function(evt) {
       var t1 = J.get$candidate$x(evt);
       if (t1 != null)
-        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_4, t1, new Y.main__closure0(), new Y.main__closure1());
+        C.RtcPeerConnection_methods.addIceCandidate$3(this.bob_8, t1, new Y.main__closure0(this.log_7), new Y.main__closure1());
     },
     $is_args1: true
   },
   main__closure0: {
-    "": "Closure;",
+    "": "Closure;log_9",
     call$0: function() {
+<<<<<<< HEAD
 =======
   main_closure4: {
     "": "Closure;log_5,alice_6",
@@ -5463,6 +6265,9 @@ $$.Closure$20 = [P, {
     "": "Closure;log_7",
     call$0: function() {
       this.log_7.log$4(C.Level_INFO_800, "alice: ice candidate added", null, null);
+=======
+      this.log_9.log$4(C.Level_INFO_800, "seems to work", null, null);
+>>>>>>> dirty
     }
   },
   main__closure0: {
@@ -5522,6 +6327,7 @@ $$.Closure$20 = [P, {
       this.log_14.log$4(C.Level_WARNING_900, "bob: could not add ice candidate", null, null);
     },
     $is_args1: true
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   },
@@ -5558,12 +6364,60 @@ $$.Closure$20 = [P, {
       t1.log$4(C.Level_INFO_800, "3# bob: created answer", null, null);
       C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_25, sdp_bob);
       C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_24, sdp_bob);
+=======
+  },
+  main_closure7: {
+    "": "Closure;box_0,log_10",
+    call$1: function(data) {
+      this.log_10.log$4(C.Level_INFO_800, C.JSString_methods.$add("alice: received ", data), null, null);
+      this.box_0.alice_dc_1.send(data);
+    },
+    $is_args1: true
+  },
+  main_closure8: {
+    "": "Closure;box_0,log_11",
+    call$1: function(data) {
+      this.log_11.log$4(C.Level_INFO_800, "alice dc opened", null, null);
+      this.box_0.alice_dc_1.send("test von alice");
+    },
+    $is_args1: true
+  },
+  main_closure9: {
+    "": "Closure;log_12",
+    call$1: function(data) {
+      this.log_12.log$4(C.Level_INFO_800, "alice dc closed", null, null);
+    },
+    $is_args1: true
+  },
+  main_closure10: {
+    "": "Closure;box_0,log_13,mediaConstraints_14,alice_15,bob_16",
+    call$1: function(sdp_alice) {
+      var t1, t2, t3;
+      t1 = this.log_13;
+      t1.log$4(C.Level_INFO_800, "2# alice: created offer", null, null);
+      t2 = this.alice_15;
+      C.RtcPeerConnection_methods.setLocalDescription$1(t2, sdp_alice);
+      t3 = this.bob_16;
+      C.RtcPeerConnection_methods.setRemoteDescription$1(t3, sdp_alice);
+      C.RtcPeerConnection_methods.createAnswer$1(t3, this.mediaConstraints_14).then$1(new Y.main__closure2(this.box_0, t1, t2, t3));
+    },
+    $is_args1: true
+  },
+  main__closure2: {
+    "": "Closure;box_0,log_17,alice_18,bob_19",
+    call$1: function(sdp_bob) {
+      var t1 = this.log_17;
+      t1.log$4(C.Level_INFO_800, "3# bob: created answer", null, null);
+      C.RtcPeerConnection_methods.setLocalDescription$1(this.bob_19, sdp_bob);
+      C.RtcPeerConnection_methods.setRemoteDescription$1(this.alice_18, sdp_bob);
+>>>>>>> dirty
       t1.log$4(C.Level_INFO_800, "desciptions set", null, null);
       t1 = this.box_0;
       t1.bob_dc_0.send("tesst");
       t1.alice_dc_1.send("rest");
     },
     $is_args1: true
+<<<<<<< HEAD
   },
   main_closure8: {
     "": "Closure;box_0,log_26",
@@ -5588,6 +6442,8 @@ $$.Closure$20 = [P, {
     },
     $is_args1: true
 >>>>>>> Stashed changes
+=======
+>>>>>>> dirty
   }
 },
 1],
@@ -5611,15 +6467,20 @@ init.globalFunctions.main$closure = Y.main$closure = new H.Closure$0(Y.main, "ma
 // Runtime type support
 J.JSInt.$isint = true;
 J.JSInt.$isObject = true;
+W.Node.$isNode = true;
+W.Node.$isObject = true;
 J.JSString.$isString = true;
 J.JSString.$isObject = true;
+N.Level.$isObject = true;
 J.JSNumber.$isObject = true;
+P.Duration.$isDuration = true;
 P.Duration.$isObject = true;
 W.Event.$isEvent = true;
 W.Event.$isObject = true;
 W.RtcIceCandidateEvent.$isRtcIceCandidateEvent = true;
 W.RtcIceCandidateEvent.$isEvent = true;
 W.RtcIceCandidateEvent.$isObject = true;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 W.RtcSessionDescription.$isObject = true;
 =======
@@ -5633,6 +6494,15 @@ W.RtcSessionDescription.$isObject = true;
 N.LogRecord.$isLogRecord = true;
 N.LogRecord.$isObject = true;
 >>>>>>> Stashed changes
+=======
+W.RtcDataChannelEvent.$isObject = true;
+W.MessageEvent.$isObject = true;
+W.RtcSessionDescription.$isRtcSessionDescription = true;
+W.RtcSessionDescription.$isObject = true;
+N.Logger.$isObject = true;
+N.LogRecord.$isLogRecord = true;
+N.LogRecord.$isObject = true;
+>>>>>>> dirty
 H.RawReceivePortImpl.$isObject = true;
 H._IsolateEvent.$isObject = true;
 H._IsolateContext.$isObject = true;
@@ -5641,6 +6511,10 @@ P.Symbol.$isSymbol = true;
 P.Symbol.$isObject = true;
 P.StackTrace.$isStackTrace = true;
 P.StackTrace.$isObject = true;
+P._BufferingStreamSubscription.$is_BufferingStreamSubscription = true;
+P._BufferingStreamSubscription.$is_EventSink = true;
+P._BufferingStreamSubscription.$isStreamSubscription = true;
+P._BufferingStreamSubscription.$isObject = true;
 P.Object.$isObject = true;
 P.Function.$isFunction = true;
 P.Function.$isObject = true;
@@ -5650,15 +6524,20 @@ P.Future.$isFuture = true;
 P.Future.$isObject = true;
 P._DelayedEvent.$is_DelayedEvent = true;
 P._DelayedEvent.$isObject = true;
-P.StreamSubscription.$isStreamSubscription = true;
-P.StreamSubscription.$isObject = true;
 P._EventSink.$is_EventSink = true;
 P._EventSink.$isObject = true;
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 P.DateTime.$isDateTime = true;
 P.DateTime.$isObject = true;
 >>>>>>> Stashed changes
+=======
+P.StreamSubscription.$isStreamSubscription = true;
+P.StreamSubscription.$isObject = true;
+P.DateTime.$isDateTime = true;
+P.DateTime.$isObject = true;
+>>>>>>> dirty
 // getInterceptor methods
 J.getInterceptor = function(receiver) {
   if (typeof receiver == "number") {
@@ -5754,6 +6633,9 @@ J.$indexSet$ax = function(receiver, a0, a1) {
     return receiver[a0] = a1;
   return J.getInterceptor$ax(receiver).$indexSet(receiver, a0, a1);
 };
+J.abs$0$n = function(receiver) {
+  return J.getInterceptor$n(receiver).abs$0(receiver);
+};
 J.addEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).addEventListener$3(receiver, a0, a1, a2);
 };
@@ -5763,8 +6645,14 @@ J.contains$2$asx = function(receiver, a0, a1) {
 J.forEach$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).forEach$1(receiver, a0);
 };
+J.get$_children$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$_children(receiver);
+};
 J.get$candidate$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$candidate(receiver);
+};
+J.get$channel$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$channel(receiver);
 };
 J.get$error$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$error(receiver);
@@ -5778,6 +6666,12 @@ J.get$iterator$ax = function(receiver) {
 J.get$length$asx = function(receiver) {
   return J.getInterceptor$asx(receiver).get$length(receiver);
 };
+J.get$name$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$name(receiver);
+};
+J.insertAdjacentText$2$x = function(receiver, a0, a1) {
+  return J.getInterceptor$x(receiver).insertAdjacentText$2(receiver, a0, a1);
+};
 J.removeEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).removeEventListener$3(receiver, a0, a1, a2);
 };
@@ -5790,7 +6684,10 @@ J.toString$0 = function(receiver) {
 C.C__DelayedDone = new P._DelayedDone();
 C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
+C.EventStreamProvider_close = new W.EventStreamProvider("close");
+C.EventStreamProvider_datachannel = new W.EventStreamProvider("datachannel");
 C.EventStreamProvider_icecandidate = new W.EventStreamProvider("icecandidate");
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiationneeded");
 =======
@@ -5800,6 +6697,12 @@ C.EventStreamProvider_negotiationneeded = new W.EventStreamProvider("negotiation
 C.EventStreamProvider_open = new W.EventStreamProvider("open");
 C.EventStreamProvider_signalingstatechange = new W.EventStreamProvider("signalingstatechange");
 >>>>>>> Stashed changes
+=======
+C.EventStreamProvider_iceconnectionstatechange = new W.EventStreamProvider("iceconnectionstatechange");
+C.EventStreamProvider_message = new W.EventStreamProvider("message");
+C.EventStreamProvider_open = new W.EventStreamProvider("open");
+C.EventStreamProvider_signalingstatechange = new W.EventStreamProvider("signalingstatechange");
+>>>>>>> dirty
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSString_methods = J.JSString.prototype;
@@ -5928,12 +6831,17 @@ C.JS_CONST_rr7 = function(hooks) {
   hooks.getTag = getTagFixed;
   hooks.prototypeForTag = prototypeForTagFixed;
 };
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 C.Level_ALL_0 = new N.Level("ALL", 0);
 C.Level_INFO_800 = new N.Level("INFO", 800);
 C.Level_WARNING_900 = new N.Level("WARNING", 900);
 >>>>>>> Stashed changes
+=======
+C.Level_ALL_0 = new N.Level("ALL", 0);
+C.Level_INFO_800 = new N.Level("INFO", 800);
+>>>>>>> dirty
 Isolate.makeConstantList = function(list) {
   list.immutable$list = init;
   list.fixed$length = init;
@@ -5961,6 +6869,9 @@ $.Device__isIE = null;
 $.Device__isFirefox = null;
 $.Device__isWebKit = null;
 $.Device__cachedPropertyPrefix = null;
+$.hierarchicalLoggingEnabled = false;
+$._rootLevel = C.Level_INFO_800;
+$.LogRecord__nextNumber = 0;
 Isolate.$lazy($, "globalThis", "globalThis", "get$globalThis", function() {
   return function() { return this; }();
 });
@@ -6050,6 +6961,9 @@ Isolate.$lazy($, "_toStringVisiting", "_toStringVisiting", "get$_toStringVisitin
 });
 Isolate.$lazy($, "_toStringList", "Maps__toStringList", "get$Maps__toStringList", function() {
   return Array();
+});
+Isolate.$lazy($, "_loggers", "Logger__loggers", "get$Logger__loggers", function() {
+  return H.setRuntimeTypeInfo(H.fillLiteralMap([], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), [J.JSString, N.Logger]);
 });
 // Native classes
 
