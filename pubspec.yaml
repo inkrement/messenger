@@ -8,5 +8,6 @@ dependencies:
   json: any
   logging: any
   unittest: any
+  js: any
 environment:
   sdk: '>0.8.7'

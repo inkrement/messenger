@@ -2,11 +2,14 @@ library messenger;
 
 //TODO: load all
 
-//part 'src/peers/messagepassingpeer.dart';
 import 'dart:async';
+import 'dart:js';
 
 import 'src/events.dart';
 export 'src/events.dart';
+
+import 'src/message.dart';
+export 'src/message.dart';
 
 part 'src/peers/peer.dart';
 part 'src/peers/messagepassingpeer.dart';

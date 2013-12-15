@@ -1,4 +1,4 @@
-part of messenger.events;
+library messenger.message;
 
 class Message{
   String msg;
