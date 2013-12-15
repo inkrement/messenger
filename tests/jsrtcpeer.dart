@@ -13,6 +13,13 @@ void main() {
     JsWebRtcPeer bob = new JsWebRtcPeer();
   });
   
+  test('Webrtc callback',(){
+    JsWebRtcPeer alice = new JsWebRtcPeer();
+    
+    //TODO: test callback
+    alice.dataChannel.onmessage("test");
+  });
+  
   
   //test('SendAndReceive', (){
     /*MessagePassingPeer alice = new MessagePassingPeer();

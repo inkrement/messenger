@@ -16,37 +16,25 @@ class JsWebRtcPeer extends Peer{
                                  }]
   };
   
+  var dataChannelOptions = {'reliable': false} ;
+  
   JsWebRtcPeer(){
     
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
-        new js.Serializable(iceServers)); // TODO: add optionalRtpDataChannels
+        js.map(iceServers), js.map(optionalRtpDataChannels));
     
     /* create DataChannel */
-    /*
-    rtcPeerConnection.callMethod('createDataChannel', ['RTCDataChannel', {
-      'reliable': false
-    } ]);
-    */
+    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
+        js.map(dataChannelOptions));
+    
     
     /* set channel events */
-    /*
-    dataChannel = rtcPeerConnection.callMethod('createDataChannel', []);
-    
-    js.context.onmessagecallback = (x)=>print("rtc message callback: " + x);
-    js.context.onopencallback = (x)=>print("rtc open callback");
-    js.context.onclosecallback = (x)=>print("rtc close callback");
-    js.context.onerrorcallback = (x)=>print("rtc error callback");
-    
-    dataChannel.callMethod('onmessage', ['onmessagecallback']);
-    dataChannel.callMethod('onopen', ['onopencallback']);
-    dataChannel.callMethod('onclose', ['onclosecallback']);
-    dataChannel.callMethod('onerror', ['onerrorcallback']);
-    */
+    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
+    dataChannel.onopen = (x)=>print("rtc open callback");
+    dataChannel.onclose = (x)=>print("rtc close callback");
+    dataChannel.onerror = (x)=>print("rtc error callback");
   }
-  
-  
-  
   
   /**
    * connect to WebrtcPeer
