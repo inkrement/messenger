@@ -1,0 +1,2 @@
+#!/bin/sh
+dart -p packages tests/jsrtcpeer.dart

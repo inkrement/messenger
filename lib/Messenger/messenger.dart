@@ -3,7 +3,7 @@ library messenger;
 //TODO: load all
 
 import 'dart:async';
-import 'dart:js';
+//import 'dart:js';
 import 'package:js/js.dart' as js;
 
 import 'src/events.dart';

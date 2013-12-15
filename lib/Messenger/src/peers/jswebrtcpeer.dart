@@ -5,7 +5,7 @@ class JsWebRtcPeer extends Peer{
   var rtcPeerConnection;
   var dataChannel;
   
-  var iceServers = {
+  Map iceServers = {
                     'iceServers': [{
                       'url': 'stun:stun.l.google.com:19302'
                     }]
@@ -19,16 +19,18 @@ class JsWebRtcPeer extends Peer{
   JsWebRtcPeer(){
     
     /* create RTCPeerConnection */
-    rtcPeerConnection = new JsObject(context['webkitRTCPeerConnection'], 
-        [iceServers, optionalRtpDataChannels]);
+    rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
+        new js.Serializable(iceServers)); // TODO: add optionalRtpDataChannels
     
     /* create DataChannel */
+    /*
     rtcPeerConnection.callMethod('createDataChannel', ['RTCDataChannel', {
       'reliable': false
     } ]);
+    */
     
     /* set channel events */
-    
+    /*
     dataChannel = rtcPeerConnection.callMethod('createDataChannel', []);
     
     js.context.onmessagecallback = (x)=>print("rtc message callback: " + x);
@@ -40,7 +42,7 @@ class JsWebRtcPeer extends Peer{
     dataChannel.callMethod('onopen', ['onopencallback']);
     dataChannel.callMethod('onclose', ['onclosecallback']);
     dataChannel.callMethod('onerror', ['onerrorcallback']);
-    
+    */
   }
   
   
