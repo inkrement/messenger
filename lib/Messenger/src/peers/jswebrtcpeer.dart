@@ -1,8 +1,9 @@
 part of messenger;
 
-
+//TODO: support multiconnections
 class JsWebRtcPeer extends Peer{
   var rtcPeerConnection;
+  var dataChannel;
   
   var iceServers = {
                     'iceServers': [{
@@ -16,8 +17,29 @@ class JsWebRtcPeer extends Peer{
   };
   
   JsWebRtcPeer(){
+    
+    /* create RTCPeerConnection */
     rtcPeerConnection = new JsObject(context['webkitRTCPeerConnection'], 
         [iceServers, optionalRtpDataChannels]);
+    
+    /* create DataChannel */
+    rtcPeerConnection.callMethod('createDataChannel', ['RTCDataChannel', {
+      'reliable': false
+    } ]);
+    
+    /* set channel events */
+    
+    dataChannel = rtcPeerConnection.callMethod('createDataChannel', []);
+    
+    js.context.onmessagecallback = (x)=>print("rtc message callback: " + x);
+    js.context.onopencallback = (x)=>print("rtc open callback");
+    js.context.onclosecallback = (x)=>print("rtc close callback");
+    js.context.onerrorcallback = (x)=>print("rtc error callback");
+    
+    dataChannel.callMethod('onmessage', ['onmessagecallback']);
+    dataChannel.callMethod('onopen', ['onopencallback']);
+    dataChannel.callMethod('onclose', ['onclosecallback']);
+    dataChannel.callMethod('onerror', ['onerrorcallback']);
     
   }
   
@@ -29,20 +51,43 @@ class JsWebRtcPeer extends Peer{
    */
   connect(JsWebRtcPeer o){
     
+    /* ice candidate callback */
+    
+    js.context.onicecandidatecallback = (e){
+      if (!e || !e.candidate) return;
+         o.rtcPeerConnection.addIceCandidate(e.candidate);
+    };
+    rtcPeerConnection.callMethod('onicecandidate', []);
+    
+    /* create offer */
+    this.rtcPeerConnection.callMethod('createOffer', [(sessionDescription){
+      rtcPeerConnection.callMethod('setLocalDescription', [sessionDescription]);
+      
+      /* create answer */
+      
+      
+      //TODO
+      
+    }, null, []]);
     
     
-    
+    //add to the peers
+    _connections.add(o);
   }
   
-  
-  
+  disconnect(JsWebRtcPeer o){
+    
+    //TODO: abort rtc connection
+    
+    _connections.remove(o);
+  }
   
   close(){
     
   }
   
-  send(Peer o, Message msg){
-    
+  send(JsWebRtcPeer o, Message msg){
+    dataChannel.callMethod('send', [msg.toString()]);
   }
   
   /*
