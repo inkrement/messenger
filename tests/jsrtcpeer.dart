@@ -33,6 +33,19 @@ void main() {
     //expect("", myClassInstanceMirror.type);
   });
   
+  test('Webrtc has icecandidates',(){
+    JsWebRtcPeer alice = new JsWebRtcPeer();
+    JsWebRtcPeer bob = new JsWebRtcPeer();
+    
+    alice.connect(bob);
+    
+    int sum = alice.iceCandidates.length + bob.iceCandidates.length;
+    
+    expect(sum, predicate((x) => (x > 0), "is bigger than 0"));
+  });
+  
+  
+  
   //test connect
   
   test('Webrtc connect',(){
