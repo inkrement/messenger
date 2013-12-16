@@ -1,9 +1,12 @@
 part of messenger;
 
 //TODO: support multiconnections
+//TODO: signalingchannel
+
 class JsWebRtcPeer extends Peer{
   var rtcPeerConnection;
   var dataChannel;
+  List iceCandidates;
   
   Map iceServers = {
                     'iceServers': [{
@@ -20,20 +23,24 @@ class JsWebRtcPeer extends Peer{
   
   JsWebRtcPeer(){
     
+    /* init attributes */
+    iceCandidates = new List();
+    
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers), js.map(optionalRtpDataChannels));
     
-    /* create DataChannel */
-    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
-        js.map(dataChannelOptions));
+    rtcPeerConnection.onIceCandidate = (event){
+      if(event.candidate)
+        iceCandidates.add(event.candidate);
+    };
     
-    
-    /* set channel events */
-    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
-    dataChannel.onopen = (x)=>print("rtc open callback");
-    dataChannel.onclose = (x)=>print("rtc close callback");
-    dataChannel.onerror = (x)=>print("rtc error callback");
+    rtcPeerConnection.onDataChannel = (event){
+      print("got datachannel");
+      
+      dataChannel = event.channel;
+      dataChannel.onmessage = (data)=>print(data);
+    };
   }
   
   /**
@@ -41,24 +48,35 @@ class JsWebRtcPeer extends Peer{
    */
   connect(JsWebRtcPeer o){
     
-    /* ice candidate callback */
+    /* TODO: send Ice candidate to other peer */
     
-    js.context.onicecandidatecallback = (e){
-      if (!e || !e.candidate) return;
-         o.rtcPeerConnection.addIceCandidate(e.candidate);
-    };
-    rtcPeerConnection.callMethod('onicecandidate', []);
+    iceCandidates.forEach((elem){
+      o.rtcPeerConnection.addIceCandidate(elem, ()=>print("ok"),(var error) => print("faaail"));
+    });
+      
     
-    /* create offer */
-    this.rtcPeerConnection.callMethod('createOffer', [(sessionDescription){
-      rtcPeerConnection.callMethod('setLocalDescription', [sessionDescription]);
+    /* create DataChannel */
+    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
+       js.map(dataChannelOptions));
+    
+    
+    /* set channel events */
+    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
+    dataChannel.onopen = (x)=>print("rtc open callback");
+    dataChannel.onclose = (x)=>print("rtc close callback");
+    dataChannel.onerror = (x)=>print("rtc error callback");
+    
+    rtcPeerConnection.createOffer((sdp_alice){
+      print("alice created offer");
       
-      /* create answer */
+      rtcPeerConnection.setLocalDescription(sdp_alice);
+      o.rtcPeerConnection.setRemoteDescription(sdp_alice);
       
-      
-      //TODO
-      
-    }, null, []]);
+      o.rtcPeerConnection.createAnswer((sdp_bob){
+        o.rtcPeerConnection.setLocalDescription(sdp_bob);
+        rtcPeerConnection.setRemoteDescription(sdp_bob);
+      });
+    }, (e)=>print(e), {});
     
     
     //add to the peers

@@ -4,6 +4,9 @@ abstract class Peer{
   List<Peer> _connections;
   StreamController<NewMessageEvent> newMessageController = new StreamController<NewMessageEvent>.broadcast();
   
+  Peer(){
+    _connections = new List<Peer>();
+  }
   connect(Peer other);
   
   send(Peer to, Message msg);
