@@ -1,11 +1,19 @@
 part of messenger;
 
 abstract class Peer{
+  final Logger log;
   List<Peer> _connections;
   StreamController<NewMessageEvent> newMessageController = new StreamController<NewMessageEvent>.broadcast();
   
-  Peer(){
+  Peer(): log = new Logger('Peer'){
     _connections = new List<Peer>();
+    
+    Logger.root.level = Level.ALL;
+    Logger.root.onRecord.listen((LogRecord rec) {
+      print('${rec.level.name}: ${rec.time}: ${rec.message}');
+    });
+    
+    
   }
   connect(Peer other);
   

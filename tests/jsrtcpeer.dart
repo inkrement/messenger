@@ -3,6 +3,7 @@ import 'package:webrtc/Messenger/messenger.dart';
 
 import 'package:unittest/html_config.dart';
 import 'dart:mirrors';
+import 'dart:async';
 
 void main() {
   
@@ -37,11 +38,21 @@ void main() {
     JsWebRtcPeer alice = new JsWebRtcPeer();
     JsWebRtcPeer bob = new JsWebRtcPeer();
     
-    alice.connect(bob);
+    expect(alice.connect(bob), completes);
     
-    int sum = alice.iceCandidates.length + bob.iceCandidates.length;
+    /*
+    new Timer(new Duration(milliseconds:100), expectAsync0((){
+        
+      alice.connect(bob).then((_){
+        int sum = alice.iceCandidates.length + bob.iceCandidates.length;
+        
+        logMessage(sum.toString());
+        expect(sum, predicate((x) => (x > 0), "is bigger than 0"));
+      });
+        
+    }));*/
     
-    expect(sum, predicate((x) => (x > 0), "is bigger than 0"));
+    
   });
   
   

@@ -19,9 +19,10 @@ class JsWebRtcPeer extends Peer{
                                  }]
   };
   
-  var dataChannelOptions = {'reliable': false} ;
+  var dataChannelOptions = null ;
   
-  
+  /* Future to handle async event */
+  Completer gotIceCandidate;
   
   /**
    * constructor
@@ -31,16 +32,12 @@ class JsWebRtcPeer extends Peer{
     /* init attributes */
     iceCandidates = new List();
     
+    gotIceCandidate = new Completer();
+    
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers), js.map(optionalRtpDataChannels));
     
-    rtcPeerConnection.onIceCandidate = (event){
-      throw new StateError("ice candidate");
-      
-      if(event.candidate)
-        iceCandidates.add(event.candidate);
-    };
     
     rtcPeerConnection.onDataChannel = (event){
       print("got datachannel");
@@ -48,6 +45,11 @@ class JsWebRtcPeer extends Peer{
       dataChannel = event.channel;
       dataChannel.onmessage = (data)=>print(data);
     };
+    
+    /* create DataChannel */
+    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
+       null); //js.map(dataChannelOptions)
+    
   }
   
   
@@ -57,9 +59,17 @@ class JsWebRtcPeer extends Peer{
    */
   connect(JsWebRtcPeer o){
     
-    /* create DataChannel */
-    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
-       js.map(dataChannelOptions));
+    rtcPeerConnection.onIceCandidate = (event){
+      
+      //TODO: yeees received ICE candidate
+      //gotIceCandidate.complete();
+      
+      //throw new StateError("ice candidate");
+      
+      if(event.candidate)
+        o.rtcPeerConnection.addIceCandiate(event.candidate);
+    };
+    
     
     
     /* set channel events */
@@ -71,9 +81,9 @@ class JsWebRtcPeer extends Peer{
     
     /* TODO: send Ice candidate to other peer */
     
-    iceCandidates.forEach((elem){
+    /*iceCandidates.forEach((elem){
       o.rtcPeerConnection.addIceCandidate(elem, ()=>print("ok"),(var error) => print("faaail"));
-    });
+    });*/
      
     
     rtcPeerConnection.createOffer((sdp_alice){
@@ -90,6 +100,8 @@ class JsWebRtcPeer extends Peer{
     
     //add to the peers
     _connections.add(o);
+    
+    //return gotIceCandidate.future;
   }
   
   
