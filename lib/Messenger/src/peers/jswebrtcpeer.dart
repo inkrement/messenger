@@ -36,6 +36,8 @@ class JsWebRtcPeer extends Peer{
         js.map(iceServers), js.map(optionalRtpDataChannels));
     
     rtcPeerConnection.onIceCandidate = (event){
+      throw new StateError("ice candidate");
+      
       if(event.candidate)
         iceCandidates.add(event.candidate);
     };
@@ -55,13 +57,6 @@ class JsWebRtcPeer extends Peer{
    */
   connect(JsWebRtcPeer o){
     
-    /* TODO: send Ice candidate to other peer */
-    
-    iceCandidates.forEach((elem){
-      o.rtcPeerConnection.addIceCandidate(elem, ()=>print("ok"),(var error) => print("faaail"));
-    });
-      
-    
     /* create DataChannel */
     dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
        js.map(dataChannelOptions));
@@ -72,6 +67,14 @@ class JsWebRtcPeer extends Peer{
     dataChannel.onopen = (x)=>print("rtc open callback");
     dataChannel.onclose = (x)=>print("rtc close callback");
     dataChannel.onerror = (x)=>print("rtc error callback");
+    
+    
+    /* TODO: send Ice candidate to other peer */
+    
+    iceCandidates.forEach((elem){
+      o.rtcPeerConnection.addIceCandidate(elem, ()=>print("ok"),(var error) => print("faaail"));
+    });
+     
     
     rtcPeerConnection.createOffer((sdp_alice){
       print("alice created offer");
