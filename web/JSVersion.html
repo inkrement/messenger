@@ -75,12 +75,6 @@
       
     }
     
-    function sendData() {
-      var data = dataChannelSend.value;
-      sendChannel.send(data);
-      console.log('Sent Data: ' + data);
-    }
-    
     function closeDataChannels() {
       console.log('Closing data Channels');
       sendChannel.close();
@@ -123,7 +117,6 @@
       
       if (readyState == "open") {
         console.log("datachannel open");
-        sendChannel.send("test");
       } else {
         console.log("dc not open");
       }
@@ -132,6 +125,8 @@
     function onReceiveChannelStateChange() {
       var readyState = receiveChannel.readyState;
       console.log('Receive channel state is: ' + readyState);
+      
+      sendChannel.send("test");
     }
     
     
