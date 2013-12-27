@@ -18,7 +18,42 @@
       pcConstraint = null;
       dataConstraint = null;
       
+      //setup
       pc1 = new webkitRTCPeerConnection(servers, pcConstraint);
+      
+      pc1.onicecandidate = iceCallback1; 
+      
+      //same.. setup
+      pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
+      
+      pc2.onicecandidate = iceCallback2;
+      pc2.ondatachannel = receiveChannelCallback;
+      
+      
+      function iceCallback1(event) { 
+        console.log('local ice callback');
+        
+        if (event.candidate) {
+          pc2.addIceCandidate(event.candidate);
+          
+          console.log('Local ICE candidate: \n' + event.candidate.candidate);
+        }
+      }
+      
+      function iceCallback2(event) {
+        console.log('remote ice callback');
+        
+        if (event.candidate) {
+          pc1.addIceCandidate(event.candidate);
+          
+          console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
+        }
+      }
+      
+      
+      
+      
+      //connect p1 -> p2
       
       try {
         sendChannel = pc1.createDataChannel("sendDataChannel", dataConstraint);
@@ -27,21 +62,10 @@
         console.log("error datachannel"); 
       }
       
-      pc1.onicecandidate = iceCallback1; 
+      
       sendChannel.onopen = onSendChannelStateChange;
       sendChannel.onclose = onSendChannelStateChange;
       
-      //same.. setup
-      pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
-      console.log('Created remote peer connection object pc2');
-      
-      pc2.onicecandidate = iceCallback2;
-      pc2.ondatachannel = receiveChannelCallback;
-      
-      
-      
-      
-      //connect p1 -> p2
       pc1.createOffer(function (desc) {
         pc1.setLocalDescription(desc);
         
@@ -79,25 +103,7 @@
       pc1.setRemoteDescription(desc);
     }
     
-    function iceCallback1(event) { 
-      console.log('local ice callback');
-      
-      if (event.candidate) {
-        pc2.addIceCandidate(event.candidate);
-        
-        console.log('Local ICE candidate: \n' + event.candidate.candidate);
-      }
-    }
     
-    function iceCallback2(event) {
-      console.log('remote ice callback');
-      
-      if (event.candidate) {
-        pc1.addIceCandidate(event.candidate);
-        
-        console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
-      }
-    }
     
     function receiveChannelCallback(event) {
       console.log('Receive Channel Callback');
