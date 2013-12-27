@@ -4,6 +4,8 @@ library messenger;
 
 import 'dart:async';
 //import 'dart:js';
+import 'dart:html';
+
 import 'package:js/js.dart' as js;
 import 'package:logging/logging.dart';
 

@@ -91,9 +91,12 @@
         console.log('remote ice callback');
         
         if (event.candidate) {
+          
           pc1.addIceCandidate(event.candidate);
           
-          console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
+          console.error(event.candidate);
+          
+          //console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
         }
       }
       

@@ -14,12 +14,11 @@ class JsWebRtcPeer extends Peer{
   Map dataChannelOptions = {};
   
   
-  
   /**
    * constructor
    */
   JsWebRtcPeer([name="sd"]):readyState="none"{
-    log.info("started new JsWebRtcPeer!");
+    //log.info("started new JsWebRtcPeer!");
     
     /* init attributes */
     readyStateEvent = new StreamController.broadcast();
@@ -29,7 +28,7 @@ class JsWebRtcPeer extends Peer{
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers)); //TODO: add pcConstraints
     
-    log.fine("created PeerConnection");
+    //log.fine("created PeerConnection");
     
     rtcPeerConnection.onDataChannel = (event){
       log.fine("datachannel received");
@@ -51,41 +50,39 @@ class JsWebRtcPeer extends Peer{
    * connect to WebrtcPeer
    */
   connect(JsWebRtcPeer o){
-    log.info("try to connect to: ");
+    log.info("try to connect to: " + o.name);
     
-    
-    ////////////////
-    
-    rtcPeerConnection.onicecandidate = (event) { 
-      log.info('local ice callback');
+    rtcPeerConnection.onicecandidate = (RtcIceCandidateEvent event) { 
+
+      if(event.candidate != null)
+        o.rtcPeerConnection.addIceCandidate(event.candidate);
       
-      if (event.candidate != null) {
         try{
           //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("works"), (_)=>print("error ice candidate"));
-          o.rtcPeerConnection.addIceCandidate(js.map(event.candidate));
-        } catch(e){
-          //log.warning("error: could not add ice candidate " + e.toString());
-          print(e);
           
+         // log.warning(event.candidate.toString());
+          
+          
+        } catch(e){
+          log.warning("bob error: could not add ice candidate " + e.toString());
         }
         
-        log.info('Local ICE candidate: \n' + event.candidate.candidate);
-      }
     };
     
     
     o.rtcPeerConnection.onicecandidate = (event) { 
-      log.info('local ice callback');
-      
-      if (event.candidate  != null) {
+     
+      if(event.candidate != null)
         try{
-          rtcPeerConnection.addIceCandidate(js.map(event.candidate));
+          
+          //log.warning(test.toString());
+          
+          //var icecandidate = event.candidate;
+          //log.info("icecandidate: " + icecandidate);
+          //rtcPeerConnection.addIceCandidate(js.map(icecandidate));
         } catch(e){
-          log.warning("error: could not add ice candidate " + e.toString());
+          log.warning("alice error: could not add ice candidate " + e.toString());
         }
-        
-        log.info('Local ICE candidate: \n' + event.candidate.candidate);
-      }
     };
     
 
@@ -118,76 +115,6 @@ class JsWebRtcPeer extends Peer{
     } catch (e) {
       log.warning("could not create DataChannel: " + e.toString()); 
     }
-    
-    
-    
-    
-    /*
-    
-    pc1.createOffer(function (desc) {
-      pc1.setLocalDescription(desc);
-      
-      console.log('Offer from pc1 \n' + desc.sdp);
-      pc2.setRemoteDescription(desc);
-      pc2.createAnswer(gotDescription2);
-    });
-    
-    ///////////////////////////
-    
-    /* create DataChannel */
-    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
-       null); //js.map(dataChannelOptions)
-    
-    /* handle ice candidates */
-    rtcPeerConnection.onIceCandidate = (event){
-      log.fine("new ice candidate!");
-      //TODO: yeees received ICE candidate
-      //gotIceCandidate.complete();
-      
-      //throw new StateError("ice candidate");
-      
-      if(event.candidate)
-        o.rtcPeerConnection.addIceCandiate(event.candidate);
-    };
-    
-    o.rtcPeerConnection.onIceCandidate = (event){
-      log.fine("new ice candidate!");
-
-      if(event.candidate)
-        rtcPeerConnection.addIceCandiate(event.candidate);
-    };
-    
-    /* TODO: send Ice candidate to other peer */
-    
-    /*iceCandidates.forEach((elem){
-      o.rtcPeerConnection.addIceCandidate(elem, ()=>print("ok"),(var error) => print("faaail"));
-    });*/
-     
-    
-    rtcPeerConnection.createOffer((sdp_alice){
-      log.info("create offer");
-      
-      rtcPeerConnection.setLocalDescription(sdp_alice);
-      o.rtcPeerConnection.setRemoteDescription(sdp_alice);
-      
-      o.rtcPeerConnection.createAnswer((sdp_bob){
-        log.info("create answer");
-        o.rtcPeerConnection.setLocalDescription(sdp_bob);
-        rtcPeerConnection.setRemoteDescription(sdp_bob);
-        
-        //test datachannel
-        //dataChannel.send("test");
-      });
-    }, (e)=>print(e), {});
-    
-    
-    //add to the peers
-    _connections.add(o);
-    
-    //return gotIceCandidate.future;
-     * 
-     * 
-     */
     
   }
   

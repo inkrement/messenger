@@ -2,8 +2,9 @@ import 'package:unittest/unittest.dart';
 import 'package:webrtc/Messenger/messenger.dart';
 
 import 'package:unittest/html_config.dart';
-import 'dart:mirrors';
-import 'dart:async';
+//import 'dart:mirrors';
+//import 'dart:async';
+
 
 void main() {
   
@@ -39,7 +40,15 @@ void main() {
     expect(alice.readyState, "none");
   });
   
-  
+  /**
+   * Test Connection
+   */
+  test('Webrtc connect',(){
+    JsWebRtcPeer alice = new JsWebRtcPeer("alice");
+    JsWebRtcPeer bob = new JsWebRtcPeer("bob");
+    
+    alice.connect(bob);
+  });
   
   
   
@@ -75,18 +84,7 @@ void main() {
   
   //test connect
   
-  test('Webrtc connect',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
-    JsWebRtcPeer bob = new JsWebRtcPeer();
-    
-    alice.connect(bob);
-    //InstanceMirror myClassInstanceMirror = reflect(alice);
-    //String type = myClassInstanceMirror.type;
-    //logMessage();
-    
-    
-    //expect("", myClassInstanceMirror.type);
-  });
+
   
   
 }
