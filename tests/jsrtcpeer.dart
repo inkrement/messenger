@@ -7,22 +7,44 @@ import 'dart:async';
 
 void main() {
   
-  /* setup html environment */
+  /// setup html environment 
   useHtmlConfiguration();
   
-  //test Constructor
+  /**
+   * expect to construct new Object without catching a exception
+   */
   test('Webrtc Status', (){
     JsWebRtcPeer alice = new JsWebRtcPeer();
     JsWebRtcPeer bob = new JsWebRtcPeer();
   });
   
+  /**
+   * The type od a new rtcPeerConnection should be
+   * RTCPeerConnection
+   */
   test('Webrtc types peerconnection',(){
     JsWebRtcPeer alice = new JsWebRtcPeer();
 
-    expect("[object RTCPeerConnection]", alice.rtcPeerConnection.toString());
+    expect(alice.rtcPeerConnection.toString(), "[object RTCPeerConnection]");
   });
   
   
+  /**
+   * New Peer should not have a datachannel.
+   * Therefore readyState is initialized with "none"
+   */
+  test('Webrtc datachannel status',(){
+    JsWebRtcPeer alice = new JsWebRtcPeer();
+
+    expect(alice.readyState, "none");
+  });
+  
+  
+  
+  
+  
+  
+  /*
   test('Webrtc types datachannel',(){
     JsWebRtcPeer alice = new JsWebRtcPeer();
     
@@ -38,29 +60,17 @@ void main() {
     JsWebRtcPeer alice = new JsWebRtcPeer();
     JsWebRtcPeer bob = new JsWebRtcPeer();
     
-    expect(alice.connect(bob), completes);
-    
-    /*
-    new Timer(new Duration(milliseconds:100), expectAsync0((){
-        
-      alice.connect(bob).then((_){
-        int sum = alice.iceCandidates.length + bob.iceCandidates.length;
-        
-        logMessage(sum.toString());
-        expect(sum, predicate((x) => (x > 0), "is bigger than 0"));
-      });
-        
-    }));*/
-    
-    
+    //expect(alice.connect(bob), completes);
+   
   });
+  
   
   test("testing a future", () {
     Compute compute = new Compute();    
     Future<Map> future = compute.sumIt([1, 2, 3]);
     expect(future, completion(equals({"value" : 6})));
   });
-  
+  */
   
   
   //test connect

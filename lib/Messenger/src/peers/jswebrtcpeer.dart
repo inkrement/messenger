@@ -6,37 +6,33 @@ part of messenger;
 class JsWebRtcPeer extends Peer{
   var rtcPeerConnection;
   var dataChannel;
-  List iceCandidates;
+  
   
   Map iceServers = {
                     'iceServers': [{
                       'url': 'stun:stun.l.google.com:19302'
                     }]
                    };
-  var optionalRtpDataChannels = {
-                                 "optional": [{
-                                   "RtpDataChannels": true
-                                 }]
-  };
+  var pcConstraint = {};
   
-  var dataChannelOptions = null ;
+ // var dataChannelOptions = [];
   
   /* Future to handle async event */
-  Completer gotIceCandidate;
+  StreamController readyStateEvent;
+  String readyState;
   
   /**
    * constructor
    */
-  JsWebRtcPeer(){
+  JsWebRtcPeer():readyState="none"{
     log.info("started new JsWebRtcPeer!");
     
     /* init attributes */
-    iceCandidates = new List();
-    gotIceCandidate = new Completer();
+    readyStateEvent = new StreamController.broadcast();
     
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
-        js.map(iceServers), js.map(optionalRtpDataChannels));
+        js.map(iceServers)); //TODO: add pcConstraints
     
     log.fine("created PeerConnection");
     
@@ -46,24 +42,23 @@ class JsWebRtcPeer extends Peer{
       dataChannel = event.channel;
       /* set channel events */
       dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
-      dataChannel.onopen = (x)=>print("rtc open callback");
-      dataChannel.onclose = (x)=>print("rtc close callback");
-      dataChannel.onerror = (x)=>print("rtc error callback");
+      
+      dataChannel.onopen = (x)=>changeReadyState(dataChannel.readyState);
+      dataChannel.onclose = (x)=>changeReadyState(dataChannel.readyState);
+      //dataChannel.onerror = (x)=>print("rtc error callback");
+      
+      readyState = dataChannel.readyState;
     };
-    
-    /* create DataChannel */
-    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
-       null); //js.map(dataChannelOptions)
-    
-    /* set channel events */
-    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
-    dataChannel.onopen = (x)=>print("rtc open callback");
-    dataChannel.onclose = (x)=>print("rtc close callback");
-    dataChannel.onerror = (x)=>print("rtc error callback");
-    
-    log.fine("created a new dataChannel");
   }
   
+  
+  //make private
+  changeReadyState(String readyState){
+    log.info("change state: " + readyState);
+    
+    this.readyState = readyState;
+    readyStateEvent.add(readyState);
+  }
   
   
   /**
@@ -71,6 +66,10 @@ class JsWebRtcPeer extends Peer{
    */
   connect(JsWebRtcPeer o){
     log.info("try to connect to :");
+    
+    /* create DataChannel */
+    dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
+       null); //js.map(dataChannelOptions)
     
     /* handle ice candidates */
     rtcPeerConnection.onIceCandidate = (event){
