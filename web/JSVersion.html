@@ -73,7 +73,7 @@
       
       //connect p1 -> p2
       pc1.onicecandidate = iceCallback1;
-      pc2.onicecandidate = iceCallback2;
+      
       
       function iceCallback1(event) { 
         console.log('local ice callback');
@@ -85,6 +85,8 @@
         }
       }
       
+      
+      pc2.onicecandidate = iceCallback2;
       function iceCallback2(event) {
         console.log('remote ice callback');
         
