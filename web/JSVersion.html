@@ -21,14 +21,17 @@
       //setup
       pc1 = new webkitRTCPeerConnection(servers, pcConstraint);
       
-      pc1.onicecandidate = iceCallback1; 
-      
       //same.. setup
       pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
       
-      pc2.onicecandidate = iceCallback2;
+      
       pc2.ondatachannel = receiveChannelCallback;
       
+      
+      
+      //connect p1 -> p2
+      pc1.onicecandidate = iceCallback1;
+      pc2.onicecandidate = iceCallback2;
       
       function iceCallback1(event) { 
         console.log('local ice callback');
@@ -50,10 +53,6 @@
         }
       }
       
-      
-      
-      
-      //connect p1 -> p2
       
       try {
         sendChannel = pc1.createDataChannel("sendDataChannel", dataConstraint);
