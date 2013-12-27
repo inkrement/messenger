@@ -9,122 +9,122 @@
     
     <script>
     
-    $( document ).ready(function() {
-      console.log("test");
-      
-      var iceServers = {
-                        'iceServers': [{
-                          'url': 'stun:stun.l.google.com:19302'
-                        }]
-      };
-      var optionalRtpDataChannels = {
-                                     "optional": [{
-                                       "RtpDataChannels": true
-                                     }]
-      };
-      
-      //erster Client
-      
-      var rtcPeerConnection = new webkitRTCPeerConnection(iceServers,optionalRtpDataChannels);
-      var rtcPeerConnection2 = new webkitRTCPeerConnection(iceServers, optionalRtpDataChannels);
-      
-      rtcPeerConnection.onIceCandidate = function(event){
-        console.log("new ice candidate!");
-        
-        if(event.candidate)
-          rtcPeerConnection2.addIceCandiate(event.candidate);
-      };
-      
-      rtcPeerConnection2.onIceCandidate = function(event){
-        console.log("new ice candidate!");
+    var pc1, pc2, sendChannel, receiveChannel, pcConstraint, dataConstraint;
 
-        if(event.candidate)
-          rtcPeerConnection.addIceCandiate(event.candidate);
-      };
+    function createConnection() {
+      var servers = null;
+      pcConstraint = null;
+      dataConstraint = null;
       
-      console.log("created PeerConnection");
+      pc1 = new webkitRTCPeerConnection(servers, pcConstraint);
+      console.log('Created local peer connection object pc1');
       
-      rtcPeerConnection.onDataChannel = function (event){
-        console.log("datachannel received");
+      try {
+        sendChannel = pc1.createDataChannel("sendDataChannel", dataConstraint);
+        console.log('Created send data channel');
+      } catch (e) {
+        console.log("error datachannel"); 
+      }
+      
+      pc1.onicecandidate = iceCallback1; 
+      sendChannel.onopen = onSendChannelStateChange;
+      sendChannel.onclose = onSendChannelStateChange;
+      
+      pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
+      console.log('Created remote peer connection object pc2');
+      
+      pc2.onicecandidate = iceCallback2;
+      pc2.ondatachannel = receiveChannelCallback;
+      
+      pc1.createOffer(gotDescription1);
+    }
+    
+    function sendData() {
+      var data = dataChannelSend.value;
+      sendChannel.send(data);
+      console.log('Sent Data: ' + data);
+    }
+    
+    function closeDataChannels() {
+      console.log('Closing data Channels');
+      sendChannel.close();
+      console.log('Closed data channel with label: ' + sendChannel.label);
+      receiveChannel.close();
+      console.log('Closed data channel with label: ' + receiveChannel.label);
+      pc1.close(); 
+      pc2.close();
+      pc1 = null;
+      pc2 = null;
+      console.log('Closed peer connections');
+    }
+    
+    function gotDescription1(desc) {
+      pc1.setLocalDescription(desc);
+      console.log('Offer from pc1 \n' + desc.sdp);
+      pc2.setRemoteDescription(desc);
+      pc2.createAnswer(gotDescription2);
+    }
+    
+    function gotDescription2(desc) {
+      pc2.setLocalDescription(desc);
+      console.log('Answer from pc2 \n' + desc.sdp);
+      pc1.setRemoteDescription(desc);
+    }
+    
+    function iceCallback1(event) { 
+      console.log('local ice callback');
+      
+      if (event.candidate) {
+        pc2.addIceCandidate(event.candidate);
         
-        dataChannel = event.channel;
-        // set channel events
-        dataChannel.onmessage = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel.onopen = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel.onclose = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel.onerror = function(x){ console.log("rtc message callback: " + x);};
-      };
+        console.log('Local ICE candidate: \n' + event.candidate.candidate);
+      }
+    }
+    
+    function iceCallback2(event) {
+      console.log('remote ice callback');
       
-      // create DataChannel 
-      dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
-          null); //js.map(dataChannelOptions)
-      
-      // set channel events 
-      dataChannel.onmessage = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel.onopen = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel.onclose = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel.onerror = function(x){ console.log("rtc message callback: " + x);};
-      
-      console.log("created a new dataChannel");
-      
-      
-      //zweiter Client
-      
-      var rtcPeerConnection2 = new webkitRTCPeerConnection(iceServers, optionalRtpDataChannels);
-      
-      console.log("created PeerConnection");
-      
-      rtcPeerConnection2.onDataChannel = function (event){
-        console.log("datachannel received");
+      if (event.candidate) {
+        pc1.addIceCandidate(event.candidate);
         
-        dataChannel2 = event.channel;
-        // set channel events
-        dataChannel2.onmessage = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel2.onopen = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel2.onclose = function(x){ console.log("rtc message callback: " + x);};
-        dataChannel2.onerror = function(x){ console.log("rtc message callback: " + x);};
-      };
+        console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
+      }
+    }
+    
+    function receiveChannelCallback(event) {
+      console.log('Receive Channel Callback');
       
-      // create DataChannel 
-      dataChannel2 = rtcPeerConnection2.createDataChannel('RTCDataChannel',
-          null); //js.map(dataChannelOptions)
+      receiveChannel = event.channel;
+      receiveChannel.onmessage = onReceiveMessageCallback;
+      receiveChannel.onopen = onReceiveChannelStateChange;
+      receiveChannel.onclose = onReceiveChannelStateChange;  
+    }
+    
+    function onReceiveMessageCallback(event) {
+      console.log('Received Message: ' + event.data);
+    }
+    
+    function onSendChannelStateChange() {
+      var readyState = sendChannel.readyState;
+      console.log('Send channel state is: ' + readyState);
       
-      // set channel events 
-      dataChannel2.onmessage = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel2.onopen = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel2.onclose = function(x){ console.log("rtc message callback: " + x);};
-      dataChannel2.onerror = function(x){ console.log("rtc message callback: " + x);};
+      if (readyState == "open") {
+        console.log("datachannel open");
+      } else {
+        console.log("dc not open");
+      }
+    }
+    
+    function onReceiveChannelStateChange() {
+      var readyState = receiveChannel.readyState;
+      console.log('Receive channel state is: ' + readyState);
+    }
+    
+    
+    $( document ).ready(function() {
       
-      console.log("created a new dataChannel");
-      
-      //connect them
-      
-      
-      
-      // TODO: send Ice candidate to other peer 
-      
-      rtcPeerConnection.createOffer(function(sdp_alice){
-        console.log("create offer");
-        
-        rtcPeerConnection.setLocalDescription(sdp_alice);
-        rtcPeerConnection2.setRemoteDescription(sdp_alice);
-        
-        rtcPeerConnection2.createAnswer(function(sdp_bob){
-          console.log("create answer");
-          rtcPeerConnection2.setLocalDescription(sdp_bob);
-          rtcPeerConnection.setRemoteDescription(sdp_bob);
-          
-          //test datachannel
-          dataChannel.send("test");
-        });
-      }, function(){
-        console.log("error");
-      });
+      createConnection();
     });
-    
-    
-    
-    
     
     </script>
   </head>
