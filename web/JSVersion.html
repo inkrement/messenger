@@ -21,11 +21,53 @@
       //setup
       pc1 = new webkitRTCPeerConnection(servers, pcConstraint);
       
+      pc1.ondatachannel = function (event) {
+        console.log('Receive Channel Callback');
+        
+        sendChannel = event.channel;
+        sendChannel.onmessage = function (event) {
+          console.log('Received Message: ' + event.data);
+        };
+        
+        sendChannel.onopen = function() {
+          var readyState = sendChannel.readyState;
+          console.log('Receive channel state is: ' + readyState);
+        };
+        
+        sendChannel.onclose = function () {
+          var readyState = sendChannel.readyState;
+          
+          console.log('send channel state is: ' + readyState);
+        };  
+        
+      };
+      
       //same.. setup
       pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
       
       
-      pc2.ondatachannel = receiveChannelCallback;
+      pc2.ondatachannel = function (event) {
+        console.log('Receive Channel Callback');
+        
+        receiveChannel = event.channel;
+        receiveChannel.onmessage = function (event) {
+          console.log('Received Message: ' + event.data);
+        };
+        
+        receiveChannel.onopen = function() {
+          var readyState = receiveChannel.readyState;
+          console.log('Receive channel state is: ' + readyState);
+          
+          sendChannel.send("test");
+        };
+        
+        receiveChannel.onclose = function () {
+          var readyState = receiveChannel.readyState;
+          
+          console.log('Receive channel state is: ' + readyState);
+        };  
+        
+      };
       
       
       
@@ -98,18 +140,9 @@
     
     
     
-    function receiveChannelCallback(event) {
-      console.log('Receive Channel Callback');
-      
-      receiveChannel = event.channel;
-      receiveChannel.onmessage = onReceiveMessageCallback;
-      receiveChannel.onopen = onReceiveChannelStateChange;
-      receiveChannel.onclose = onReceiveChannelStateChange;  
-    }
     
-    function onReceiveMessageCallback(event) {
-      console.log('Received Message: ' + event.data);
-    }
+    
+    
     
     function onSendChannelStateChange() {
       var readyState = sendChannel.readyState;
@@ -122,12 +155,7 @@
       }
     }
     
-    function onReceiveChannelStateChange() {
-      var readyState = receiveChannel.readyState;
-      console.log('Receive channel state is: ' + readyState);
-      
-      sendChannel.send("test");
-    }
+    
     
     
     $( document ).ready(function() {
