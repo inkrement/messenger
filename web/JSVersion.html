@@ -12,12 +12,13 @@
     var pc1, pc2, sendChannel, receiveChannel, pcConstraint, dataConstraint;
 
     function createConnection() {
+      
+      //setup peer
       var servers = null;
       pcConstraint = null;
       dataConstraint = null;
       
       pc1 = new webkitRTCPeerConnection(servers, pcConstraint);
-      console.log('Created local peer connection object pc1');
       
       try {
         sendChannel = pc1.createDataChannel("sendDataChannel", dataConstraint);
@@ -30,13 +31,25 @@
       sendChannel.onopen = onSendChannelStateChange;
       sendChannel.onclose = onSendChannelStateChange;
       
+      //same.. setup
       pc2 = new webkitRTCPeerConnection(servers, pcConstraint);
       console.log('Created remote peer connection object pc2');
       
       pc2.onicecandidate = iceCallback2;
       pc2.ondatachannel = receiveChannelCallback;
       
-      pc1.createOffer(gotDescription1);
+      
+      
+      
+      //connect p1 -> p2
+      pc1.createOffer(function (desc) {
+        pc1.setLocalDescription(desc);
+        
+        console.log('Offer from pc1 \n' + desc.sdp);
+        pc2.setRemoteDescription(desc);
+        pc2.createAnswer(gotDescription2);
+      });
+      
     }
     
     function sendData() {
@@ -58,12 +71,7 @@
       console.log('Closed peer connections');
     }
     
-    function gotDescription1(desc) {
-      pc1.setLocalDescription(desc);
-      console.log('Offer from pc1 \n' + desc.sdp);
-      pc2.setRemoteDescription(desc);
-      pc2.createAnswer(gotDescription2);
-    }
+    
     
     function gotDescription2(desc) {
       pc2.setLocalDescription(desc);
@@ -110,6 +118,7 @@
       
       if (readyState == "open") {
         console.log("datachannel open");
+        sendChannel.send("test");
       } else {
         console.log("dc not open");
       }
