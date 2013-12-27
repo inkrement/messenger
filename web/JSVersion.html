@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>JSVersion</title>
+    <meta charset="UTF-8">
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <script>
+    
+    $( document ).ready(function() {
+      console.log("test");
+      
+      var iceServers = {
+                        'iceServers': [{
+                          'url': 'stun:stun.l.google.com:19302'
+                        }]
+      };
+      var optionalRtpDataChannels = {
+                                     "optional": [{
+                                       "RtpDataChannels": true
+                                     }]
+      };
+      
+      //erster Client
+      
+      var rtcPeerConnection = new webkitRTCPeerConnection(iceServers,optionalRtpDataChannels);
+      var rtcPeerConnection2 = new webkitRTCPeerConnection(iceServers, optionalRtpDataChannels);
+      
+      rtcPeerConnection.onIceCandidate = function(event){
+        console.log("new ice candidate!");
+        
+        if(event.candidate)
+          rtcPeerConnection2.addIceCandiate(event.candidate);
+      };
+      
+      rtcPeerConnection2.onIceCandidate = function(event){
+        console.log("new ice candidate!");
+
+        if(event.candidate)
+          rtcPeerConnection.addIceCandiate(event.candidate);
+      };
+      
+      console.log("created PeerConnection");
+      
+      rtcPeerConnection.onDataChannel = function (event){
+        console.log("datachannel received");
+        
+        dataChannel = event.channel;
+        // set channel events
+        dataChannel.onmessage = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel.onopen = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel.onclose = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel.onerror = function(x){ console.log("rtc message callback: " + x);};
+      };
+      
+      // create DataChannel 
+      dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
+          null); //js.map(dataChannelOptions)
+      
+      // set channel events 
+      dataChannel.onmessage = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel.onopen = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel.onclose = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel.onerror = function(x){ console.log("rtc message callback: " + x);};
+      
+      console.log("created a new dataChannel");
+      
+      
+      //zweiter Client
+      
+      var rtcPeerConnection2 = new webkitRTCPeerConnection(iceServers, optionalRtpDataChannels);
+      
+      console.log("created PeerConnection");
+      
+      rtcPeerConnection2.onDataChannel = function (event){
+        console.log("datachannel received");
+        
+        dataChannel2 = event.channel;
+        // set channel events
+        dataChannel2.onmessage = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel2.onopen = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel2.onclose = function(x){ console.log("rtc message callback: " + x);};
+        dataChannel2.onerror = function(x){ console.log("rtc message callback: " + x);};
+      };
+      
+      // create DataChannel 
+      dataChannel2 = rtcPeerConnection2.createDataChannel('RTCDataChannel',
+          null); //js.map(dataChannelOptions)
+      
+      // set channel events 
+      dataChannel2.onmessage = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel2.onopen = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel2.onclose = function(x){ console.log("rtc message callback: " + x);};
+      dataChannel2.onerror = function(x){ console.log("rtc message callback: " + x);};
+      
+      console.log("created a new dataChannel");
+      
+      //connect them
+      
+      
+      
+      // TODO: send Ice candidate to other peer 
+      
+      rtcPeerConnection.createOffer(function(sdp_alice){
+        console.log("create offer");
+        
+        rtcPeerConnection.setLocalDescription(sdp_alice);
+        rtcPeerConnection2.setRemoteDescription(sdp_alice);
+        
+        rtcPeerConnection2.createAnswer(function(sdp_bob){
+          console.log("create answer");
+          rtcPeerConnection2.setLocalDescription(sdp_bob);
+          rtcPeerConnection.setRemoteDescription(sdp_bob);
+          
+          //test datachannel
+          dataChannel.send("test");
+        });
+      }, function(){
+        console.log("error");
+      });
+    });
+    
+    
+    
+    
+    
+    </script>
+  </head>
+ 
+  <body>   
+    <p id="text"></p>
+    
+    <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>

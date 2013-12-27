@@ -55,6 +55,12 @@ void main() {
     
   });
   
+  test("testing a future", () {
+    Compute compute = new Compute();    
+    Future<Map> future = compute.sumIt([1, 2, 3]);
+    expect(future, completion(equals({"value" : 6})));
+  });
+  
   
   
   //test connect

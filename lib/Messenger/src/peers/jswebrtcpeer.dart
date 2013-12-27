@@ -28,28 +28,40 @@ class JsWebRtcPeer extends Peer{
    * constructor
    */
   JsWebRtcPeer(){
+    log.info("started new JsWebRtcPeer!");
     
     /* init attributes */
     iceCandidates = new List();
-    
     gotIceCandidate = new Completer();
     
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers), js.map(optionalRtpDataChannels));
     
+    log.fine("created PeerConnection");
     
     rtcPeerConnection.onDataChannel = (event){
-      print("got datachannel");
+      log.fine("datachannel received");
       
       dataChannel = event.channel;
-      dataChannel.onmessage = (data)=>print(data);
+      /* set channel events */
+      dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
+      dataChannel.onopen = (x)=>print("rtc open callback");
+      dataChannel.onclose = (x)=>print("rtc close callback");
+      dataChannel.onerror = (x)=>print("rtc error callback");
     };
     
     /* create DataChannel */
     dataChannel = rtcPeerConnection.createDataChannel('RTCDataChannel',
        null); //js.map(dataChannelOptions)
     
+    /* set channel events */
+    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
+    dataChannel.onopen = (x)=>print("rtc open callback");
+    dataChannel.onclose = (x)=>print("rtc close callback");
+    dataChannel.onerror = (x)=>print("rtc error callback");
+    
+    log.fine("created a new dataChannel");
   }
   
   
@@ -58,9 +70,11 @@ class JsWebRtcPeer extends Peer{
    * connect to WebrtcPeer
    */
   connect(JsWebRtcPeer o){
+    log.info("try to connect to :");
     
+    /* handle ice candidates */
     rtcPeerConnection.onIceCandidate = (event){
-      
+      log.fine("new ice candidate!");
       //TODO: yeees received ICE candidate
       //gotIceCandidate.complete();
       
@@ -70,14 +84,12 @@ class JsWebRtcPeer extends Peer{
         o.rtcPeerConnection.addIceCandiate(event.candidate);
     };
     
-    
-    
-    /* set channel events */
-    dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
-    dataChannel.onopen = (x)=>print("rtc open callback");
-    dataChannel.onclose = (x)=>print("rtc close callback");
-    dataChannel.onerror = (x)=>print("rtc error callback");
-    
+    o.rtcPeerConnection.onIceCandidate = (event){
+      log.fine("new ice candidate!");
+
+      if(event.candidate)
+        rtcPeerConnection.addIceCandiate(event.candidate);
+    };
     
     /* TODO: send Ice candidate to other peer */
     
@@ -87,16 +99,21 @@ class JsWebRtcPeer extends Peer{
      
     
     rtcPeerConnection.createOffer((sdp_alice){
-      print("alice created offer");
+      log.info("create offer");
       
       rtcPeerConnection.setLocalDescription(sdp_alice);
       o.rtcPeerConnection.setRemoteDescription(sdp_alice);
       
       o.rtcPeerConnection.createAnswer((sdp_bob){
+        log.info("create answer");
         o.rtcPeerConnection.setLocalDescription(sdp_bob);
         rtcPeerConnection.setRemoteDescription(sdp_bob);
+        
+        //test datachannel
+        //dataChannel.send("test");
       });
     }, (e)=>print(e), {});
+    
     
     //add to the peers
     _connections.add(o);
