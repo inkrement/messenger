@@ -5,10 +5,7 @@ part of messenger;
 
 class WebRtcPeer extends Peer{
   RtcPeerConnection rtcPeerConnection;
-  var dataChannel;
-  String name;
-  StreamController readyStateEvent;
-  String readyState;
+  var dataChannel;  
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
   var pcConstraint = {};
   Map dataChannelOptions = {};
@@ -17,7 +14,7 @@ class WebRtcPeer extends Peer{
   /**
    * constructor
    */
-  WebRtcPeer([name="sd"]):readyState="none"{
+  WebRtcPeer([name="sd"]){
     //log.info("started new JsWebRtcPeer!");
     
     /* init attributes */
@@ -118,17 +115,6 @@ class WebRtcPeer extends Peer{
     }
     
   }
-  
-  
-  //make private
-  changeReadyState(String readyState){
-    log.info("change state: " + readyState);
-    
-    this.readyState = readyState;
-    readyStateEvent.add(readyState);
-  }
-  
-  
   
   /**
    * disconnect Peer
