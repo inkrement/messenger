@@ -53,36 +53,35 @@ class JsWebRtcPeer extends Peer{
       
       log.info(event.runtimeType.toString());
 
-      if(event.candidate != null)
-        o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
+      //if(event.candidate != null)
+        //o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
       
-        try{
+        //try{
           //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("works"), (_)=>print("error ice candidate"));
           
          // log.warning(event.candidate.toString());
           
           
-        } catch(e){
-          log.warning("bob error: could not add ice candidate " + e.toString());
-        }
+        //} catch(e){
+        //  log.warning("bob error: could not add ice candidate " + e.toString());
+        //}
         
     };
     
     
     o.rtcPeerConnection.onicecandidate = (event) { 
-     
-      if(event.candidate != null)
+      log.info("rtcC. Type: " + o.rtcPeerConnection.runtimeType.toString());
+      
+      if(event.candidate != null){
         try{
+          log.info("ICE C. Type: " + event.candidate.runtimeType.toString());
           
           rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
-          //log.warning(test.toString());
-          
-          //var icecandidate = event.candidate;
-          //log.info("icecandidate: " + icecandidate);
-          //rtcPeerConnection.addIceCandidate(js.map(icecandidate));
+          log.info("something added so far!");
         } catch(e){
           log.warning("alice error: could not add ice candidate " + e.toString());
         }
+      }
     };
     
 
