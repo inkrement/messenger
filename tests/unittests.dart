@@ -22,13 +22,13 @@ void main() {
   helloworld();
   
   /// webrtc Peer tests
-  webrtcpeer();
+  //webrtcpeer();
   
   /// tests for JS Wrapper
-  //jsrtcpeer();
+  jsrtcpeer();
   
   /// messagepassing peer test
-  messagepassingpeer();
+  //messagepassingpeer();
 
   
 }

@@ -54,7 +54,7 @@ class JsWebRtcPeer extends Peer{
       log.info(event.runtimeType.toString());
 
       if(event.candidate != null)
-        o.rtcPeerConnection.addIceCandidate(event.candidate);
+        o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
       
         try{
           //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("works"), (_)=>print("error ice candidate"));
@@ -74,6 +74,7 @@ class JsWebRtcPeer extends Peer{
       if(event.candidate != null)
         try{
           
+          rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
           //log.warning(test.toString());
           
           //var icecandidate = event.candidate;
