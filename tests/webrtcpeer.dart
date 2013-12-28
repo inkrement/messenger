@@ -1,16 +1,14 @@
 part of unittest;
 
-jsrtcpeer() {
+webrtcpeer() {
   
-  /// setup html environment 
-  useHtmlConfiguration();
   
   /**
    * expect to construct new Object without catching a exception
    */
   test('Webrtc Status', (){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
-    JsWebRtcPeer bob = new JsWebRtcPeer();
+    WebRtcPeer alice = new WebRtcPeer();
+    WebRtcPeer bob = new WebRtcPeer();
   });
   
   /**
@@ -18,9 +16,9 @@ jsrtcpeer() {
    * RTCPeerConnection
    */
   test('Webrtc types peerconnection',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
+    WebRtcPeer alice = new WebRtcPeer();
 
-    expect(alice.rtcPeerConnection.toString(), "[object RTCPeerConnection]");
+    //expect(alice.rtcPeerConnection.toString(), 'RtcPeerConnection');
   });
   
   
@@ -29,7 +27,7 @@ jsrtcpeer() {
    * Therefore readyState is initialized with "none"
    */
   test('Webrtc datachannel status',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
+    WebRtcPeer alice = new WebRtcPeer();
 
     expect(alice.readyState, "none");
   });
@@ -38,8 +36,8 @@ jsrtcpeer() {
    * Test Connection
    */
   test('Webrtc connect',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer("alice");
-    JsWebRtcPeer bob = new JsWebRtcPeer("bob");
+    WebRtcPeer alice = new WebRtcPeer("alice");
+    WebRtcPeer bob = new WebRtcPeer("bob");
     
     alice.connect(bob);
   });

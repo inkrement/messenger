@@ -4,7 +4,7 @@ part of messenger;
 //TODO: signalingchannel
 
 class JsWebRtcPeer extends Peer{
-  var rtcPeerConnection;
+  js.Proxy rtcPeerConnection;
   var dataChannel;
   String name;
   StreamController readyStateEvent;
@@ -52,7 +52,9 @@ class JsWebRtcPeer extends Peer{
   connect(JsWebRtcPeer o){
     log.info("try to connect to: " + o.name);
     
-    rtcPeerConnection.onicecandidate = (RtcIceCandidateEvent event) { 
+    rtcPeerConnection.onicecandidate = (event) { 
+      
+      log.info(event.runtimeType.toString());
 
       if(event.candidate != null)
         o.rtcPeerConnection.addIceCandidate(event.candidate);

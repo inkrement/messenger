@@ -2,19 +2,25 @@ part of messenger;
 
 abstract class Peer{
   final Logger log;
+  static int num = 0;
   List<Peer> _connections;
+  String name;
   StreamController<NewMessageEvent> newMessageController = new StreamController<NewMessageEvent>.broadcast();
   
-  Peer(): log = new Logger('Peer'){
+  Peer([name=""]): log = new Logger('Peer'){
     _connections = new List<Peer>();
     
-    Logger.root.level = Level.ALL;
+    this.name = (name.length == 0)?"peer" + num.toString():name;
+    
+    Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((LogRecord rec) {
-      print('${rec.level.name}: ${rec.time}: ${rec.message}');
+      print('${rec.level.name}: ${this.name}: ${rec.message}');
     });
     
-    
+    //increment number of peers
+    num++;
   }
+  
   connect(Peer other);
   
   send(Peer to, Message msg);

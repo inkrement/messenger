@@ -1,9 +1,11 @@
+part of unittest;
 
-
-import 'package:unittest/unittest.dart';
-
-void main() {
-  test('SendAndReceive', (){
+void helloworld() {
+  
+  /**
+   * hello world
+   */
+  test('hello world', (){
     String hello = "hello world";
     
     expect(hello, "hello world");
