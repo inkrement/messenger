@@ -29,6 +29,10 @@ abstract class Peer{
   ///todo: generalize and add to connections to support multiple states
   StreamController<String> readyStateEvent;
   
+  ///completer for connection
+  ///TODO: use another generic type
+  var connection_completer = new Completer<String>();
+  
   /**
    * constuctor
    */
@@ -69,7 +73,7 @@ abstract class Peer{
    * 
    * @param Peer other
    */
-  connect(Peer other);
+  Future connect(Peer other);
   
   /**
    * send Message to other peer

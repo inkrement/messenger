@@ -35,26 +35,27 @@ void main() {
   });
   
   /**
-   * Test Connection
+   * Test connection
    */
   test('Webrtc connect',(){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
     
-    alice.connect(bob);
+    expect(alice.connect(bob), completes);
   });
   
+  
+  
   /**
-   * test status opens
+   * test DataChannel's readyState opens
    */
-  test('webrtc datachannel open', (){
+  test('webrtc datachannel', (){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
     
-    alice.readyStateEvent.stream.listen((String status){
-      if(status == "open")
-          expectAsync0((){});
-    });
+    _callback(String status) => expect(status, "open");
+    
+    alice.readyStateEvent.stream.listen(expectAsync1(_callback));
     
     alice.connect(bob);
     

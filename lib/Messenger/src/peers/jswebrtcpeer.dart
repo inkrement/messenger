@@ -44,7 +44,7 @@ class JsWebRtcPeer extends Peer{
   /**
    * connect to WebrtcPeer
    */
-  connect(JsWebRtcPeer o){
+  Future connect(JsWebRtcPeer o){
     
     /// add ice candidates
     rtcPeerConnection.onicecandidate = (event) {
@@ -71,7 +71,7 @@ class JsWebRtcPeer extends Peer{
       }
     };
     
-  /// add Datachannel
+  /// create datachannel
     
     try {
       dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
@@ -94,13 +94,17 @@ class JsWebRtcPeer extends Peer{
           
           //test datachannel
           //dataChannel.send("test");
+          connection_completer.complete("wuhuu");
         });
-      }, (e)=>print(e), {});
-      
-      
+      }, (e){
+        connection_completer.completeError(e, e.stackTrace);
+      }, {});
+
     } catch (e) {
-      log.warning("could not create DataChannel: " + e.toString()); 
+      connection_completer.completeError(e, e.stackTrace);
     }
+    
+    return connection_completer.future;
   }
   
   
