@@ -58,7 +58,7 @@ void main() {
   
   /**
    * test DataChannel's readyState opens
-   */
+   
   test('webrtc datachannel', (){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
@@ -70,6 +70,6 @@ void main() {
     alice.connect(bob);
     
   });
-  
+  */
   
 }

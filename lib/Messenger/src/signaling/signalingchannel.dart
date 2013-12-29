@@ -31,7 +31,7 @@ abstract class SignalingChannel{
   /**
    * send String to other side of Channel
    */
-  send(String);
+  send(Message);
   
   /**
    * listen for incoming messages

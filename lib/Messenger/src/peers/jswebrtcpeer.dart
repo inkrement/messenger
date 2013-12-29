@@ -10,6 +10,9 @@ class JsWebRtcPeer extends Peer{
   var pcConstraint = {};
   Map dataChannelOptions = {};
   
+  //TODO: what if not set yet.
+  SignalingChannel sc;
+  
   
   /**
    * constructor
@@ -40,16 +43,45 @@ class JsWebRtcPeer extends Peer{
     };
   }
   
-  
-  gotSignalingMessage(Message data){
-    
+  /**
+   * gotSignalingMessage callback
+   */
+  gotSignalingMessage(NewMessageEvent data){
+    switch(data.data.mtype){
+      case MessageType.ICE_CANDIDATE:
+        log.info("got ice candidate");
+        //add ice candaidate
+        break;
+      case MessageType.STRING:
+        //new Message. pass it!
+        break;
+      case MessageType.WEBRTC_OFFER:
+        log.info("got offer");
+        createAnswer();
+        break;
+    }
   }
   
+  /**
+   * RTC SDP answer
+   */
+  createAnswer(){
+    rtcPeerConnection.createAnswer((sdp_answer){
+      log.info("create answer");
+      
+      rtcPeerConnection.setLocalDescription(sdp_answer);
+      sc.send(new Message(sdp_answer, MessageType.WEBRTC_ANSWER));
+      
+      connection_completer.complete("wuhuu");
+    });
+  }
   
   /**
    * connect to WebrtcPeer
    */
   Future connect(SignalingChannel sc){
+    
+    this.sc = sc;
     
     sc.onReceive.listen(gotSignalingMessage);
     
@@ -73,18 +105,6 @@ class JsWebRtcPeer extends Peer{
         
     };
     
-    /*
-    o.rtcPeerConnection.onicecandidate = (event) {
-      
-      if(event.candidate != null){
-        try{
-          rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event).candidate);
-        } catch(e){
-          log.warning("alice error: could not add ice candidate " + e.toString());
-        }
-      }
-    };*/
-    
   /// create datachannel
     
     try {
@@ -95,21 +115,16 @@ class JsWebRtcPeer extends Peer{
       dc.onopen = (_)=>changeReadyState(dc.readyState);
       dc.onclose = (_)=>changeReadyState(dc.readyState);
       
-      rtcPeerConnection.createOffer((sdp_alice){
+      rtcPeerConnection.createOffer((sdp_offer){
         log.info("create offer");
         
-        rtcPeerConnection.setLocalDescription(sdp_alice);
-        o.rtcPeerConnection.setRemoteDescription(sdp_alice);
+        rtcPeerConnection.setLocalDescription(sdp_offer);
+        sc.send(new Message(sdp_offer.toString(), MessageType.WEBRTC_OFFER));
         
-        o.rtcPeerConnection.createAnswer((sdp_bob){
-          log.info("create answer");
-          o.rtcPeerConnection.setLocalDescription(sdp_bob);
-          rtcPeerConnection.setRemoteDescription(sdp_bob);
-          
-          //test datachannel
-          //dataChannel.send("test");
-          connection_completer.complete("wuhuu");
-        });
+        //TODO: send offer
+        //rtcPeerConnection.setRemoteDescription(sdp_alice);
+        
+        
       }, (e){
         connection_completer.completeError(e, e.stackTrace);
       }, {});
