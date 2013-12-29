@@ -41,7 +41,17 @@ void main() {
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
     
-    expect(alice.connect(bob), completes);
+    //setup signaling channel
+    MessagePassing alice_sc = new MessagePassing();
+    MessagePassing bob_sc = new MessagePassing();
+    
+    //connect signaling channel
+    alice_sc.connect(bob_sc.identityMap());
+    bob_sc.connect(alice_sc.identityMap());
+    
+    //connect peer
+    expect(alice.connect(bob_sc), completes);
+    expect(bob.connect(alice_sc), completes);
   });
   
   

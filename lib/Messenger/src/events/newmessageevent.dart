@@ -7,7 +7,6 @@ part of messenger.events;
   * this event is triggered if a new message receives
   */
 class NewMessageEvent implements Event{
-  Message data;
   var path;
   var defaultPrevented;
   var currentTarget;
@@ -20,9 +19,10 @@ class NewMessageEvent implements Event{
   var matchingTarget;
   var timeStamp;
   
-  NewMessageEvent(Message msg){
-    data = msg;
-  }
+  final Message data;
+  
+  NewMessageEvent(this.data);
   
   Message getMessage() => data;
 }
+

@@ -41,17 +41,31 @@ class JsWebRtcPeer extends Peer{
   }
   
   
+  gotSignalingMessage(Message data){
+    
+  }
+  
+  
   /**
    * connect to WebrtcPeer
    */
-  Future connect(JsWebRtcPeer o){
+  Future connect(SignalingChannel sc){
+    
+    sc.onReceive.listen(gotSignalingMessage);
     
     /// add ice candidates
     rtcPeerConnection.onicecandidate = (event) {
       
       if(event.candidate != null){
         try{
-          o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event).candidate);
+          
+          (new js.Proxy.fromBrowserObject(event).candidate);
+          
+          //sc.send(String);
+          
+          //new js.Proxy.fromBrowserObject(event).toJs();
+          
+          //o.rtcPeerConnection.addIceCandidate();
         } catch(e){
           log.warning("bob error: could not add ice candidate " + e.toString());
         }
@@ -59,7 +73,7 @@ class JsWebRtcPeer extends Peer{
         
     };
     
-    
+    /*
     o.rtcPeerConnection.onicecandidate = (event) {
       
       if(event.candidate != null){
@@ -69,7 +83,7 @@ class JsWebRtcPeer extends Peer{
           log.warning("alice error: could not add ice candidate " + e.toString());
         }
       }
-    };
+    };*/
     
   /// create datachannel
     

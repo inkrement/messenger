@@ -23,8 +23,14 @@ void main() {
    * signaling
    */
   
-  sig_mp.main();
+  //sig_mp.main();
   
+  /*
+   * peers
+   */
+  
+  /// tests for JS Wrapper
+  js_rtc.main();
   
   /// run hello world tests
   //helloworld();
@@ -32,8 +38,7 @@ void main() {
   /// webrtc Peer tests
   //webrtcpeer();
   
-  /// tests for JS Wrapper
-  //js_rtc.main();
+  
   
   /// messagepassing peer test
   //messagepassingpeer();

@@ -73,7 +73,7 @@ abstract class Peer{
    * 
    * @param Peer other
    */
-  Future connect(Peer other);
+  Future connect(SignalingChannel other);
   
   /**
    * send Message to other peer
