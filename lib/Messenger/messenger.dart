@@ -15,6 +15,9 @@ export 'src/events.dart';
 import 'src/message.dart';
 export 'src/message.dart';
 
+import 'src/signaling.dart';
+export 'src/signaling.dart';
+
 part 'src/peers/peer.dart';
 part 'src/peers/messagepassingpeer.dart';
 part 'src/peers/webrtcpeer.dart';

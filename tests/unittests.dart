@@ -12,11 +12,18 @@ import 'jsrtcpeer.dart' as js_rtc;
 import 'webrtcpeer.dart' as native_rtc;
 import 'messagepassingpeer.dart' as messagepassing;
 
+import 'signaling.messagepassing.dart' as sig_mp;
+
 void main() {
   
   /// setup html environment 
   useHtmlConfiguration();
   
+  /*
+   * signaling
+   */
+  
+  sig_mp.main();
   
   
   /// run hello world tests
@@ -26,7 +33,7 @@ void main() {
   //webrtcpeer();
   
   /// tests for JS Wrapper
-  js_rtc.main();
+  //js_rtc.main();
   
   /// messagepassing peer test
   //messagepassingpeer();
