@@ -1,9 +1,9 @@
-part of unittest;
+library unittest.jsrtcpeer;
 
-jsrtcpeer() {
-  
-  /// setup html environment 
-  useHtmlConfiguration();
+import 'package:unittest/unittest.dart';
+import 'package:webrtc/Messenger/messenger.dart';
+
+void main() {
   
   /**
    * expect to construct new Object without catching a exception
@@ -44,45 +44,21 @@ jsrtcpeer() {
     alice.connect(bob);
   });
   
-  test('webrtc datachannel', (){
+  /**
+   * test status opens
+   */
+  test('webrtc datachannel open', (){
+    JsWebRtcPeer alice = new JsWebRtcPeer("alice");
+    JsWebRtcPeer bob = new JsWebRtcPeer("bob");
+    
+    alice.readyStateEvent.stream.listen((String status){
+      if(status == "open")
+          expectAsync0((){});
+    });
+    
+    alice.connect(bob);
     
   });
-  
-  
-  
-  
-  /*
-  test('Webrtc types datachannel',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
-    
-    InstanceMirror myClassInstanceMirror = reflect(alice);
-    //String type = myClassInstanceMirror.type;
-    //logMessage();
-    
-    
-    //expect("", myClassInstanceMirror.type);
-  });
-  
-  test('Webrtc has icecandidates',(){
-    JsWebRtcPeer alice = new JsWebRtcPeer();
-    JsWebRtcPeer bob = new JsWebRtcPeer();
-    
-    //expect(alice.connect(bob), completes);
-   
-  });
-  
-  
-  test("testing a future", () {
-    Compute compute = new Compute();    
-    Future<Map> future = compute.sumIt([1, 2, 3]);
-    expect(future, completion(equals({"value" : 6})));
-  });
-  */
-  
-  
-  //test connect
-  
-
   
   
 }

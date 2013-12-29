@@ -1,6 +1,9 @@
-part of unittest;
+library unittest.messagepassing;
 
-messagepassingpeer() {
+import 'package:unittest/unittest.dart';
+import 'package:webrtc/Messenger/messenger.dart';
+
+main() {
   test('SendAndReceive', (){
     MessagePassingPeer alice = new MessagePassingPeer();
     MessagePassingPeer bob = new MessagePassingPeer();

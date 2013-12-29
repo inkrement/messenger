@@ -1,5 +1,10 @@
 part of messenger;
 
+/**
+ * @todo: 
+ *  * ready Status enum instead of string
+ */
+
 abstract class Peer{
   ///logging object
   final Logger log;
@@ -14,7 +19,7 @@ abstract class Peer{
   String name;
   
   ///new message event stream
-  StreamController<NewMessageEvent> newMessageController = new StreamController<NewMessageEvent>.broadcast();
+  StreamController<NewMessageEvent> newMessageController;
   
   ///ready State of connection
   ///todo: generalize and add to connections to support multiple states
@@ -22,26 +27,29 @@ abstract class Peer{
   
   ///ready State event stream component
   ///todo: generalize and add to connections to support multiple states
-  StreamController readyStateEvent;
+  StreamController<String> readyStateEvent;
   
   /**
    * constuctor
    */
-  Peer([String name="", Level logLevel=Level.FINE]): log = new Logger('Peer'), readyState="none"{
-    log.info("new peer! " + num.toString());
-    _connections = new List<Peer>();
+  Peer([String name="", Level logLevel=Level.FINE]):log = new Logger('Peer'){
+    ///increment number of peers
+    num++;
     
-    ///set name of this peer instance
-    this.name = (name.length < 1)?"peer" + num.toString():name;
+    log.info("new peer! " + num.toString());
+    
+    ///init
+    readyStateEvent = new StreamController<String>.broadcast();
+    newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
+    this.name = (name.length < 1)?"peer" + num.toString():name; //set name of this peer instance
+    _connections = new List<Peer>();
+    readyState="none";
     
     ///setup logging library
     Logger.root.level = logLevel;
     Logger.root.onRecord.listen((LogRecord rec) {
       print('${rec.level.name}: ${this.name}: ${rec.message}');
     });
-    
-    ///increment number of peers
-    num++;
   }
   
   /**

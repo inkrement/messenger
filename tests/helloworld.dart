@@ -1,6 +1,8 @@
-part of unittest;
+library unittest.helloworld;
 
-void helloworld() {
+import 'package:unittest/unittest.dart';
+
+main() {
   
   /**
    * hello world
