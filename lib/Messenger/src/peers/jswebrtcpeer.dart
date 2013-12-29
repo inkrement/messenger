@@ -56,7 +56,7 @@ class JsWebRtcPeer extends Peer{
         //new Message. pass it!
         break;
       case MessageType.WEBRTC_OFFER:
-        log.info("got offer");
+        log.info("got offer: " + data.data.msg);
         createAnswer();
         break;
     }
@@ -70,7 +70,7 @@ class JsWebRtcPeer extends Peer{
       log.info("create answer");
       
       rtcPeerConnection.setLocalDescription(sdp_answer);
-      sc.send(new Message(sdp_answer, MessageType.WEBRTC_ANSWER));
+      sc.send(new Message(sdp_answer.toJs(), MessageType.WEBRTC_ANSWER));
       
       connection_completer.complete("wuhuu");
     });
@@ -93,7 +93,8 @@ class JsWebRtcPeer extends Peer{
           
           (new js.Proxy.fromBrowserObject(event).candidate);
           
-          //sc.send(String);
+          //log.info((new js.Proxy.fromBrowserObject(event).candidate).toJs());
+          sc.send(new Message(JSON.encode(new js.Proxy.fromBrowserObject(event).candidate), MessageType.ICE_CANDIDATE));
           
           //new js.Proxy.fromBrowserObject(event).toJs();
           
