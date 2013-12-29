@@ -5,7 +5,7 @@ part of messenger;
 
 class JsWebRtcPeer extends Peer{
   js.Proxy rtcPeerConnection;
-  var dataChannel;
+  var dc;
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
   var pcConstraint = {};
   Map dataChannelOptions = {};
@@ -14,12 +14,10 @@ class JsWebRtcPeer extends Peer{
   /**
    * constructor
    */
-  JsWebRtcPeer([name="sd"]){
-    //log.info("started new JsWebRtcPeer!");
+  JsWebRtcPeer([String name=""]){
     
     /* init attributes */
     readyStateEvent = new StreamController.broadcast();
-    this.name = name;
     
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
@@ -30,15 +28,15 @@ class JsWebRtcPeer extends Peer{
     rtcPeerConnection.onDataChannel = (event){
       log.fine("datachannel received");
       
-      dataChannel = event.channel;
+      dc = event.channel;
       /* set channel events */
-      dataChannel.onmessage = (x)=>print("rtc message callback: " + x);
+      dc.onmessage = (x)=>print("rtc message callback: " + x);
       
-      dataChannel.onopen = (x)=>changeReadyState(dataChannel.readyState);
-      dataChannel.onclose = (x)=>changeReadyState(dataChannel.readyState);
-      //dataChannel.onerror = (x)=>print("rtc error callback");
+      dc.onopen = (_)=>changeReadyState(dc.readyState);
+      dc.onclose = (_)=>changeReadyState(dc.readyState);
+      dc.onerror = (x)=>print("rtc error callback: " + x.toString());
       
-      readyState = dataChannel.readyState;
+      readyState = dc.readyState;
     };
   }
   
@@ -47,52 +45,41 @@ class JsWebRtcPeer extends Peer{
    * connect to WebrtcPeer
    */
   connect(JsWebRtcPeer o){
-    log.info("try to connect to: " + o.name);
     
-    rtcPeerConnection.onicecandidate = (event) { 
+    /// add ice candidates
+    rtcPeerConnection.onicecandidate = (event) {
       
-      log.info(event.runtimeType.toString());
-
-      //if(event.candidate != null)
-        //o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
-      
-        //try{
-          //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("works"), (_)=>print("error ice candidate"));
-          
-         // log.warning(event.candidate.toString());
-          
-          
-        //} catch(e){
-        //  log.warning("bob error: could not add ice candidate " + e.toString());
-        //}
+      if(event.candidate != null){
+        try{
+          o.rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event).candidate);
+        } catch(e){
+          log.warning("bob error: could not add ice candidate " + e.toString());
+        }
+      }
         
     };
     
     
-    o.rtcPeerConnection.onicecandidate = (event) { 
-      log.info("rtcC. Type: " + o.rtcPeerConnection.runtimeType.toString());
+    o.rtcPeerConnection.onicecandidate = (event) {
       
       if(event.candidate != null){
         try{
-          log.info("ICE C. Type: " + event.candidate.runtimeType.toString());
-          
-          rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event.candidate));
-          log.info("something added so far!");
+          rtcPeerConnection.addIceCandidate(new js.Proxy.fromBrowserObject(event).candidate);
         } catch(e){
           log.warning("alice error: could not add ice candidate " + e.toString());
         }
       }
     };
     
-
+  /// add Datachannel
     
     try {
-      dataChannel = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
+      dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
       log.info('Created send data channel');
       
       
-      dataChannel.onopen = (_)=>changeReadyState(dataChannel.readyState);
-      dataChannel.onclose = (_)=>changeReadyState(dataChannel.readyState);
+      dc.onopen = (_)=>changeReadyState(dc.readyState);
+      dc.onclose = (_)=>changeReadyState(dc.readyState);
       
       rtcPeerConnection.createOffer((sdp_alice){
         log.info("create offer");
@@ -143,7 +130,7 @@ class JsWebRtcPeer extends Peer{
    * send Message
    */
   send(JsWebRtcPeer o, Message msg){
-    dataChannel.send(msg.toString());
+    dc.send(msg.toString());
   }
   
 }

@@ -27,14 +27,15 @@ abstract class Peer{
   /**
    * constuctor
    */
-  Peer([name=""]): log = new Logger('Peer'), readyState="none"{
+  Peer([String name="", Level logLevel=Level.FINE]): log = new Logger('Peer'), readyState="none"{
+    log.info("new peer! " + num.toString());
     _connections = new List<Peer>();
     
     ///set name of this peer instance
-    this.name = (name.length == 0)?"peer" + num.toString():name;
+    this.name = (name.length < 1)?"peer" + num.toString():name;
     
     ///setup logging library
-    Logger.root.level = Level.FINE;
+    Logger.root.level = logLevel;
     Logger.root.onRecord.listen((LogRecord rec) {
       print('${rec.level.name}: ${this.name}: ${rec.message}');
     });
