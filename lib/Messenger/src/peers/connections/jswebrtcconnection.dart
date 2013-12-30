@@ -11,7 +11,9 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
   
   
   
-  JsWebRtcConnection(log){
+  JsWebRtcConnection([Logger log=null]){
+    if (log == null) log = new Logger("Connection");
+    
     dc=null;
     
     readyStateEvent = new StreamController<ReadyState>.broadcast();
@@ -104,8 +106,8 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
       sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       log.fine("sdp answer sent");
       
-      connection_completer.complete("wuhuu");
-      listen_completer.complete("wuhuu");
+      connection_completer.complete(this.hashCode.toString());
+      listen_completer.complete(this.hashCode.toString());
     });
   }
   

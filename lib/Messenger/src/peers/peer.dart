@@ -23,8 +23,12 @@ abstract class Peer{
   ///new message event stream
   StreamController<NewMessageEvent> newMessageController;
   
-  Map<Peer, Connection> _connections;
+  Map<String, Connection> _connections;
+  
+  static List<Peer> peers = new List<Peer>();
  
+  //object is identified by hash of name. name has to be unique
+  int get hashCode => this.name.hashCode;
   
   /**
    * constuctor
@@ -35,7 +39,7 @@ abstract class Peer{
     this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     
     //is name is unique?
-    if(peers.keys.contains(this.name))
+    if(peers.contains(this))
       throw new StateError("peer with name ${this.name} already exists!");
     
     //setup logger
@@ -50,8 +54,12 @@ abstract class Peer{
     
     log.info("new peer: #${num.toString()} ${this.name} ");
     
+<<<<<<< Updated upstream
     //add instance reference to peerlist
     peers[this.name] = this;
+=======
+    peers.add(this);
+>>>>>>> Stashed changes
   }
   
   
@@ -86,16 +94,17 @@ abstract class Peer{
   /**
    * send message to multiple peers
    */
-  broadcast(List<Peer> to, Message msg){
-    to.forEach((Peer p){
-      this.send(p, msg);
+  broadcast(List<Connection> to, Message msg){
+    to.forEach((Connection p){
+      //TODO: remove first param
+      this.send(null, msg);
     });
   }
   
   /**
    * send message to all known peers
    */
-  multicast(Message msg) => broadcast(_connections.keys, msg);
+  multicast(Message msg) => broadcast(_connections.values, msg);
   
   /**
    * getter: onstream event channel (stream)

@@ -9,12 +9,20 @@ class JsWebRtcPeer extends Peer{
     
   }
   
-  listen(sc){
+  listen(SignalingChannel sc){
+    JsWebRtcConnection<JsWebRtcPeer> c = new JsWebRtcConnection<JsWebRtcPeer>(log);
+    Future<String> f = c.listen(sc);
     
+    //add to list of connections. index is identity of other peer
+    //TODO: test if identity is unique
+    f.then((String hash) => _connections[hash] = c);
   }
   
-  connect(sc){
+  connect(SignalingChannel sc){
+    JsWebRtcConnection<JsWebRtcPeer> c = new JsWebRtcConnection<JsWebRtcPeer>(log);
+    Future<String> f = c.connect(sc);
     
+    f.then((String hash) => _connections[hash] = c);
   }
  
   
@@ -36,7 +44,7 @@ class JsWebRtcPeer extends Peer{
    * TODO: implementation
    */
   close(){
-    _connections.forEach((Peer p, Connection c)=>disconnect(p));
+    //_connections.forEach((Peer p, Connection c)=>disconnect(p));
   }
   
   
