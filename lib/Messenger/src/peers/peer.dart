@@ -9,9 +9,6 @@ abstract class Peer{
   ///root logging object
   static final Logger parent_log = new Logger("Peer");
   
-  //list of all local peers
-  static Map<String, Peer> peers;
-  
   Logger log;
   
   ///number of all local peer instances
@@ -34,10 +31,13 @@ abstract class Peer{
     //set name of this peer instance
     this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     
+<<<<<<< HEAD
     //is name is unique?
     if(peers.keys.contains(this.name))
       throw new StateError("peer with name ${this.name} already exists!");
     
+=======
+>>>>>>> parent of 88b084f... added static list of all peers
     //setup logger
     hierarchicalLoggingEnabled = true;
     log = new Logger("Peer.${this.runtimeType}.${this.name}");
@@ -49,9 +49,6 @@ abstract class Peer{
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
     
     log.info("new peer: #${num.toString()} ${this.name} ");
-    
-    //add instance reference to peerlist
-    peers[this.name] = this;
   }
   
   
