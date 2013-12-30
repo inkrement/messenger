@@ -2,7 +2,7 @@ part of messenger;
 
 //TODO: support multiconnections
 //TODO: signalingchannel
-
+/*
 class WebRtcPeer extends Peer{
   RtcPeerConnection rtcPeerConnection;
   var dataChannel;  
@@ -286,3 +286,4 @@ class WebRtcPeer extends Peer{
   });
    */
 //}
+*/

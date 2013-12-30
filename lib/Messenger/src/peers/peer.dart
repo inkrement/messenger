@@ -6,7 +6,7 @@ part of messenger;
  */
 
 abstract class Peer{
-  ///logging object
+  ///root logging object
   static final Logger parent_log = new Logger("Peer");
   
   //list of all local peers
@@ -17,36 +17,24 @@ abstract class Peer{
   ///number of all local peer instances
   static int num = 0;
   
-  ///list of all connected peers
-  List<Peer> _connections;
-  
   ///name of this peer instance
   String name;
   
   ///new message event stream
   StreamController<NewMessageEvent> newMessageController;
   
-  ///ready State of connection
-  ///todo: generalize and add to connections to support multiple states
-  ReadyState readyState;
-  
-  ///ready State event stream component
-  ///todo: generalize and add to connections to support multiple states
-  StreamController<ReadyState> readyStateEvent;
-  
-  ///completer for connection
-  ///TODO: use another generic type
-  Completer<String> connection_completer;
-  Completer<String> listen_completer;
+  Map<Peer, Connection> _connections;
+ 
   
   /**
    * constuctor
    * 
-   * todo: name has to be unique
    */
   Peer([String name="", Level logLevel=Level.FINE]){
-    this.name = (name.length < 1)?"peer" + (++num).toString():name; //set name of this peer instance
+    //set name of this peer instance
+    this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     
+    //is name is unique?
     if(peers.keys.contains(this.name))
       throw new StateError("peer with name ${this.name} already exists!");
     
@@ -58,13 +46,7 @@ abstract class Peer{
       print('${rec.loggerName} (${rec.level.name}): ${rec.message}');
     });
     
-    connection_completer = new Completer<String>();
-    listen_completer = new Completer<String>();
-    readyStateEvent = new StreamController<ReadyState>.broadcast();
-    newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
-    
-    _connections = new List<Peer>();
-    readyState=ReadyState.NEW;
+    newMessageController = new StreamController<NewMessageEvent>.broadcast();
     
     log.info("new peer: #${num.toString()} ${this.name} ");
     
@@ -72,20 +54,7 @@ abstract class Peer{
     peers[this.name] = this;
   }
   
-  /**
-   * setter: readyState
-   * 
-   * @ TODO: make private
-   */
-  changeReadyState(ReadyState readyState){
-    //break if nothing will change
-    if (this.readyState == readyState) return;
-    
-    log.fine("change state: " + readyState.name);
-    
-    this.readyState = readyState;
-    readyStateEvent.add(readyState);
-  }
+  
   
   /**
    * listen for incoming connections
@@ -126,7 +95,7 @@ abstract class Peer{
   /**
    * send message to all known peers
    */
-  multicast(Message msg) => broadcast(_connections, msg);
+  multicast(Message msg) => broadcast(_connections.keys, msg);
   
   /**
    * getter: onstream event channel (stream)

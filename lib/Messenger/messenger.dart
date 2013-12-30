@@ -22,3 +22,6 @@ part 'src/peers/peer.dart';
 part 'src/peers/messagepassingpeer.dart';
 part 'src/peers/webrtcpeer.dart';
 part 'src/peers/jswebrtcpeer.dart';
+
+part 'src/peers/connections/connection.dart';
+part 'src/peers/connections/jswebrtcconnection.dart';
