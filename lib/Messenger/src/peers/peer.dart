@@ -9,9 +9,6 @@ abstract class Peer{
   ///root logging object
   static final Logger parent_log = new Logger("Peer");
   
-  //list of all local peers
-  static Map<String, Peer> peers;
-  
   Logger log;
   
   ///number of all local peer instances
@@ -54,12 +51,8 @@ abstract class Peer{
     
     log.info("new peer: #${num.toString()} ${this.name} ");
     
-<<<<<<< Updated upstream
-    //add instance reference to peerlist
-    peers[this.name] = this;
-=======
+
     peers.add(this);
->>>>>>> Stashed changes
   }
   
   
