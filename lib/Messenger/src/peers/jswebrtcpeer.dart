@@ -49,15 +49,33 @@ class JsWebRtcPeer extends Peer{
   gotSignalingMessage(NewMessageEvent data){
     switch(data.data.mtype){
       case MessageType.ICE_CANDIDATE:
-        log.info("got ice candidate");
-        //add ice candaidate
+        //log.info("got ice candidate");
+        
+        //deserialize
+        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(data.data.msg));
+        
+        //add candidate
+        rtcPeerConnection.addIceCandidate(iceCandidate);
         break;
       case MessageType.STRING:
         //new Message. pass it!
         break;
       case MessageType.WEBRTC_OFFER:
-        log.info("got offer: " + data.data.msg);
+        //log.info("got offer: " + data.data.msg);
+        
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
+        
+        rtcPeerConnection.setRemoteDescription(sdp);
+        
         createAnswer();
+        break;
+        
+      case MessageType.WEBRTC_ANSWER:
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
+
+        rtcPeerConnection.setRemoteDescription(sdp);
+        
+        //TODO: change status?!
         break;
     }
   }
@@ -67,10 +85,14 @@ class JsWebRtcPeer extends Peer{
    */
   createAnswer(){
     rtcPeerConnection.createAnswer((sdp_answer){
-      log.info("create answer");
       
       rtcPeerConnection.setLocalDescription(sdp_answer);
-      sc.send(new Message(sdp_answer.toJs(), MessageType.WEBRTC_ANSWER));
+      
+      //serialize sdp answer
+      final String jsonString = js.context.JSON.stringify(sdp_answer);
+      
+      //send ice candidate to other peer
+      sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       
       connection_completer.complete("wuhuu");
     });
@@ -90,15 +112,13 @@ class JsWebRtcPeer extends Peer{
       
       if(event.candidate != null){
         try{
+          var proxy = new js.Proxy.fromBrowserObject(event).candidate;
           
-          (new js.Proxy.fromBrowserObject(event).candidate);
+          //serialize ice candidate
+          final String jsonString = js.context.JSON.stringify(proxy);
           
-          //log.info((new js.Proxy.fromBrowserObject(event).candidate).toJs());
-          sc.send(new Message(JSON.encode(new js.Proxy.fromBrowserObject(event).candidate), MessageType.ICE_CANDIDATE));
-          
-          //new js.Proxy.fromBrowserObject(event).toJs();
-          
-          //o.rtcPeerConnection.addIceCandidate();
+          //send ice candidate to other peer
+          sc.send(new Message(jsonString, MessageType.ICE_CANDIDATE));
         } catch(e){
           log.warning("bob error: could not add ice candidate " + e.toString());
         }
@@ -120,11 +140,11 @@ class JsWebRtcPeer extends Peer{
         log.info("create offer");
         
         rtcPeerConnection.setLocalDescription(sdp_offer);
-        sc.send(new Message(sdp_offer.toString(), MessageType.WEBRTC_OFFER));
         
-        //TODO: send offer
-        //rtcPeerConnection.setRemoteDescription(sdp_alice);
+        //serialize
+        final String jsonString = js.context.JSON.stringify(sdp_offer);
         
+        sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
         
       }, (e){
         connection_completer.completeError(e, e.stackTrace);
