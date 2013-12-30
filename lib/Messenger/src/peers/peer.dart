@@ -7,7 +7,9 @@ part of messenger;
 
 abstract class Peer{
   ///logging object
-  final Logger log;
+  static final Logger parent_log = new Logger("Peer");
+  
+  Logger log;
   
   ///number of all local peer instances
   static int num = 0;
@@ -31,29 +33,34 @@ abstract class Peer{
   
   ///completer for connection
   ///TODO: use another generic type
-  var connection_completer = new Completer<String>();
+  Completer<String> connection_completer;
+  Completer<String> listen_completer;
   
   /**
    * constuctor
+   * 
+   * todo: name has to be unique
    */
-  Peer([String name="", Level logLevel=Level.FINE]):log = new Logger('Peer'){
-    ///increment number of peers
-    num++;
+  Peer([String name="", Level logLevel=Level.FINE]){
+    this.name = (name.length < 1)?"peer" + (++num).toString():name; //set name of this peer instance
     
-    log.info("new peer! " + num.toString());
+    //setup logger
+    hierarchicalLoggingEnabled = true;
+    log = new Logger("Peer.${this.runtimeType}.${this.name}");
+    log.level = logLevel;   
+    log.onRecord.listen((LogRecord rec) {
+      print('${rec.loggerName} (${rec.level.name}): ${rec.message}');
+    });
     
-    ///init
+    connection_completer = new Completer<String>();
+    listen_completer = new Completer<String>();
     readyStateEvent = new StreamController<ReadyState>.broadcast();
     newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
-    this.name = (name.length < 1)?"peer" + num.toString():name; //set name of this peer instance
+    
     _connections = new List<Peer>();
     readyState=ReadyState.NEW;
     
-    ///setup logging library
-    Logger.root.level = logLevel;
-    Logger.root.onRecord.listen((LogRecord rec) {
-      print('${rec.level.name}: ${this.name}: ${rec.message}');
-    });
+    log.info("new peer: #${num.toString()} ${this.name} ");
   }
   
   /**
@@ -70,6 +77,13 @@ abstract class Peer{
     this.readyState = readyState;
     readyStateEvent.add(readyState);
   }
+  
+  /**
+   * listen for incoming connections
+   * 
+   * @param Peer other
+   */
+  Future listen(SignalingChannel other);
   
   /**
    * connect to another peer
