@@ -14,11 +14,7 @@ class JsWebRtcPeer extends Peer{
   /**
    * constructor
    */
-  JsWebRtcPeer([String name=""]){
-    
-    /* init attributes */
-    readyStateEvent = new StreamController.broadcast();
-    
+  JsWebRtcPeer([String name=""]){    
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers)); //TODO: add pcConstraints

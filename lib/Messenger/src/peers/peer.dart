@@ -23,11 +23,11 @@ abstract class Peer{
   
   ///ready State of connection
   ///todo: generalize and add to connections to support multiple states
-  String readyState;
+  ReadyState readyState;
   
   ///ready State event stream component
   ///todo: generalize and add to connections to support multiple states
-  StreamController<String> readyStateEvent;
+  StreamController<ReadyState> readyStateEvent;
   
   ///completer for connection
   ///TODO: use another generic type
@@ -43,11 +43,11 @@ abstract class Peer{
     log.info("new peer! " + num.toString());
     
     ///init
-    readyStateEvent = new StreamController<String>.broadcast();
+    readyStateEvent = new StreamController<ReadyState>.broadcast();
     newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
     this.name = (name.length < 1)?"peer" + num.toString():name; //set name of this peer instance
     _connections = new List<Peer>();
-    readyState="none";
+    readyState=ReadyState.NEW;
     
     ///setup logging library
     Logger.root.level = logLevel;
@@ -61,11 +61,11 @@ abstract class Peer{
    * 
    * @ TODO: make private
    */
-  changeReadyState(String readyState){
+  changeReadyState(ReadyState readyState){
     //break if nothing will change
     if (this.readyState == readyState) return;
     
-    log.fine("change state: " + readyState);
+    log.fine("change state: " + readyState.name);
     
     this.readyState = readyState;
     readyStateEvent.add(readyState);
@@ -119,4 +119,40 @@ abstract class Peer{
    * close connection
    */
   close();
+}
+
+
+/*
+//Signaling
+ * 
+static const ReadyState STABLE = const ReadyState('STABLE', 1);
+static const ReadyState HAVE_LOCAL_OFFER = const ReadyState('HAVE_LOCAL_OFFER', 2);
+static const ReadyState HAVE_REMOTE_OFFER = const ReadyState('HAVE_REMOTE_OFFER', 3);
+static const ReadyState HAVE_LOCAL_PRANSWER = const ReadyState('HAVE_LOCAL_PRANSWER', 4);
+static const ReadyState HAVE_REMOTE_PRANSWER = const ReadyState('HAVE_REMOTE_PRANSWER', 5);
+*/
+
+class ReadyState{
+  final String name;
+  final int value;
+  
+  //init value
+  static const ReadyState NEW = const ReadyState('NEW', 0);
+  
+  //RTC
+  static const ReadyState RTC_NEW = const ReadyState('RTC_NEW', 1);
+  static const ReadyState RTC_CONNECTING = const ReadyState('RTC_CONNECTING', 2);
+  static const ReadyState RTC_CONNECTED = const ReadyState('RTC_CONNECTED', 3);
+  static const ReadyState RTC_COMPLETED = const ReadyState('RTC_COMPLETED', 4);
+  static const ReadyState RTC_FAILED = const ReadyState('RTC_FAILED', 5);
+  static const ReadyState RTC_DISCONNECTED = const ReadyState('RTC_DISCONNECTED', 6);
+  static const ReadyState RTC_CLOSED = const ReadyState('RTC_CLOSED', 7);
+  
+  //DC
+  static const ReadyState DC_CONNECTING = const ReadyState('DC_CONNECTING', 8);
+  static const ReadyState DC_OPEN = const ReadyState('DC_OPEN', 9);
+  static const ReadyState DC_CLOSING = const ReadyState('DC_CLOSING', 10);
+  static const ReadyState DC_CLOSED = const ReadyState('DC_CLOSED', 11);
+  
+  const ReadyState(this.name, this.value);
 }
