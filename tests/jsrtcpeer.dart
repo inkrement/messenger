@@ -84,4 +84,38 @@ void main() {
   });
   
   
+  /**
+   * send
+   */
+  
+  test('JSwebrtc send', (){
+    
+    String something = "some lousy string";
+    
+    JsWebRtcPeer alice = new JsWebRtcPeer("alice");
+    JsWebRtcPeer bob = new JsWebRtcPeer("bob");
+    
+    //setup signaling channel
+    MessagePassing alice_sc = new MessagePassing();
+    MessagePassing bob_sc = new MessagePassing();
+    
+    //connect signaling channel
+    alice_sc.connect(bob_sc.identityMap());
+    bob_sc.connect(alice_sc.identityMap());
+    
+    //TODO: maybe not the first call
+    _callback(NewMessageEvent me) => expect(me.data.msg, something);
+    
+    alice.onReceive.listen(expectAsync1(_callback));
+    
+    //connect peer
+    alice.connect(bob_sc);
+    bob.connect(alice_sc);
+    
+    //send
+    bob.send(alice, new Message(something));
+    
+  });
+  
+  
 }
