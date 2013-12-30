@@ -27,6 +27,9 @@ abstract class Peer{
   //object is identified by hash of name. name has to be unique
   int get hashCode => this.name.hashCode;
   
+  Completer<String> connection_completer;
+  Completer<String> listen_completer;
+  
   /**
    * constuctor
    * 
@@ -47,12 +50,35 @@ abstract class Peer{
       print('${rec.loggerName} (${rec.level.name}): ${rec.message}');
     });
     
+    //init
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
+    _connections = new Map<String, Connection>();
+    
+    listen_completer = new Completer<String>();
+    connection_completer = new Completer<String>();
     
     log.info("new peer: #${num.toString()} ${this.name} ");
     
 
     peers.add(this);
+  }
+  
+  /**
+   * number of connections
+   * 
+   * @param ReadyState filter. count only connections with this readyState
+   * @returns number of connections
+   */
+  
+  int connections([ReadyState filter=null]){
+    int i=0;
+    
+    _connections.forEach((k,v){
+      if(filter==null)  return i++;
+      else if(v.readyState == filter) i++;
+    });
+    
+    return i;
   }
   
   
@@ -74,30 +100,29 @@ abstract class Peer{
   /**
    * send Message to other peer
    * 
-   * @param Peer to receiver of message
+   * @param String receiverId receiver of message
    * @param Message msg is content of message
    */
-  send(Peer to, Message msg);
+  send(String receiverId, Message msg);
   
   /**
    * send string to other peer
    */
-  sendString(Peer p, String msg) => send(p, new Message(msg));
+  sendString(String receiverId, String msg) => send(receiverId, new Message(msg));
   
   /**
    * send message to multiple peers
    */
-  broadcast(List<Connection> to, Message msg){
-    to.forEach((Connection p){
-      //TODO: remove first param
-      this.send(null, msg);
+  broadcast(List<String> receiverIds, Message msg){
+    receiverIds.forEach((String id){
+      this.send(id, msg);
     });
   }
   
   /**
    * send message to all known peers
    */
-  multicast(Message msg) => broadcast(_connections.values, msg);
+  multicast(Message msg) => broadcast(_connections.keys, msg);
   
   /**
    * getter: onstream event channel (stream)
@@ -126,45 +151,3 @@ static const ReadyState HAVE_LOCAL_PRANSWER = const ReadyState('HAVE_LOCAL_PRANS
 static const ReadyState HAVE_REMOTE_PRANSWER = const ReadyState('HAVE_REMOTE_PRANSWER', 5);
 */
 
-class ReadyState{
-  final String name;
-  final int value;
-  
-  //init value
-  static const ReadyState NEW = const ReadyState._create('NEW', 0);
-  
-  //RTC
-  static const ReadyState RTC_NEW = const ReadyState._create('RTC_NEW', 1);
-  static const ReadyState RTC_CONNECTING = const ReadyState._create('RTC_CONNECTING', 2);
-  static const ReadyState RTC_CONNECTED = const ReadyState._create('RTC_CONNECTED', 3);
-  static const ReadyState RTC_COMPLETED = const ReadyState._create('RTC_COMPLETED', 4);
-  static const ReadyState RTC_FAILED = const ReadyState._create('RTC_FAILED', 5);
-  static const ReadyState RTC_DISCONNECTED = const ReadyState._create('RTC_DISCONNECTED', 6);
-  static const ReadyState RTC_CLOSED = const ReadyState._create('RTC_CLOSED', 7);
-  
-  //DC
-  static const ReadyState DC_CONNECTING = const ReadyState._create('DC_CONNECTING', 8);
-  static const ReadyState DC_OPEN = const ReadyState._create('DC_OPEN', 9);
-  static const ReadyState DC_CLOSING = const ReadyState._create('DC_CLOSING', 10);
-  static const ReadyState DC_CLOSED = const ReadyState._create('DC_CLOSED', 11);
-  
-  //Undefined status
-  static const ReadyState UNDEFINED = const ReadyState._create('UNDEFINED', 100);
-  
-  const ReadyState._create(this.name, this.value);
-  
-  factory ReadyState.fromDataChannel(String name){
-    switch(name){
-      case "connecting":
-        return const ReadyState._create('DC_CONNECTING', 11);
-      case "open":
-        return const ReadyState._create('DC_OPEN', 9);
-      case "closing":
-        return const ReadyState._create('DC_CLOSING', 10);
-      case "closed":
-        return const ReadyState._create('DC_CLOSED', 11);
-      default:
-        return const ReadyState._create('UNDEFINED', 100);
-    }
-  }
-}

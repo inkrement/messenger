@@ -25,3 +25,6 @@ part 'src/peers/jswebrtcpeer.dart';
 
 part 'src/peers/connections/connection.dart';
 part 'src/peers/connections/jswebrtcconnection.dart';
+
+part 'src/peers/connections/ReadyStates.dart';
+part 'src/peers/connections/ReadyStates.dart';

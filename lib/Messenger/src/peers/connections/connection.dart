@@ -1,7 +1,6 @@
 part of messenger;
 
-abstract class Connection<T extends Peer>{
-  T partner;
+abstract class Connection{
   SignalingChannel sc;
   ReadyState readyState;
   StreamController<ReadyState> readyStateEvent;
@@ -13,6 +12,16 @@ abstract class Connection<T extends Peer>{
   ///TODO: use another generic type
   Completer<String> connection_completer;
   Completer<String> listen_completer;
+  
+  Connection([Logger logger=null]){
+    if (logger == null) this.log = new Logger("Connection");
+    else this.log = logger;
+    
+    //init
+    listen_completer = new Completer<String>();
+    connection_completer = new Completer<String>();
+    newMessageController = new StreamController<NewMessageEvent>();
+  }
   
   /**
    * setter: readyState

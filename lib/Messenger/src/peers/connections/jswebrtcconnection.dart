@@ -1,8 +1,7 @@
 part of messenger;
 
-class JsWebRtcConnection<T extends Peer> extends Connection<T>{
-  T partner;
-  js.Proxy rtcPeerConnection;
+class JsWebRtcConnection extends Connection{
+  js.Proxy _rtcPeerConnection;
   js.Proxy dc;
   
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
@@ -10,22 +9,19 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
   Map dataChannelOptions = {};
   
   
-  
-  JsWebRtcConnection([Logger log=null]){
-    if (log == null) log = new Logger("Connection");
-    
+  JsWebRtcConnection([Logger logger=null]):super(logger){
     dc=null;
     
     readyStateEvent = new StreamController<ReadyState>.broadcast();
     newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
     
     /* create RTCPeerConnection */
-    rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
+    _rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers)); //TODO: add pcConstraints
     
     log.fine("created PeerConnection");
     
-    rtcPeerConnection.ondatachannel = (RtcDataChannelEvent event){
+    _rtcPeerConnection.ondatachannel = (RtcDataChannelEvent event){
       log.info("datachannel received");
       
       var proxy = new js.Proxy.fromBrowserObject(event); 
@@ -57,7 +53,7 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
         var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(data.data.msg));
         
         //add candidate
-        rtcPeerConnection.addIceCandidate(iceCandidate);
+        _rtcPeerConnection.addIceCandidate(iceCandidate);
         break;
       case MessageType.STRING:
         //new Message. pass it!
@@ -68,7 +64,7 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
         
-        rtcPeerConnection.setRemoteDescription(sdp);
+        _rtcPeerConnection.setRemoteDescription(sdp);
         
         createAnswer();
         break;
@@ -79,7 +75,7 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
 
-        rtcPeerConnection.setRemoteDescription(sdp);
+        _rtcPeerConnection.setRemoteDescription(sdp);
         
         log.fine("connection established");
         connection_completer.complete("wuhuu");
@@ -94,10 +90,10 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
    * RTC SDP answer
    */
   createAnswer(){
-    rtcPeerConnection.createAnswer((sdp_answer){
+    _rtcPeerConnection.createAnswer((sdp_answer){
       log.fine("created sdp answer");
       
-      rtcPeerConnection.setLocalDescription(sdp_answer);
+      _rtcPeerConnection.setLocalDescription(sdp_answer);
       
       //serialize sdp answer
       final String jsonString = js.context.JSON.stringify(sdp_answer);
@@ -123,7 +119,7 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
     
     /// add ice candidates
     
-    rtcPeerConnection.onicecandidate = (event) {
+    _rtcPeerConnection.onicecandidate = (event) {
       log.finest("new ice candidate received");
       
       if(event.candidate != null){
@@ -159,16 +155,16 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
     /// create datachannel
     
     try {
-      dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
+      dc = _rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
       log.fine('created new data channel');
       
       dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
       dc.onclose = (_)=>changeReadyState(dc.readyState);
       
-      rtcPeerConnection.createOffer((sdp_offer){
+      _rtcPeerConnection.createOffer((sdp_offer){
         log.fine("create sdp offer");
         
-        rtcPeerConnection.setLocalDescription(sdp_offer);
+        _rtcPeerConnection.setLocalDescription(sdp_offer);
         
         //serialize
         final String jsonString = js.context.JSON.stringify(sdp_offer);
@@ -186,9 +182,10 @@ class JsWebRtcConnection<T extends Peer> extends Connection<T>{
     //return completer
     return connection_completer.future;
   }
-  
+
   send(String msg){
     dc.send(msg.toString());
   }
+ 
   
 }

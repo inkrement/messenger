@@ -9,20 +9,30 @@ class JsWebRtcPeer extends Peer{
     
   }
   
-  listen(SignalingChannel sc){
-    JsWebRtcConnection<JsWebRtcPeer> c = new JsWebRtcConnection<JsWebRtcPeer>(log);
+  Future listen(SignalingChannel sc){
+    JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.listen(sc);
     
     //add to list of connections. index is identity of other peer
     //TODO: test if identity is unique
-    f.then((String hash) => _connections[hash] = c);
+    f.then((String hash){
+      _connections[hash] = c; 
+      listen_completer.complete("wuhuu");
+    });
+    
+    return listen_completer.future;
   }
   
-  connect(SignalingChannel sc){
-    JsWebRtcConnection<JsWebRtcPeer> c = new JsWebRtcConnection<JsWebRtcPeer>(log);
+  Future connect(SignalingChannel sc){
+    JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.connect(sc);
     
-    f.then((String hash) => _connections[hash] = c);
+    f.then((String hash) {
+      _connections[hash] = c;
+      connection_completer.complete("wuhuu");
+    });
+    
+    return connection_completer.future;
   }
  
   
@@ -54,7 +64,7 @@ class JsWebRtcPeer extends Peer{
    * 
    * @ TODO: check if datachannel open. else throw exception
    */
-  send(JsWebRtcPeer o, Message msg){
+  send(String name, Message msg){
     log.info("send message!");
     
     if(!_connections.containsKey(o))

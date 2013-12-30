@@ -18,10 +18,10 @@ void main() {
    * The type od a new rtcPeerConnection should be
    * RTCPeerConnection
    */
-  test('JSWebrtc types peerconnection',(){
+  test('JSWebrtc create components',(){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
-
-    expect(alice.rtcPeerConnection.toString(), "[object RTCPeerConnection]");
+    MessagePassing alice_sc = new MessagePassing();
+    JsWebRtcConnection alice_cn = new JsWebRtcConnection();
   });
   
   
@@ -32,7 +32,8 @@ void main() {
   test('JSWebrtc datachannel status',(){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
 
-    expect(alice.readyState, ReadyState.NEW);
+    expect(alice.connections(), 0);
+    
   });
   
   
@@ -51,8 +52,7 @@ void main() {
     alice_sc.connect(bob_sc.identityMap());
     bob_sc.connect(alice_sc.identityMap());
     
-    
-    bob.readyStateEvent.stream.listen(expectAsync1((_){}));
+    //bob.readyStateEvent.stream.listen(expectAsync1((_){}));
     
     //connect peer
     expect(alice.listen(bob_sc), completes);
@@ -80,14 +80,15 @@ void main() {
     //TODO: maybe not the first call
     _callback(ReadyState status) => expect(status, ReadyState.DC_OPEN);
     
-    alice.readyStateEvent.stream.listen(expectAsync1(_callback));
+    //alice.readyStateEvent.stream.listen(expectAsync1(_callback));
+    
+    
     
     //connect peer
     alice.listen(bob_sc);
     bob.connect(alice_sc);
     
   });
- 
   
   /**
    * send
@@ -120,15 +121,14 @@ void main() {
     bob.connect(alice_sc);
     
     //send
-    _callback2(ReadyState status) {
-      if(status == ReadyState.DC_OPEN)
-        bob.send(bob, new Message(something));
-      };
+    //_callback2(ReadyState status) {
+    //  if(status == ReadyState.DC_OPEN)
+    bob.send(bob.hashCode, new Message(something));
+    //  };
     
-    alice.readyStateEvent.stream.listen(expectAsync1(_callback2));
+    //alice.readyStateEvent.stream.listen(expectAsync1(_callback2));
     
    // bob.send(alice, new Message(something));
     
   });
-
 }
