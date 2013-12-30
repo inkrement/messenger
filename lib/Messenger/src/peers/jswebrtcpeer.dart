@@ -1,8 +1,5 @@
 part of messenger;
 
-//TODO: support multiconnections
-//TODO: signalingchannel
-
 class JsWebRtcPeer extends Peer{
   js.Proxy rtcPeerConnection;
   var dc;
@@ -102,6 +99,7 @@ class JsWebRtcPeer extends Peer{
    * connect to WebrtcPeer
    */
   Future connect(SignalingChannel sc){
+    log.finest("try to connect");
     
     this.sc = sc;
     
@@ -109,6 +107,7 @@ class JsWebRtcPeer extends Peer{
     
     /// add ice candidates
     rtcPeerConnection.onicecandidate = (event) {
+      log.finest("new ice candidate received");
       
       if(event.candidate != null){
         try{
@@ -119,6 +118,8 @@ class JsWebRtcPeer extends Peer{
           
           //send ice candidate to other peer
           sc.send(new Message(jsonString, MessageType.ICE_CANDIDATE));
+          
+          log.finest("new ice candidate serialized and sent to other peer");
         } catch(e){
           log.warning("bob error: could not add ice candidate " + e.toString());
         }
@@ -130,14 +131,13 @@ class JsWebRtcPeer extends Peer{
     
     try {
       dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
-      log.info('Created send data channel');
-      
+      log.fine('created new data channel');
       
       dc.onopen = (_)=>changeReadyState(dc.readyState);
       dc.onclose = (_)=>changeReadyState(dc.readyState);
       
       rtcPeerConnection.createOffer((sdp_offer){
-        log.info("create offer");
+        log.fine("create sdp offer");
         
         rtcPeerConnection.setLocalDescription(sdp_offer);
         
@@ -182,6 +182,8 @@ class JsWebRtcPeer extends Peer{
   
   /**
    * send Message
+   * 
+   * @ TODO: check if datachannel open. else throw exception
    */
   send(JsWebRtcPeer o, Message msg){
     dc.send(msg.toString());

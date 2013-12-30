@@ -62,7 +62,10 @@ abstract class Peer{
    * @ TODO: make private
    */
   changeReadyState(String readyState){
-    log.info("change state: " + readyState);
+    //break if nothing will change
+    if (this.readyState == readyState) return;
+    
+    log.fine("change state: " + readyState);
     
     this.readyState = readyState;
     readyStateEvent.add(readyState);
