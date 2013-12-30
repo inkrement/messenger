@@ -15,27 +15,30 @@ class JsWebRtcPeer extends Peer{
    * constructor
    */
   JsWebRtcPeer([String name="", Level logLevel=Level.FINE]):super(name, logLevel){  
-    
-    
     dc = null;
+    
     /* create RTCPeerConnection */
     rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers)); //TODO: add pcConstraints
     
-    //log.fine("created PeerConnection");
+    log.fine("created PeerConnection");
     
-    rtcPeerConnection.onDataChannel = (event){
-      log.fine("datachannel received");
+    rtcPeerConnection.ondatachannel = (RtcDataChannelEvent event){
+      log.info("datachannel received");
       
-      dc = event.channel;
+      var proxy = new js.Proxy.fromBrowserObject(event); 
+      
+      dc = proxy.channel;
+      
+      //dc = new js.Proxy(js.context.RTCDataChannel, js.context.JSON.stringify(event.channel));
       /* set channel events */
-      dc.onmessage = (x)=>print("rtc message callback: " + x);
+      dc.onmessage = (String x)=>newMessageController.add(new NewMessageEvent(new Message(x)));
       
-      dc.onopen = (_)=>changeReadyState(dc.readyState);
-      dc.onclose = (_)=>changeReadyState(dc.readyState);
-      dc.onerror = (x)=>print("rtc error callback: " + x.toString());
+      dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
+      dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
+      dc.onerror = (x)=>log.shout("rtc error callback: " + x.toString());
       
-      readyState = dc.readyState;
+      changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
     };
   }
   
@@ -57,8 +60,9 @@ class JsWebRtcPeer extends Peer{
         //new Message. pass it!
         break;
       case MessageType.WEBRTC_OFFER:
-        //log.info("got offer: " + data.data.msg);
+        log.fine("received sdp offer");
         
+        //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
         
         rtcPeerConnection.setRemoteDescription(sdp);
@@ -67,11 +71,14 @@ class JsWebRtcPeer extends Peer{
         break;
         
       case MessageType.WEBRTC_ANSWER:
+        log.fine("received sdp answer");
+        
+        //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
 
         rtcPeerConnection.setRemoteDescription(sdp);
         
-        log.fine("received answer connection established");
+        log.fine("connection established");
         connection_completer.complete("wuhuu");
         listen_completer.complete("wuhuu");
         
@@ -85,6 +92,7 @@ class JsWebRtcPeer extends Peer{
    */
   createAnswer(){
     rtcPeerConnection.createAnswer((sdp_answer){
+      log.fine("created sdp answer");
       
       rtcPeerConnection.setLocalDescription(sdp_answer);
       
@@ -93,8 +101,8 @@ class JsWebRtcPeer extends Peer{
       
       //send ice candidate to other peer
       sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
+      log.fine("sdp answer sent");
       
-      log.fine("received answer connection established");
       connection_completer.complete("wuhuu");
       listen_completer.complete("wuhuu");
     });
@@ -146,34 +154,31 @@ class JsWebRtcPeer extends Peer{
     listen(sc);
     
     /// create datachannel
-    if (dc == null){
-      try {
-        dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
-        log.fine('created new data channel');
+    
+    try {
+      dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
+      log.fine('created new data channel');
+      
+      dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
+      dc.onclose = (_)=>changeReadyState(dc.readyState);
+      
+      rtcPeerConnection.createOffer((sdp_offer){
+        log.fine("create sdp offer");
         
-        dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
-        dc.onclose = (_)=>changeReadyState(dc.readyState);
+        rtcPeerConnection.setLocalDescription(sdp_offer);
         
-        rtcPeerConnection.createOffer((sdp_offer){
-          log.fine("create sdp offer");
-          
-          rtcPeerConnection.setLocalDescription(sdp_offer);
-          
-          //serialize
-          final String jsonString = js.context.JSON.stringify(sdp_offer);
-          
-          sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
-          
-        }, (e){
-          connection_completer.completeError(e, e.stackTrace);
-        }, {});
-  
-      } catch (e) {
+        //serialize
+        final String jsonString = js.context.JSON.stringify(sdp_offer);
+        
+        sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
+        
+      }, (e){
         connection_completer.completeError(e, e.stackTrace);
-      }
+      }, {});
+
+    } catch (e) {
+      connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
     }
-    
-    
     
     //return completer
     return connection_completer.future;
@@ -208,6 +213,7 @@ class JsWebRtcPeer extends Peer{
    * @ TODO: check if datachannel open. else throw exception
    */
   send(JsWebRtcPeer o, Message msg){
+    log.info("send message!");
     dc.send(msg.toString());
   }
   

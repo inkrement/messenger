@@ -81,7 +81,7 @@
         if (event.candidate) {
           pc2.addIceCandidate(event.candidate);
           
-          console.log('Local ICE candidate: \n' + event.candidate.candidate);
+          //console.log('Local ICE candidate: \n' + event.candidate.candidate);
         }
       }
       
@@ -94,7 +94,7 @@
           
           pc1.addIceCandidate(event.candidate);
           
-          console.error(event.candidate);
+          //console.error(event.candidate);
           
           //console.log('Remote ICE candidate: \n ' + event.candidate.candidate);
         }
@@ -115,7 +115,7 @@
       pc1.createOffer(function (desc) {
         pc1.setLocalDescription(desc);
         
-        console.log('Offer from pc1 \n' + desc.sdp);
+        //console.log('Offer from pc1 \n' + desc.sdp);
         pc2.setRemoteDescription(desc);
         pc2.createAnswer(gotDescription2);
       });
@@ -139,7 +139,7 @@
     
     function gotDescription2(desc) {
       pc2.setLocalDescription(desc);
-      console.log('Answer from pc2 \n' + desc.sdp);
+      //console.log('Answer from pc2 \n' + desc.sdp);
       pc1.setRemoteDescription(desc);
     }
     
