@@ -45,15 +45,15 @@ class WebRtcPeer extends Peer{
   /**
    * connect to WebrtcPeer
    */
-  connect(WebRtcPeer o){
-    log.info("try to connect to: " + o.name);
+  connect(SignalingChannel o){
+    //log.info("try to connect to: " + o.name);
     
     rtcPeerConnection.onIceCandidate.listen((event) { 
       
       log.info(event.runtimeType.toString());
 
       if(event.candidate != null)
-        o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("wuhuu"), (_) => print("error"));
+        //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("wuhuu"), (_) => print("error"));
       
         try{
           //o.rtcPeerConnection.addIceCandidate(event.candidate, ()=>print("works"), (_)=>print("error ice candidate"));
@@ -68,8 +68,8 @@ class WebRtcPeer extends Peer{
     });
     
     
-    o.rtcPeerConnection.onIceCandidate.listen((event) { 
-     
+    //o.rtcPeerConnection.onIceCandidate.listen((event) { 
+     /*
       if(event.candidate != null)
         try{
           
@@ -112,7 +112,7 @@ class WebRtcPeer extends Peer{
       
     } catch (e) {
       log.warning("could not create DataChannel: " + e.toString()); 
-    }
+    }*/
     
   }
   

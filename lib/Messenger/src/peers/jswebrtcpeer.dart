@@ -2,7 +2,7 @@ part of messenger;
 
 class JsWebRtcPeer extends Peer{
   js.Proxy rtcPeerConnection;
-  var dc;
+  js.Proxy dc;
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
   var pcConstraint = {};
   Map dataChannelOptions = {};
@@ -68,6 +68,9 @@ class JsWebRtcPeer extends Peer{
 
         rtcPeerConnection.setRemoteDescription(sdp);
         
+        log.fine("received answer connection established");
+        connection_completer.complete("wuhuu");
+        
         //TODO: change status?!
         break;
     }
@@ -87,6 +90,7 @@ class JsWebRtcPeer extends Peer{
       //send ice candidate to other peer
       sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       
+      log.fine("received answer connection established");
       connection_completer.complete("wuhuu");
     });
   }
@@ -129,7 +133,7 @@ class JsWebRtcPeer extends Peer{
       dc = rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
       log.fine('created new data channel');
       
-      dc.onopen = (_)=>changeReadyState(dc.readyState);
+      dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
       dc.onclose = (_)=>changeReadyState(dc.readyState);
       
       rtcPeerConnection.createOffer((sdp_offer){

@@ -8,7 +8,7 @@ void main() {
   /**
    * expect to construct new Object without catching a exception
    */
-  test('Webrtc Status', (){
+  test('JSWebrtc Status', (){
     JsWebRtcPeer alice = new JsWebRtcPeer();
     JsWebRtcPeer bob = new JsWebRtcPeer();
   });
@@ -17,7 +17,7 @@ void main() {
    * The type od a new rtcPeerConnection should be
    * RTCPeerConnection
    */
-  test('Webrtc types peerconnection',(){
+  test('JSWebrtc types peerconnection',(){
     JsWebRtcPeer alice = new JsWebRtcPeer();
 
     expect(alice.rtcPeerConnection.toString(), "[object RTCPeerConnection]");
@@ -28,16 +28,16 @@ void main() {
    * New Peer should not have a datachannel.
    * Therefore readyState is initialized with "none"
    */
-  test('Webrtc datachannel status',(){
+  test('JSWebrtc datachannel status',(){
     JsWebRtcPeer alice = new JsWebRtcPeer();
 
-    expect(alice.readyState, "none");
+    expect(alice.readyState, ReadyState.NEW);
   });
   
   /**
    * Test connection
    */
-  test('Webrtc connect',(){
+  test('JSWebrtc connect',(){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
     
@@ -58,18 +58,30 @@ void main() {
   
   /**
    * test DataChannel's readyState opens
-   
-  test('webrtc datachannel', (){
+   */
+  
+  test('JSwebrtc datachannel', (){
     JsWebRtcPeer alice = new JsWebRtcPeer("alice");
     JsWebRtcPeer bob = new JsWebRtcPeer("bob");
     
-    _callback(String status) => expect(status, "open");
+    //setup signaling channel
+    MessagePassing alice_sc = new MessagePassing();
+    MessagePassing bob_sc = new MessagePassing();
+    
+    //connect signaling channel
+    alice_sc.connect(bob_sc.identityMap());
+    bob_sc.connect(alice_sc.identityMap());
+    
+    //TODO: maybe not the first call
+    _callback(ReadyState status) => expect(status, ReadyState.DC_OPEN);
     
     alice.readyStateEvent.stream.listen(expectAsync1(_callback));
     
-    alice.connect(bob);
+    //connect peer
+    alice.connect(bob_sc);
+    bob.connect(alice_sc);
     
   });
-  */
+  
   
 }
