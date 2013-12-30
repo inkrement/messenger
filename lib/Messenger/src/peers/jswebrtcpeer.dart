@@ -32,7 +32,7 @@ class JsWebRtcPeer extends Peer{
       
       //dc = new js.Proxy(js.context.RTCDataChannel, js.context.JSON.stringify(event.channel));
       /* set channel events */
-      dc.onmessage = (String x)=>newMessageController.add(new NewMessageEvent(new Message(x)));
+      dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message(event.data)));
       
       dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
       dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
@@ -40,6 +40,7 @@ class JsWebRtcPeer extends Peer{
       
       changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
     };
+    
   }
   
   /**
@@ -120,6 +121,7 @@ class JsWebRtcPeer extends Peer{
     sc.onReceive.listen(gotSignalingMessage);
     
     /// add ice candidates
+    
     rtcPeerConnection.onicecandidate = (event) {
       log.finest("new ice candidate received");
       
@@ -139,7 +141,7 @@ class JsWebRtcPeer extends Peer{
         }
       }
         
-    };
+    }; 
     
     return listen_completer.future;
   }
