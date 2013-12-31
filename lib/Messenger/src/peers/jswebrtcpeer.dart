@@ -21,7 +21,11 @@ class JsWebRtcPeer extends Peer{
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
-      c.newMessageController.stream.listen((NewMessageEvent e) => newMessageController.add(e));
+      c.newMessageController.stream.listen((NewMessageEvent e){
+        
+        log.info("message redirected");
+        newMessageController.add(e);
+      });
     });
     
     return newConnectionController.stream;
@@ -37,7 +41,11 @@ class JsWebRtcPeer extends Peer{
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
-      c.newMessageController.stream.listen((NewMessageEvent e) => newMessageController.add(e));
+      c.newMessageController.stream.listen((NewMessageEvent e){
+        
+        log.info("message redirected");
+        newMessageController.add(e);
+      });
     });
     
     return newConnectionController.stream;
@@ -73,8 +81,6 @@ class JsWebRtcPeer extends Peer{
    * @ TODO: check if datachannel open. else throw exception
    */
   send(int id, Message msg){
-    log.info("send message!");
-    
     if(!_connections.containsKey(id))
       throw new StateError("list of connections does not contain peer ${name}");
     
