@@ -128,11 +128,11 @@ void main() {
       
       //set callbacks
       alice.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(alice.connections.keys.first, bob_sc.id.toString()))
+          expectAsync1((_)=>expect(alice.connections.keys.first, bob_sc.id))
           );
       
       bob.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(bob.connections.keys.first, alice_sc.id.toString()))
+          expectAsync1((_)=>expect(bob.connections.keys.first, alice_sc.id))
           );
       
       //connect peer
@@ -140,6 +140,158 @@ void main() {
       bob.connect(alice_sc);
     });
     
+    
+    group('multi connections', (){
+      
+      test('three connections at the same time', (){
+        JsWebRtcPeer alice = new JsWebRtcPeer("alice_m3", Level.OFF);
+        JsWebRtcPeer bob = new JsWebRtcPeer("bob_m3", Level.OFF);
+        JsWebRtcPeer clark = new JsWebRtcPeer("clark_m3", Level.OFF);
+        
+        //setup signaling channels
+        MessagePassing alice_bob_sc = new MessagePassing();
+        MessagePassing bob_alice_sc = new MessagePassing();
+        
+        MessagePassing alice_clark_sc = new MessagePassing();
+        MessagePassing clark_alice_sc = new MessagePassing();
+        
+        MessagePassing clark_bob_sc = new MessagePassing();
+        MessagePassing bob_clark_sc = new MessagePassing();
+        
+        alice_bob_sc.connect(bob_alice_sc.identityMap());
+        bob_alice_sc.connect(alice_bob_sc.identityMap());
+        
+        alice_clark_sc.connect(clark_alice_sc.identityMap());
+        clark_alice_sc.connect(alice_clark_sc.identityMap());
+        
+        clark_bob_sc.connect(bob_clark_sc.identityMap());
+        bob_clark_sc.connect(clark_bob_sc.identityMap());
+        
+        
+        //set callbacks
+        
+        int alice_c = 1;
+        int bob_c = 1;
+        int clark_c = 1;
+        
+        alice.newConnectionController.stream.listen(
+            expectAsync1((_)=>expect(alice.connections.length, alice_c++), count:2)
+        );
+        
+        bob.newConnectionController.stream.listen(
+            expectAsync1((_)=>expect(bob.connections.length, bob_c++), count:2)
+        );
+        
+        clark.newConnectionController.stream.listen(
+            expectAsync1((_)=>expect(clark.connections.length, clark_c++), count:2)
+        );
+        
+        
+        //connect clark/bob bob/clark
+        bob.listen(clark_bob_sc);
+        clark.connect(bob_clark_sc);
+        
+        //connect alice/bob bob/alice
+        alice.listen(bob_alice_sc);
+        bob.connect(alice_bob_sc);
+        
+        //connect alice/clark clark/alice
+        alice.listen(clark_alice_sc);
+        clark.connect(alice_clark_sc);
+        
+      });
+      
+      
+      
+      test('3 clients send messages', (){
+        JsWebRtcPeer alice = new JsWebRtcPeer("alice_s3", Level.ALL);
+        JsWebRtcPeer bob = new JsWebRtcPeer("bob_s3", Level.ALL);
+        JsWebRtcPeer clark = new JsWebRtcPeer("clark_s3", Level.ALL);
+        
+        //setup signaling channels
+        MessagePassing alice_bob_sc = new MessagePassing();
+        MessagePassing bob_alice_sc = new MessagePassing();
+        
+        MessagePassing alice_clark_sc = new MessagePassing();
+        MessagePassing clark_alice_sc = new MessagePassing();
+        
+        MessagePassing clark_bob_sc = new MessagePassing();
+        MessagePassing bob_clark_sc = new MessagePassing();
+        
+        alice_bob_sc.connect(bob_alice_sc.identityMap());
+        bob_alice_sc.connect(alice_bob_sc.identityMap());
+        
+        alice_clark_sc.connect(clark_alice_sc.identityMap());
+        clark_alice_sc.connect(alice_clark_sc.identityMap());
+        
+        clark_bob_sc.connect(bob_clark_sc.identityMap());
+        bob_clark_sc.connect(clark_bob_sc.identityMap());
+        
+        
+        //set callbacks
+        
+        String s = "some random string";
+        Message tm = new Message(s);
+        
+        //each sould receive two messages
+        alice.newMessageController.stream.listen(
+            expectAsync1((NewMessageEvent e){
+              expect(e.data.msg, s);
+            }, count: 2)
+        );
+
+        bob.newMessageController.stream.listen(
+            expectAsync1((NewMessageEvent e){
+              expect(e.data.msg, s);
+            }, count: 2)
+        );
+        
+        clark.newMessageController.stream.listen(
+            expectAsync1((NewMessageEvent e){
+              expect(e.data.msg, s);
+            }, count: 2)
+        );
+        
+        
+        bob.newConnectionController.stream.listen((_){
+          if(bob.connections.length > 1){
+            logMessage("connected to more than 1 client. looks quite good");
+            
+            bob.multicast(tm);
+          }
+        });
+        
+        clark.newConnectionController.stream.listen((_){
+          if(clark.connections.length > 1){
+            logMessage("connected to more than 1 client. looks quite good");
+            
+            clark.multicast(tm);
+          }
+        });
+        
+        alice.newConnectionController.stream.listen((_){
+          if(alice.connections.length > 1){
+            logMessage("connected to more than 1 client. looks quite good");
+            
+            alice.multicast(tm);
+          }
+        });
+        
+        //connect clark/bob bob/clark
+        bob.listen(clark_bob_sc);
+        clark.connect(bob_clark_sc);
+        
+        //connect alice/bob bob/alice
+        alice.listen(bob_alice_sc);
+        bob.connect(alice_bob_sc);
+        
+        //connect alice/clark clark/alice
+        alice.listen(clark_alice_sc);
+        clark.connect(alice_clark_sc);
+
+      });
+      
+    });
     
     /**
      * test DataChannel's readyState opens

@@ -11,12 +11,13 @@ class JsWebRtcPeer extends Peer{
   
   Stream<NewConnectionEvent> listen(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
-    Future<String> f = c.listen(sc);
+    Future<int> f = c.listen(sc);
     
     //add to list of connections. index is identity of other peer
     //TODO: test if identity is unique
-    f.then((String hash){
-      _connections[hash] = c;
+    f.then((int id){
+      _connections[id] = c;
+      log.info("new connection added! (now: ${connections.length.toString()})");
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
@@ -28,10 +29,11 @@ class JsWebRtcPeer extends Peer{
   
   Stream<NewConnectionEvent> connect(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
-    Future<String> f = c.connect(sc);
+    Future<int> f = c.connect(sc);
     
-    f.then((String hash) {
-      _connections[hash] = c;
+    f.then((int id) {
+      _connections[id] = c;
+      log.info("new connection added! (now: ${connections.length.toString()})");
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
@@ -70,13 +72,13 @@ class JsWebRtcPeer extends Peer{
    * 
    * @ TODO: check if datachannel open. else throw exception
    */
-  send(String name, Message msg){
+  send(int id, Message msg){
     log.info("send message!");
     
-    if(!_connections.containsKey(name))
+    if(!_connections.containsKey(id))
       throw new StateError("list of connections does not contain peer ${name}");
     
-    _connections[name].send(msg.toString());
+    _connections[id].send(msg);
   }
   
 }

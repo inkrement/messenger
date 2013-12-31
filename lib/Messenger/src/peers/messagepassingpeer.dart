@@ -5,7 +5,7 @@ import './peer.dart';
 import '../message.dart';
 import '../events/newmessageevent.dart';
 */
-
+/*
 class MessagePassingPeer extends Peer{
   connect(MessagePassingPeer p){
     //TODO: connect?!
@@ -17,4 +17,4 @@ class MessagePassingPeer extends Peer{
   }
   
   close(){}
-}
+}*/

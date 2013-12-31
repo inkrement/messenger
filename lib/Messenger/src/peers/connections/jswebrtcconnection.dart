@@ -32,7 +32,10 @@ class JsWebRtcConnection extends Connection{
       /* set channel events */
       _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
       
-      _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onopen = (_){
+        changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+        listen_completer.complete(sc.id);
+      };
       _dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
       _dc.onerror = (x)=>log.shout("rtc error callback: " + x.toString());
   
@@ -64,7 +67,7 @@ class JsWebRtcConnection extends Connection{
          */
       case MessageType.PEER_ID:
         log.fine("PEER_ID received: connection established");
-        listen_completer.complete(sc.id.toString());
+        //listen_completer.complete(sc.id);
         
         sc.send(new Message(this.hashCode.toString(), MessageType.AKN_PEER_ID));
         changeReadyState(ReadyState.CONNECTED);
@@ -72,9 +75,7 @@ class JsWebRtcConnection extends Connection{
         break;
       case MessageType.AKN_PEER_ID:
         log.fine("AKN_PEER_ID received:  connection established");
-        connection_completer.complete(sc.id.toString());
         
-        changeReadyState(ReadyState.CONNECTED);
         break;
       case MessageType.WEBRTC_OFFER:
         log.fine("received sdp offer");
@@ -127,7 +128,7 @@ class JsWebRtcConnection extends Connection{
   /**
    * listen for incoming connections
    */
-  Future listen(SignalingChannel sc){
+  Future<int> listen(SignalingChannel sc){
     log.finest("start listening");
     
     this.sc = sc;
@@ -163,7 +164,7 @@ class JsWebRtcConnection extends Connection{
   /**
    * connect to WebrtcPeer
    */
-  Future connect(SignalingChannel sc){
+  Future<int> connect(SignalingChannel sc){
     log.finest("try to connect");
     
     //listen for incoming connection
@@ -175,7 +176,12 @@ class JsWebRtcConnection extends Connection{
       _dc = _rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
       log.fine('created new data channel');
       
-      _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onopen = (_){
+        changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+        connection_completer.complete(sc.id);
+        
+        changeReadyState(ReadyState.CONNECTED);
+      };
       _dc.onclose = (_)=>changeReadyState(_dc.readyState);
       
       _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
@@ -204,6 +210,13 @@ class JsWebRtcConnection extends Connection{
 
   send(Message msg){
     //serialize
+    if(_dc == null){
+      log.warning("could not send message. No DataChannel open!");
+      return;
+    }
+    
+    //TODO: not ready, pipe message.
+    log.info("send message to : ${sc.id.toString()}");
     _dc.send(Message.serialize(msg));
   }
  

@@ -10,16 +10,16 @@ abstract class Connection{
   
   ///completer for connection
   ///TODO: use another generic type
-  Completer<String> connection_completer;
-  Completer<String> listen_completer;
+  Completer<int> connection_completer;
+  Completer<int> listen_completer;
   
   Connection([Logger logger=null]){
     if (logger == null) this.log = new Logger("Connection");
     else this.log = logger;
     
     //init
-    listen_completer = new Completer<String>();
-    connection_completer = new Completer<String>();
+    listen_completer = new Completer<int>();
+    connection_completer = new Completer<int>();
     newMessageController = new StreamController<NewMessageEvent>();
   }
   

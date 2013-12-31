@@ -16,7 +16,7 @@ void main() {
   /// setup html environment 
   // override configuration to set custom timeout
   final HtmlEnhancedConfiguration sc = new HtmlEnhancedConfiguration(false);
-  sc.timeout = new Duration(seconds: 5);
+  sc.timeout = new Duration(seconds: 10);
   unittestConfiguration = sc;
   
   /*

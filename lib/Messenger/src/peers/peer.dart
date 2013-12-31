@@ -22,7 +22,7 @@ abstract class Peer{
   ///new message event stream
   StreamController<NewMessageEvent> newMessageController;
   
-  Map<String, Connection> _connections;
+  Map<int, Connection> _connections;
   
   static List<Peer> peers = new List<Peer>();
  
@@ -55,7 +55,7 @@ abstract class Peer{
     //init
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
     newConnectionController = new StreamController<NewConnectionEvent>.broadcast();
-    _connections = new Map<String, Connection>();
+    _connections = new Map<int, Connection>();
     
     listen_completer = new Completer<String>();
     connection_completer = new Completer<String>();
@@ -69,7 +69,7 @@ abstract class Peer{
   /**
    * connections getter
    */
-  Map<String, Connection> get connections => _connections;
+  Map<int, Connection> get connections => _connections;
   
   /**
    * get identifer of this object
@@ -116,18 +116,18 @@ abstract class Peer{
    * @param String receiverId receiver of message
    * @param Message msg is content of message
    */
-  send(String receiverId, Message msg);
+  send(int receiverId, Message msg);
   
   /**
    * send string to other peer
    */
-  sendString(String receiverId, String msg) => send(receiverId, new Message(msg));
+  sendString(int receiverId, String msg) => send(receiverId, new Message(msg));
   
   /**
    * send message to multiple peers
    */
-  broadcast(List<String> receiverIds, Message msg){
-    receiverIds.forEach((String id){
+  broadcast(Iterable<int> receiverIds, Message msg){
+    receiverIds.forEach((int id){
       this.send(id, msg);
     });
   }
