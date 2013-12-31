@@ -1,13 +1,8 @@
 
 library unittest;
 
-
-
+import 'package:unittest/unittest.dart';
 import 'package:unittest/html_enhanced_config.dart';
-
-
-//import 'dart:mirrors';
-//import 'dart:async';
 
 import 'helloworld.dart' as hello;
 import 'jsrtcpeer.dart' as js_rtc;
@@ -19,12 +14,10 @@ import 'signaling.messagepassing.dart' as sig_mp;
 void main() {
   
   /// setup html environment 
-  useHtmlEnhancedConfiguration();
-  
-  /*
-  Configuration cfg = new Configuration();
-  unittestConfiguration = cfg;
-  */
+  // override configuration to set custom timeout
+  final HtmlEnhancedConfiguration sc = new HtmlEnhancedConfiguration(true);
+  sc.timeout = new Duration(seconds: 1);
+  unittestConfiguration = sc;
   
   /*
    * signaling

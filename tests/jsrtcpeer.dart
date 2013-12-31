@@ -10,8 +10,11 @@ void main() {
   group('JS RTC Peer', () {
     
     setUP(){
-      print("setup");
       
+      // override configuration to set custom timeout
+      SimpleConfiguration sc = new SimpleConfiguration();
+      sc.timeout = new Duration(seconds: 1);
+      unittestConfiguration = sc;
       
     }
     
@@ -68,7 +71,7 @@ void main() {
       Stream<NewConnectionEvent> s_a = alice.listen(bob_sc);
       Stream<NewConnectionEvent> s_b = bob.connect(alice_sc);
       
-      s_a.listen(expectAsync1((_){}));
+      s_a.listen(expectAsync1((_){}, count: 2));
       s_b.listen(expectAsync1((_){}));
     });
     
