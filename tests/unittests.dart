@@ -3,7 +3,9 @@ library unittest;
 
 
 
-import 'package:unittest/html_config.dart';
+import 'package:unittest/html_enhanced_config.dart';
+
+
 //import 'dart:mirrors';
 //import 'dart:async';
 
@@ -17,7 +19,12 @@ import 'signaling.messagepassing.dart' as sig_mp;
 void main() {
   
   /// setup html environment 
-  useHtmlConfiguration();
+  useHtmlEnhancedConfiguration();
+  
+  /*
+  Configuration cfg = new Configuration();
+  unittestConfiguration = cfg;
+  */
   
   /*
    * signaling
@@ -29,11 +36,13 @@ void main() {
    * peers
    */
   
+  /// run hello world tests
+  hello.main();
+  
   /// tests for JS Wrapper
   js_rtc.main();
   
-  /// run hello world tests
-  //helloworld();
+
   
   /// webrtc Peer tests
   //webrtcpeer();
@@ -41,7 +50,7 @@ void main() {
   
   
   /// messagepassing peer test
-  //messagepassingpeer();
+  //messagepassing.main();
 
   
 }

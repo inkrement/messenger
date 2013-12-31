@@ -91,14 +91,14 @@ abstract class Peer{
    * 
    * @param Peer other
    */
-  Stream listen(SignalingChannel other);
+  Stream<NewConnectionEvent> listen(SignalingChannel other);
   
   /**
    * connect to another peer
    * 
    * @param Peer other
    */
-  Stream connect(SignalingChannel other);
+  Stream<NewConnectionEvent> connect(SignalingChannel other);
   
   /**
    * send Message to other peer

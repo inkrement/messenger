@@ -4,12 +4,15 @@ import 'package:unittest/unittest.dart';
 
 main() {
   
-  /**
-   * hello world
-   */
-  test('hello world', (){
-    String hello = "hello world";
-    
-    expect(hello, "hello world");
+  group('Simple Unittests to check Framework', () {
+  
+    /**
+     * hello world
+     */
+    test('hello world', (){
+      String hello = "hello world";
+      
+      expect(hello, "hello world");
+    });
   });
 }

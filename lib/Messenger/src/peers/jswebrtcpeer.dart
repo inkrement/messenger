@@ -9,7 +9,7 @@ class JsWebRtcPeer extends Peer{
     
   }
   
-  Stream listen(SignalingChannel sc){
+  Stream<NewConnectionEvent> listen(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.listen(sc);
     
@@ -23,7 +23,7 @@ class JsWebRtcPeer extends Peer{
     return newConnectionController.stream;
   }
   
-  Stream connect(SignalingChannel sc){
+  Stream<NewConnectionEvent> connect(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.connect(sc);
     
