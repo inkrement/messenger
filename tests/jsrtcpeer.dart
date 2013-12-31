@@ -71,7 +71,7 @@ void main() {
       Stream<NewConnectionEvent> s_a = alice.listen(bob_sc);
       Stream<NewConnectionEvent> s_b = bob.connect(alice_sc);
       
-      s_a.listen(expectAsync1((_){}, count: 2));
+      s_a.listen(expectAsync1((_){}));
       s_b.listen(expectAsync1((_){}));
     });
     
