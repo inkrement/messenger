@@ -2,7 +2,7 @@ part of messenger;
 
 class JsWebRtcConnection extends Connection{
   js.Proxy _rtcPeerConnection;
-  js.Proxy dc;
+  js.Proxy _dc;
   
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
   var pcConstraint = {};
@@ -10,7 +10,7 @@ class JsWebRtcConnection extends Connection{
   
   
   JsWebRtcConnection([Logger logger=null]):super(logger){
-    dc=null;
+    _dc=null;
     
     readyStateEvent = new StreamController<ReadyState>.broadcast();
     newMessageController = new StreamController<NewMessageEvent>.broadcast(); 
@@ -26,18 +26,18 @@ class JsWebRtcConnection extends Connection{
       
       var proxy = new js.Proxy.fromBrowserObject(event); 
       
-      dc = proxy.channel;
+      _dc = proxy.channel;
       
       //dc = new js.Proxy(js.context.RTCDataChannel, js.context.JSON.stringify(event.channel));
       /* set channel events */
-      dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message(event.data)));
+      _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message(event.data)));
       
-      dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
-      dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
-      dc.onerror = (x)=>log.shout("rtc error callback: " + x.toString());
+      _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onerror = (x)=>log.shout("rtc error callback: " + x.toString());
   
     
-      changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
+      changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
     };
   }
   
@@ -155,11 +155,11 @@ class JsWebRtcConnection extends Connection{
     /// create datachannel
     
     try {
-      dc = _rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
+      _dc = _rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
       log.fine('created new data channel');
       
-      dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(dc.readyState));
-      dc.onclose = (_)=>changeReadyState(dc.readyState);
+      _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onclose = (_)=>changeReadyState(_dc.readyState);
       
       _rtcPeerConnection.createOffer((sdp_offer){
         log.fine("create sdp offer");
@@ -184,7 +184,7 @@ class JsWebRtcConnection extends Connection{
   }
 
   send(String msg){
-    dc.send(msg.toString());
+    _dc.send(msg.toString());
   }
  
   
