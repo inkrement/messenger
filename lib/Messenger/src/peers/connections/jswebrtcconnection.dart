@@ -58,6 +58,13 @@ class JsWebRtcConnection extends Connection{
       case MessageType.STRING:
         //new Message. pass it!
         break;
+      case MessageType.PEER_ID:
+        log.fine("connection established");
+        connection_completer.complete(data.data.msg);
+        listen_completer.complete(data.data.msg);
+        
+        changeReadyState(ReadyState.CONNECTED);
+        break;
       case MessageType.WEBRTC_OFFER:
         log.fine("received sdp offer");
         
@@ -77,11 +84,8 @@ class JsWebRtcConnection extends Connection{
 
         _rtcPeerConnection.setRemoteDescription(sdp);
         
-        log.fine("connection established");
-        connection_completer.complete("wuhuu");
-        listen_completer.complete("wuhuu");
+        send(new Message());
         
-        //TODO: change status?!
         break;
     }
   }
@@ -183,8 +187,9 @@ class JsWebRtcConnection extends Connection{
     return connection_completer.future;
   }
 
-  send(String msg){
-    _dc.send(msg.toString());
+  send(Message msg){
+    //serialize
+    _dc.send(msg.serialize());
   }
  
   

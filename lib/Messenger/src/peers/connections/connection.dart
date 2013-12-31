@@ -38,6 +38,6 @@ abstract class Connection{
     readyStateEvent.add(readyState);
   }
   
-  send(String msg);
+  send(Message msg);
   
 }

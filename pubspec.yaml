@@ -11,3 +11,4 @@ dependencies:
   logging: any
   serialization: any
   unittest: any
+  utils: any

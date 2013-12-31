@@ -175,6 +175,7 @@ class ReadyState{
   static const ReadyState DC_CLOSING = const ReadyState._create('DC_CLOSING', 10);
   static const ReadyState DC_CLOSED = const ReadyState._create('DC_CLOSED', 11);
   
+  static const ReadyState CONNECTED = const ReadyState._create('CONNECTED', 50);
   //Undefined status
   static const ReadyState UNDEFINED = const ReadyState._create('UNDEFINED', 100);
   
