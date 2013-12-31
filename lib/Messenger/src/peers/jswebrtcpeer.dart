@@ -9,7 +9,7 @@ class JsWebRtcPeer extends Peer{
     
   }
   
-  Future listen(SignalingChannel sc){
+  Stream listen(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.listen(sc);
     
@@ -17,22 +17,22 @@ class JsWebRtcPeer extends Peer{
     //TODO: test if identity is unique
     f.then((String hash){
       _connections[hash] = c; 
-      listen_completer.complete("wuhuu");
+      newConnectionController.add(new NewConnectionEvent(c));
     });
     
-    return listen_completer.future;
+    return newConnectionController.stream;
   }
   
-  Future connect(SignalingChannel sc){
+  Stream connect(SignalingChannel sc){
     JsWebRtcConnection c = new JsWebRtcConnection(log);
     Future<String> f = c.connect(sc);
     
     f.then((String hash) {
       _connections[hash] = c;
-      connection_completer.complete("wuhuu");
+      newConnectionController.add(new NewConnectionEvent(c));
     });
     
-    return connection_completer.future;
+    return newConnectionController.stream;
   }
  
   
@@ -67,10 +67,10 @@ class JsWebRtcPeer extends Peer{
   send(String name, Message msg){
     log.info("send message!");
     
-    if(!_connections.containsKey(o))
-      throw new StateError("list of connections does not contain peer ${o.name}");
+    if(!_connections.containsKey(name))
+      throw new StateError("list of connections does not contain peer ${name}");
     
-    _connections[o].send(msg.toString());
+    _connections[name].send(msg.toString());
   }
   
 }
