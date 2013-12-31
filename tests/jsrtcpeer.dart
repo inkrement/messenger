@@ -61,8 +61,8 @@ void main() {
     test('JSWebrtc connect',(){
       
       
-      JsWebRtcPeer alice = new JsWebRtcPeer("alice_c", Level.OFF);
-      JsWebRtcPeer bob = new JsWebRtcPeer("bob_c", Level.OFF);
+      JsWebRtcPeer alice = new JsWebRtcPeer("alice_c", Level.ALL);
+      JsWebRtcPeer bob = new JsWebRtcPeer("bob_c", Level.ALL);
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
@@ -86,8 +86,8 @@ void main() {
      */
     
     test('check connection etablishment', (){
-      JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
-      JsWebRtcPeer bob = new JsWebRtcPeer("bob", Level.OFF);
+      JsWebRtcPeer alice = new JsWebRtcPeer("alice_ce", Level.OFF);
+      JsWebRtcPeer bob = new JsWebRtcPeer("bob_ce", Level.OFF);
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();

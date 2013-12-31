@@ -30,7 +30,7 @@ class Message{
     
     Map<String, String> json = JSON.decode(data);
     
-    return new Message(json["msg"], MessageType.fromString(json["mtype"]));
+    return new Message(json["msg"], new MessageType.fromString(json["mtype"]));
   }
   
 }
@@ -55,6 +55,7 @@ class MessageType{
   static const MessageType WEBRTC_ANSWER = const MessageType._create('WEBRTC_ANSWER', 7);
   
   static const MessageType PEER_ID = const MessageType._create('PEER_ID', 8);
+  static const MessageType AKN_PEER_ID = const MessageType._create('AKN_PEER_ID', 9);
   
   const MessageType._create(this.name, this.value);
   

@@ -30,7 +30,7 @@ class JsWebRtcConnection extends Connection{
       
       //dc = new js.Proxy(js.context.RTCDataChannel, js.context.JSON.stringify(event.channel));
       /* set channel events */
-      _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message(event.data)));
+      _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
       
       _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
       _dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
@@ -59,9 +59,16 @@ class JsWebRtcConnection extends Connection{
         //new Message. pass it!
         break;
       case MessageType.PEER_ID:
-        log.fine("connection established");
-        connection_completer.complete(data.data.msg);
+        log.fine("PEER_ID received: connection established");
         listen_completer.complete(data.data.msg);
+        
+        sc.send(new Message(this.hashCode.toString(), MessageType.AKN_PEER_ID));
+        changeReadyState(ReadyState.CONNECTED);
+        
+        break;
+      case MessageType.AKN_PEER_ID:
+        log.fine("AKN_PEER_ID received:  connection established");
+        connection_completer.complete(data.data.msg);
         
         changeReadyState(ReadyState.CONNECTED);
         break;
@@ -84,9 +91,14 @@ class JsWebRtcConnection extends Connection{
 
         _rtcPeerConnection.setRemoteDescription(sdp);
         
-        send(new Message());
+        //send if open
+        readyStateEvent.stream.listen((ReadyState rs){
+          if (rs == ReadyState.DC_OPEN){
+            log.info("send PEER_ID");
+            sc.send(new Message(this.hashCode.toString(), MessageType.PEER_ID));
+          }
+        });
         
-        break;
     }
   }
   
@@ -105,9 +117,6 @@ class JsWebRtcConnection extends Connection{
       //send ice candidate to other peer
       sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       log.fine("sdp answer sent");
-      
-      connection_completer.complete(this.hashCode.toString());
-      listen_completer.complete(this.hashCode.toString());
     });
   }
   
@@ -165,6 +174,8 @@ class JsWebRtcConnection extends Connection{
       _dc.onopen = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
       _dc.onclose = (_)=>changeReadyState(_dc.readyState);
       
+      _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
+      
       _rtcPeerConnection.createOffer((sdp_offer){
         log.fine("create sdp offer");
         
@@ -189,7 +200,7 @@ class JsWebRtcConnection extends Connection{
 
   send(Message msg){
     //serialize
-    _dc.send(msg.serialize());
+    _dc.send(Message.serialize(msg));
   }
  
   
