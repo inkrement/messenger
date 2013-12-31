@@ -67,13 +67,23 @@ abstract class Peer{
   }
   
   /**
+   * connections getter
+   */
+  Map<String, Connection> get connections => _connections;
+  
+  /**
+   * get identifer of this object
+   */
+  String get id => this.hashCode.toString();
+  
+  /**
    * number of connections
    * 
    * @param ReadyState filter. count only connections with this readyState
    * @returns number of connections
    */
   
-  int connections([ReadyState filter=null]){
+  int countConnections([ReadyState filter=null]){
     int i=0;
     
     _connections.forEach((k,v){

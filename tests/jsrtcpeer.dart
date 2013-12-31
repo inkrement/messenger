@@ -45,13 +45,18 @@ void main() {
     test('JSWebrtc datachannel status',(){
       JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
   
-      expect(alice.connections(), 0);
+      expect(alice.countConnections(), 0);
       
     });
     
+  });
+  
+  
+  group('JS Webrtc Connection', (){
+    
     
     /**
-     * 4 Test connection
+     * Test connection
      */
     test('JSWebrtc connect',(){
       
@@ -76,34 +81,93 @@ void main() {
     });
     
     
-    
     /**
-     * test DataChannel's readyState opens
-     
+     * test connection
+     */
     
-    test('JSwebrtc datachannel', (){
+    test('check connection etablishment', (){
       JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
       JsWebRtcPeer bob = new JsWebRtcPeer("bob", Level.OFF);
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
       MessagePassing bob_sc = new MessagePassing();
+      alice_sc.connect(bob_sc.identityMap());
+      bob_sc.connect(alice_sc.identityMap());
       
-      //connect signaling channel
+      
+      //set callbacks
+      alice.newConnectionController.stream.listen(
+          expectAsync1((_)=>expect(alice.connections.length, 1))
+          );
+      
+      bob.newConnectionController.stream.listen(
+          expectAsync1((_)=>expect(bob.connections.length, 1))
+          );
+      
+      //connect peer
+      alice.listen(bob_sc);
+      bob.connect(alice_sc);
+    });
+    
+    
+    /**
+     * test connection
+     */
+    
+    test('check connection management', (){
+      JsWebRtcPeer alice = new JsWebRtcPeer("alice_ccm", Level.OFF);
+      JsWebRtcPeer bob = new JsWebRtcPeer("bob_ccm", Level.OFF);
+      
+      //setup signaling channel
+      MessagePassing alice_sc = new MessagePassing();
+      MessagePassing bob_sc = new MessagePassing();
+      alice_sc.connect(bob_sc.identityMap());
+      bob_sc.connect(alice_sc.identityMap());
+      
+      
+      //set callbacks
+      alice.newConnectionController.stream.listen(
+          expectAsync1((_)=>expect(alice.connections.keys.first, bob.id))
+          );
+      
+      bob.newConnectionController.stream.listen(
+          expectAsync1((_)=>expect(bob.connections.keys.first, alice.id))
+          );
+      
+      //connect peer
+      alice.listen(bob_sc);
+      bob.connect(alice_sc);
+    });
+    
+    
+    /**
+     * test DataChannel's readyState opens
+     
+    
+    test('JSwebrtc datachannel', (){
+      bool bob_gotmessage = false;
+      
+      JsWebRtcPeer alice = new JsWebRtcPeer("alice", Level.OFF);
+      JsWebRtcPeer bob = new JsWebRtcPeer("bob", Level.OFF);
+      
+      //setup signaling channel
+      MessagePassing alice_sc = new MessagePassing();
+      MessagePassing bob_sc = new MessagePassing();
       alice_sc.connect(bob_sc.identityMap());
       bob_sc.connect(alice_sc.identityMap());
       
       //TODO: maybe not the first call
       _callback(ReadyState status) => expect(status, ReadyState.DC_OPEN);
       
-      //alice.readyStateEvent.stream.listen(expectAsync1(_callback));
-      
-      
+      //bob should receive something
+      bob.newMessageController.stream.listen(expectAsync1((){}));
       
       //connect peer
       alice.listen(bob_sc);
       bob.connect(alice_sc);
       
+      alice.send(bob.id, new Message("some random string"));
     });
     */
     

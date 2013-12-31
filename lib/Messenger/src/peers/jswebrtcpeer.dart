@@ -16,8 +16,11 @@ class JsWebRtcPeer extends Peer{
     //add to list of connections. index is identity of other peer
     //TODO: test if identity is unique
     f.then((String hash){
-      _connections[hash] = c; 
+      _connections[hash] = c;
       newConnectionController.add(new NewConnectionEvent(c));
+      
+      //redirect messages
+      c.newMessageController.stream.listen((NewMessageEvent e) => newMessageController.add(e));
     });
     
     return newConnectionController.stream;
@@ -30,6 +33,9 @@ class JsWebRtcPeer extends Peer{
     f.then((String hash) {
       _connections[hash] = c;
       newConnectionController.add(new NewConnectionEvent(c));
+      
+      //redirect messages
+      c.newMessageController.stream.listen((NewMessageEvent e) => newMessageController.add(e));
     });
     
     return newConnectionController.stream;
