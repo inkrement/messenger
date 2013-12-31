@@ -61,8 +61,8 @@ void main() {
     test('JSWebrtc connect',(){
       
       
-      JsWebRtcPeer alice = new JsWebRtcPeer("alice_c", Level.ALL);
-      JsWebRtcPeer bob = new JsWebRtcPeer("bob_c", Level.ALL);
+      JsWebRtcPeer alice = new JsWebRtcPeer("alice_c", Level.OFF);
+      JsWebRtcPeer bob = new JsWebRtcPeer("bob_c", Level.OFF);
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
@@ -128,11 +128,11 @@ void main() {
       
       //set callbacks
       alice.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(alice.connections.keys.first, bob.id))
+          expectAsync1((_)=>expect(alice.connections.keys.first, bob_sc.id.toString()))
           );
       
       bob.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(bob.connections.keys.first, alice.id))
+          expectAsync1((_)=>expect(bob.connections.keys.first, alice_sc.id.toString()))
           );
       
       //connect peer

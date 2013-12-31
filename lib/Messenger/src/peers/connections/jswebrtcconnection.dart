@@ -58,9 +58,13 @@ class JsWebRtcConnection extends Connection{
       case MessageType.STRING:
         //new Message. pass it!
         break;
+        
+        /**
+         * TODO: change peer_id and akn_peer_id to syn and akn or use it for key exchange
+         */
       case MessageType.PEER_ID:
         log.fine("PEER_ID received: connection established");
-        listen_completer.complete(data.data.msg);
+        listen_completer.complete(sc.id.toString());
         
         sc.send(new Message(this.hashCode.toString(), MessageType.AKN_PEER_ID));
         changeReadyState(ReadyState.CONNECTED);
@@ -68,7 +72,7 @@ class JsWebRtcConnection extends Connection{
         break;
       case MessageType.AKN_PEER_ID:
         log.fine("AKN_PEER_ID received:  connection established");
-        connection_completer.complete(data.data.msg);
+        connection_completer.complete(sc.id.toString());
         
         changeReadyState(ReadyState.CONNECTED);
         break;

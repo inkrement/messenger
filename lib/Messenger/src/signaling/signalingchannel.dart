@@ -24,6 +24,11 @@ abstract class SignalingChannel{
   }
   
   /**
+   * unique identifer
+   */
+  int get id => this.hashCode;
+  
+  /**
    * establish connection
    */
   Future connect(Map options);
