@@ -160,6 +160,7 @@ class ConnectionState{
         return ConnectionState.CLOSING;
       case "closed":
         return ConnectionState.CLOSED;
+        
       default:
         return ConnectionState.ERROR;
     }

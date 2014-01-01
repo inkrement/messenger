@@ -1,48 +1,72 @@
 /**
- * class JsDataChannelConnection
+ * JsDataChannelConnection
  * 
  * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
  */
 
-
 part of messenger.connections;
 
 class JsDataChannelConnection extends Connection{
-  js.Proxy _rtcPeerConnection;
+  //map of ice providers
+  Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
+  
+  //peer connection constraints (currently unused)
+  var pcConstraint = {};
+  
+  //RTCDataChannel options
+  Map _dcOptions = {};
+  
+  //JavaScript Proxy of RTCPeerConnection
+  js.Proxy _rpc;
+  
+  //JavaScript Proxy of RTCDataChannel
   js.Proxy _dc;
   
-  Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
-  var pcConstraint = {};
-  Map dataChannelOptions = {};
-  
-  
-  JsDataChannelConnection(SignalingChannel sc, Logger log):super(sc, log){
-    _log.fine("created PeerConnection");
-    _dc=null;
+  /**
+   * constructor
+   */
+  JsDataChannelConnection(SignalingChannel sc, Logger log):super(sc, log), _dc=null{
+    _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */
-    _rtcPeerConnection = new js.Proxy(js.context.webkitRTCPeerConnection, 
+    _rpc = new js.Proxy(js.context.webkitRTCPeerConnection, 
         js.map(iceServers)); //TODO: add pcConstraints
     
-    _rtcPeerConnection.ondatachannel = (RtcDataChannelEvent event){
+    /*
+     * listen for incoming RTCDataChannels
+     */
+    
+    _rpc.ondatachannel = (RtcDataChannelEvent event){
       _log.info("datachannel received");
       
-      var proxy = new js.Proxy.fromBrowserObject(event); 
-      _dc = proxy.channel;
+      //set RTCDataChannel
+      _dc = (new js.Proxy.fromBrowserObject(event)).channel;
       
-      /* set channel events */
+      /*
+       * set RTCDataChannel callbacks
+       */
+      
+      //onMessage
       _dc.onmessage = (MessageEvent event){
         _log.finest("Message received from DataChannel");
         
         _newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
       };
       
+      //onOpen
       _dc.onopen = (_){
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _listen_completer.complete(sc.id);
       };
       
-      _dc.onclose = (_)=>_setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
+      //onClose
+      _dc.onclose = (_){
+        _setCommunicationState(
+            new ConnectionState.fromRTCDataChannelState(_dc.readyState)
+            );
+      };
+      
+      //onError TODO: error state!
       _dc.onerror = (x)=>_log.shout("rtc error callback: " + x.toString());
       
       //set state to current DC_State
@@ -56,13 +80,16 @@ class JsDataChannelConnection extends Connection{
   gotSignalingMessage(NewMessageEvent mevent){
     switch(mevent.getMessage().getMessageType()){
       case MessageType.ICE_CANDIDATE:
-        //log.info("got ice candidate");
+        _log.finest("got ice candidate");
         
         //deserialize
-        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(mevent.getMessage().toString()));
+        var iceCandidate = new js.Proxy(
+            js.context.RTCIceCandidate, 
+            js.context.JSON.parse(mevent.getMessage().toString())
+          );
         
         //add candidate
-        _rtcPeerConnection.addIceCandidate(iceCandidate);
+        _rpc.addIceCandidate(iceCandidate);
         break;
       case MessageType.STRING:
         //new Message. pass it!
@@ -89,7 +116,7 @@ class JsDataChannelConnection extends Connection{
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
         
-        _rtcPeerConnection.setRemoteDescription(sdp);
+        _rpc.setRemoteDescription(sdp);
         
         createAnswer();
         break;
@@ -100,7 +127,7 @@ class JsDataChannelConnection extends Connection{
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
 
-        _rtcPeerConnection.setRemoteDescription(sdp);
+        _rpc.setRemoteDescription(sdp);
         
         //send if open
         onStateChange.listen((ConnectionState rs){
@@ -114,34 +141,43 @@ class JsDataChannelConnection extends Connection{
   }
   
   /**
-   * RTC SDP answer
+   * createAnswer
+   * 
+   * creates new SDP Answer and sends it over signalingChannel
    */
   createAnswer(){
-    _rtcPeerConnection.createAnswer((sdp_answer){
-      _log.fine("created sdp answer");
+    _rpc.createAnswer((sdp_answer){
+      _log.finest("created sdp answer");
       
-      _rtcPeerConnection.setLocalDescription(sdp_answer);
+      _rpc.setLocalDescription(sdp_answer);
       
       //serialize sdp answer
       final String jsonString = js.context.JSON.stringify(sdp_answer);
       
       //send ice candidate to other peer
       _sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
+      
       _log.fine("sdp answer sent");
     });
   }
   
   /**
-   * listen for incoming connections
+   * listen
+   * 
+   * listen for incoming RTCPeerConnections
+   * 
+   * @return Future
    */
   Future<int> listen(){
     _log.finest("start listening");
     
+    //process all incoming signaling messages
     _sc.onReceive.listen(gotSignalingMessage);
     
-    /// add ice candidates
-    
-    _rtcPeerConnection.onicecandidate = (event) {
+    /*
+     * New IceCandidate Callback
+     */
+    _rpc.onicecandidate = (event) {
       _log.finest("new ice candidate received");
       
       if(event.candidate != null){
@@ -154,10 +190,11 @@ class JsDataChannelConnection extends Connection{
           //send ice candidate to other peer
           _sc.send(new Message(jsonString, MessageType.ICE_CANDIDATE));
           
-          _log.finest("new ice candidate serialized and sent to other peer");
+          _log.fine("new ice candidate serialized and sent to other peer");
         } catch(e){
           _log.warning("bob error: could not add ice candidate " + e.toString());
         }
+        
       }
         
     }; 
@@ -166,7 +203,11 @@ class JsDataChannelConnection extends Connection{
   }
   
   /**
-   * connect to WebrtcPeer
+   * connect
+   * 
+   * establish RTCPeerConnection and create RTCDataChannel
+   * 
+   * @return Future
    */
   Future<int> connect(){
     _log.finest("try to connect");
@@ -174,36 +215,52 @@ class JsDataChannelConnection extends Connection{
     //listen for incoming connection
     listen();
     
-    /// create datachannel
+    /*
+     * create new RTCDataChannel
+     */
     
     try {
-      _dc = _rtcPeerConnection.createDataChannel("sendDataChannel", js.map(dataChannelOptions));
-      _log.fine('created new data channel');
+      _dc = _rpc.createDataChannel("sendDataChannel", js.map(_dcOptions));
+      _log.finest('created new data channel');
       
+      /*
+       * RTCDataChannel callbacks
+       */
+      
+      //onOpen
       _dc.onopen = (_){
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _connection_completer.complete(_sc.id);
       };
+      
+      //onClose
       _dc.onclose = (_){
         _log.info("datachannel closed!");
         
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
       };
       
+      //onMessage
       _dc.onmessage = (MessageEvent event){
         _log.finest("Message received from DataChannel");
         
         _newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
       };
       
-      _rtcPeerConnection.createOffer((sdp_offer){
-        _log.fine("create sdp offer");
+      //TODO: onERROR
+      
+      /*
+       * create SDP OFFER of RTCPeerConnection
+       */
+      _rpc.createOffer((sdp_offer){
+        _log.finest("create sdp offer");
         
-        _rtcPeerConnection.setLocalDescription(sdp_offer);
+        _rpc.setLocalDescription(sdp_offer);
         
         //serialize
         final String jsonString = js.context.JSON.stringify(sdp_offer);
         
+        //send serialized string to other peer
         _sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
         
       }, (e){
@@ -214,7 +271,6 @@ class JsDataChannelConnection extends Connection{
       _connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
     }
     
-    //return completer
     return _connection_completer.future;
   }
 

@@ -49,6 +49,11 @@ abstract class Connection{
      */
     Future<int> connect();
     
+    /**
+     * listen for incoming connections
+     * 
+     * @return Future<int>
+     */
     Future<int> listen();
   
   /**
