@@ -4,33 +4,18 @@ library messenger;
 
 //import 'package:logging/logging.dart';
 
-
 import 'src/components/peer.dart';
 
-/**
- * test environment and return best peer
- */
-
 class Messenger{
-  final Peer _peer;
-  
-  const Messenger._create(this._peer);
+  Peer _peer;
+  Messenger _msgr;
+   
+  Messenger._create();
   
   factory Messenger(){
-    if(_peer == null){
-      switch(testEnv()){
-        case "":
-        case "":
-        case "":
-        
-      }
-      //TODO: test
-      return new Messenger._create(new JsWebRtcPeer());
-    }
-  }
-  
-  static String testEnv(){
+    if(_msgr == null)
+      _msgr = new Messenger._create();
     
+    return _msgr;
   }
-  
 }

@@ -1,15 +1,12 @@
-
 library unittest;
 
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_enhanced_config.dart';
 
-import 'helloworld.dart' as hello;
-import 'jsrtcpeer.dart' as js_rtc;
-import 'webrtcpeer.dart' as native_rtc;
-import 'messagepassingpeer.dart' as messagepassing;
+import 'helloworld_test.dart' as hello;
+import 'jswebrtcconnection_test.dart' as js_rtc;
 
-import 'signaling.messagepassing.dart' as sig_mp;
+import 'signaling.messagepassing_test.dart' as sig_mp;
 
 void main() {
   
@@ -20,17 +17,22 @@ void main() {
   unittestConfiguration = sc;
   
   /*
+   * test
+   */
+  hello.main();
+  
+  /*
    * signaling
    */
   
-  //sig_mp.main();
+  sig_mp.main();
   
   /*
    * peers
    */
   
   /// run hello world tests
-  hello.main();
+  
   
   /// tests for JS Wrapper
   js_rtc.main();
