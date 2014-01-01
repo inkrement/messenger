@@ -68,7 +68,8 @@ class Peer{
     
     //init
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
-    newConnectionController = new StreamController<NewConnectionEvent>.broadcast();
+    newConnectionController = 
+        new StreamController<NewConnectionEvent>.broadcast();
     _connections = new Map<int, Connection>();
     
     listen_completer = new Completer<String>();

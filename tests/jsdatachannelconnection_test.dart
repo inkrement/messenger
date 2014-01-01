@@ -219,18 +219,24 @@ void main() {
         //each sould receive two messages
         alice.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
+              logMessage("alice received message");
+              
               expect(e.data.toString(), s);
             }, count: 2)
         );
 
         bob.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
+              logMessage("bob received message");
+              
               expect(e.data.toString(), s);
             }, count: 2)
         );
         
         clark.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
+              logMessage("clark received message");
+              
               expect(e.data.toString(), s);
             }, count: 2)
         );

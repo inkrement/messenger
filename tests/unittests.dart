@@ -51,7 +51,7 @@ void main() {
   
   /// tests for JS Wrapper
   group('connection',(){
-    //js_rtc.main();
+    js_rtc.main();
   });
 
   
