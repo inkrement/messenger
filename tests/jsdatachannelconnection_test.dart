@@ -56,8 +56,10 @@ void main() {
       bob_sc.connect(alice_sc.identityMap());
       
       //connect peer
-      Stream<NewConnectionEvent> s_a = alice.listen(bob_sc);
-      Stream<NewConnectionEvent> s_b = bob.connect(alice_sc);
+      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc, Peer.parent_log);
+      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc, Peer.parent_log);
+      Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
+      Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
       
       s_a.listen(expectAsync1((_){}));
       s_b.listen(expectAsync1((_){}));
@@ -89,8 +91,10 @@ void main() {
           );
       
       //connect peer
-      alice.listen(bob_sc);
-      bob.connect(alice_sc);
+      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc, Peer.parent_log);
+      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc, Peer.parent_log);
+      Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
+      Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
     });
     
     
@@ -119,8 +123,10 @@ void main() {
           );
       
       //connect peer
-      alice.listen(bob_sc);
-      bob.connect(alice_sc);
+      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc, Peer.parent_log);
+      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc, Peer.parent_log);
+      Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
+      Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
     });
     
     
@@ -169,19 +175,28 @@ void main() {
             expectAsync1((_)=>expect(clark.connections.length, clark_c++), count:2)
         );
         
+        //create connections
+        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc, Peer.parent_log);
+        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc, Peer.parent_log);
+        
+        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc, Peer.parent_log);
+        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc, Peer.parent_log);
+        
+        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc, Peer.parent_log);
+        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc, Peer.parent_log);
+        
         
         //connect clark/bob bob/clark
-        bob.listen(clark_bob_sc);
-        clark.connect(bob_clark_sc);
+        bob.listen(c_b_c);
+        clark.connect(b_c_c);
         
         //connect alice/bob bob/alice
-        alice.listen(bob_alice_sc);
-        bob.connect(alice_bob_sc);
+        alice.listen(b_a_c);
+        bob.connect(a_b_c);
         
         //connect alice/clark clark/alice
-        alice.listen(clark_alice_sc);
-        clark.connect(alice_clark_sc);
-        
+        alice.listen(c_a_c);
+        clark.connect(a_c_c);
       });
       
       
@@ -266,17 +281,28 @@ void main() {
           }
         });
         
+        //create connections
+        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc, Peer.parent_log);
+        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc, Peer.parent_log);
+        
+        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc, Peer.parent_log);
+        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc, Peer.parent_log);
+        
+        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc, Peer.parent_log);
+        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc, Peer.parent_log);
+        
+        
         //connect clark/bob bob/clark
-        bob.listen(clark_bob_sc);
-        clark.connect(bob_clark_sc);
+        bob.listen(c_b_c);
+        clark.connect(b_c_c);
         
         //connect alice/bob bob/alice
-        alice.listen(bob_alice_sc);
-        bob.connect(alice_bob_sc);
+        alice.listen(b_a_c);
+        bob.connect(a_b_c);
         
         //connect alice/clark clark/alice
-        alice.listen(clark_alice_sc);
-        clark.connect(alice_clark_sc);
+        alice.listen(c_a_c);
+        clark.connect(a_c_c);
 
       });
       

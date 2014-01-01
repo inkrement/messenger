@@ -116,8 +116,7 @@ class Peer{
    * 
    * @param Peer other
    */
-  Stream<NewConnectionEvent> listen(SignalingChannel sc){
-    JsDataChannelConnection c = new JsDataChannelConnection(sc, _log);
+  Stream<NewConnectionEvent> listen(Connection c){
     Future<int> f = c.listen();
     
     //add to list of connections. index is identity of other peer
@@ -143,8 +142,7 @@ class Peer{
    * 
    * @param Peer other
    */
-  Stream<NewConnectionEvent> connect(SignalingChannel sc){
-    JsDataChannelConnection c = new JsDataChannelConnection(sc, _log);
+  Stream<NewConnectionEvent> connect(Connection c){
     Future<int> f = c.connect();
     
     f.then((int id) {

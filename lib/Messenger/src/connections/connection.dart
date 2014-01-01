@@ -29,6 +29,11 @@ abstract class Connection{
     _log = log{
       if(_log == null) throw new StateError("Logger should not be null!");
     }
+    
+    
+    Future<int> connect();
+    
+    Future<int> listen();
   
   /**
    * setter: readyState
