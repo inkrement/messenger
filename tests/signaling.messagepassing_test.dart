@@ -2,8 +2,6 @@ library unittest.signaling.messagepassing;
 
 import 'package:unittest/unittest.dart';
 import 'package:webrtc/Messenger/src/signaling.dart';
-import 'package:webrtc/Messenger/src/events.dart';
-import 'package:webrtc/Messenger/src/message.dart';
 
 void main() {
   
@@ -29,7 +27,7 @@ void main() {
     bob.connect(alice.identityMap());
     
     //setup receiver
-    _callback(NewMessageEvent event) => expect(event.data.msg, message);
+    _callback(NewMessageEvent event) => expect(event.data.toString(), message);
     alice.onReceive.listen(expectAsync1(_callback));
     
     //send

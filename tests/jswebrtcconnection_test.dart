@@ -1,7 +1,5 @@
 library unittest.jsrtcpeer;
 
-import 'dart:async';
-
 import 'package:unittest/unittest.dart';
 import 'package:logging/logging.dart';
 

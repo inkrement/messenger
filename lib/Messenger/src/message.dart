@@ -10,7 +10,6 @@ class Message{
   
   Message(String this._msg, [MessageType this._mtype = MessageType.STRING]);
   
-  
   String toString(){
     return _msg;
   }

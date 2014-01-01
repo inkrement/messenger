@@ -44,13 +44,13 @@ class JsWebRtcConnection extends Connection{
   /**
    * gotSignalingMessage callback
    */
-  gotSignalingMessage(NewMessageEvent data){
-    switch(data.data.mtype){
+  gotSignalingMessage(NewMessageEvent mevent){
+    switch(mevent.data.getMessageType()){
       case MessageType.ICE_CANDIDATE:
         //log.info("got ice candidate");
         
         //deserialize
-        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(data.data.msg));
+        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(mevent.data.toString()));
         
         //add candidate
         _rtcPeerConnection.addIceCandidate(iceCandidate);
@@ -78,7 +78,7 @@ class JsWebRtcConnection extends Connection{
         _log.fine("received sdp offer");
         
         //deserialize
-        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.data.toString()));
         
         _rtcPeerConnection.setRemoteDescription(sdp);
         
@@ -89,7 +89,7 @@ class JsWebRtcConnection extends Connection{
         _log.fine("received sdp answer");
         
         //deserialize
-        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(data.data.msg));
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.data.toString()));
 
         _rtcPeerConnection.setRemoteDescription(sdp);
         
