@@ -19,33 +19,30 @@ void main() {
   /*
    * test
    */
-  hello.main();
+  group('selftest',(){
+    hello.main();
+  });
   
   /*
    * signaling
    */
   
-  sig_mp.main();
+  group('signaling',(){
+    sig_mp.main();
+  });
+  
   
   /*
-   * peers
+   * peer
    */
   
   /// run hello world tests
   
   
   /// tests for JS Wrapper
-  js_rtc.main();
-  
-
-  
-  /// webrtc Peer tests
-  //webrtcpeer();
-  
-  
-  
-  /// messagepassing peer test
-  //messagepassing.main();
+  group('connection',(){
+    js_rtc.main();
+  });
 
   
 }
