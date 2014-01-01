@@ -8,6 +8,8 @@ import 'jsdatachannelconnection_test.dart' as js_rtc;
 
 import 'signaling.messagepassing_test.dart' as sig_mp;
 
+import 'connectionstates_test.dart' as con_states;
+
 void main() {
   
   /// setup html environment 
@@ -21,6 +23,14 @@ void main() {
    */
   group('selftest',(){
     hello.main();
+  });
+  
+  /*
+   * libfunctions
+   */
+  
+  group('libtests',(){
+    con_states.main();
   });
   
   /*
@@ -41,7 +51,7 @@ void main() {
   
   /// tests for JS Wrapper
   group('connection',(){
-    js_rtc.main();
+    //js_rtc.main();
   });
 
   
