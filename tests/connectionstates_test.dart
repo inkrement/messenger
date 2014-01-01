@@ -1,12 +1,16 @@
+/**
+ * test creation of different connection states
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
+
 library unittest.connectionstates;
 
 import 'package:unittest/unittest.dart';
 import 'package:webrtc/Messenger/src/connections.dart';
 
 
-/**
- * test creation of different connection states
- */
 void main(){
   
   group('ConnectionState Factories', (){

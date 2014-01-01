@@ -1,3 +1,9 @@
+/**
+ * enum (class) MessageType
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
 part of messenger.message;
 
 /**

@@ -1,3 +1,9 @@
+/**
+ * Connections Library
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
 library messenger.connections;
 
 /*

@@ -5,7 +5,12 @@ part of messenger.events;
   * NewMessageEvent
   * 
   * this event is triggered if a new message receives
+  * 
+  * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
   */
+
+
+
 class NewConnectionEvent implements Event{
   var path;
   var defaultPrevented;

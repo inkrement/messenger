@@ -1,3 +1,9 @@
+/**
+ * class Peer
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
 library messenger.peer;
 
 import 'package:logging/logging.dart';

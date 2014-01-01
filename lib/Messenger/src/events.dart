@@ -1,3 +1,9 @@
+/**
+ * Custom Event Libraray
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
 library messenger.events;
 
 import 'dart:html';

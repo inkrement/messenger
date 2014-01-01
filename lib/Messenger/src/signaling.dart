@@ -1,3 +1,10 @@
+/**
+ * Signaling Library
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
+
 library messenger.signaling;
 
 import 'dart:async';

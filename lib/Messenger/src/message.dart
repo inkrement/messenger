@@ -1,3 +1,9 @@
+/**
+ * class Message
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
 library messenger.message;
 
 import 'dart:convert';

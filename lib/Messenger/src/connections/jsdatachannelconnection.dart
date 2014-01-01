@@ -1,3 +1,10 @@
+/**
+ * class JsDataChannelConnection
+ * 
+ * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
+ */
+
+
 part of messenger.connections;
 
 class JsDataChannelConnection extends Connection{
