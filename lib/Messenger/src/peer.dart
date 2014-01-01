@@ -127,7 +127,7 @@ class Peer{
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
-      c.newMessageController.stream.listen((NewMessageEvent e){
+      c.onMessage.listen((NewMessageEvent e){
         
         _log.info("message redirected");
         newMessageController.add(e);
@@ -151,7 +151,7 @@ class Peer{
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
-      c.newMessageController.stream.listen((NewMessageEvent e){
+      c.onMessage.listen((NewMessageEvent e){
         
         _log.info("message redirected");
         newMessageController.add(e);
