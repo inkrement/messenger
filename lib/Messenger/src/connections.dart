@@ -11,9 +11,8 @@ import 'dart:html';
 /*
  * homebrew libs
  */
-import 'message.dart';
 import 'signaling.dart';
-import 'events.dart';
+export 'signaling.dart';
 
 /*
  * load parts

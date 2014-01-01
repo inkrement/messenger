@@ -6,10 +6,6 @@ import 'package:unittest/unittest.dart';
 import 'package:logging/logging.dart';
 
 import 'package:webrtc/Messenger/src/peer.dart';
-import 'package:webrtc/Messenger/src/signaling.dart';
-import 'package:webrtc/Messenger/src/connections.dart';
-import 'package:webrtc/Messenger/src/events.dart';
-import 'package:webrtc/Messenger/src/message.dart';
 
 void main() {
   
@@ -225,19 +221,19 @@ void main() {
         //each sould receive two messages
         alice.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
-              expect(e.data.msg, s);
+              expect(e.data.toString(), s);
             }, count: 2)
         );
 
         bob.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
-              expect(e.data.msg, s);
+              expect(e.data.toString(), s);
             }, count: 2)
         );
         
         clark.newMessageController.stream.listen(
             expectAsync1((NewMessageEvent e){
-              expect(e.data.msg, s);
+              expect(e.data.toString(), s);
             }, count: 2)
         );
         

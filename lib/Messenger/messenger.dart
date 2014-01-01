@@ -1,10 +1,7 @@
 library messenger;
 
-//TODO: load all
-
-//import 'package:logging/logging.dart';
-
-import 'src/components/peer.dart';
+import 'src/peer.dart';
+export 'src/peer.dart';
 
 class Messenger{
   Peer _peer;

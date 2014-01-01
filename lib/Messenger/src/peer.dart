@@ -3,12 +3,8 @@ library messenger.peer;
 import 'package:logging/logging.dart';
 import 'dart:async';
 
-import 'events.dart';
 import 'connections.dart';
-import 'signaling.dart';
-import 'message.dart';
-
-
+export 'connections.dart';
 
 /*
  * @todo: 
