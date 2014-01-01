@@ -1,7 +1,5 @@
-part of messenger.connections;
-
 /**
- * 
+ * ConnectionState
  * 
  * states:
  *  NEW: Connection is new
@@ -12,7 +10,12 @@ part of messenger.connections;
  *  CLOSED: Connection is closed.
  *  
  *  @ TODO: rename class
+ *  
+ *  @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
  */
+
+part of messenger.connections;
+
 class ConnectionState{
   final String name;
   final int value;
