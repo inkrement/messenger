@@ -4,5 +4,8 @@ import 'dart:html';
 import 'message.dart';
 export 'message.dart';
 
+//only import connection class
+import 'connections.dart';
+
 part 'events/newmessageevent.dart';
 part 'events/newconnectionevent.dart';

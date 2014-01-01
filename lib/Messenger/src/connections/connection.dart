@@ -6,19 +6,22 @@ abstract class Connection{
   final StreamController<ReadyState> readyStateEvent;
   ///new message event stream
   final StreamController<NewMessageEvent> newMessageController;
-  final Logger _log = new Logger("Connection");
+  final Logger _log;
   
   ///completer for connection
   final Completer<int> _connection_completer;
   final Completer<int> _listen_completer;
   
   
-  Connection(SignalingChannel sc, [Level loglevel=Level.OFF]):
+  Connection(SignalingChannel sc, Logger log):
     readyStateEvent=new StreamController<ReadyState>.broadcast(), 
     _listen_completer = new Completer<int>(),
     _connection_completer = new Completer<int>(),
     newMessageController = new StreamController<NewMessageEvent>(),
-    _sc = sc{ _log.level = loglevel; }
+    _sc = sc,
+    _log = log{
+      if(_log == null) throw new StateError("Logger should not be null!");
+    }
   
   /**
    * setter: readyState
@@ -35,6 +38,9 @@ abstract class Connection{
     readyStateEvent.add(readyState);
   }
   
+  /**
+   * sendMessage
+   */
   send(Message msg);
   
 }

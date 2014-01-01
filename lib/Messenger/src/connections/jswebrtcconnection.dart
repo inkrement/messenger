@@ -9,7 +9,7 @@ class JsWebRtcConnection extends Connection{
   Map dataChannelOptions = {};
   
   
-  JsWebRtcConnection(SignalingChannel sc, [Level loglevel=Level.OFF]):super(sc, loglevel){
+  JsWebRtcConnection(SignalingChannel sc, Logger log):super(sc, log){
     _log.fine("created PeerConnection");
     _dc=null;
     
@@ -25,6 +25,8 @@ class JsWebRtcConnection extends Connection{
       
       /* set channel events */
       _dc.onmessage = (MessageEvent event){
+        _log.finest("Message received from DataChannel");
+        
         newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
       };
       
@@ -179,7 +181,11 @@ class JsWebRtcConnection extends Connection{
       };
       _dc.onclose = (_)=>changeReadyState(_dc.readyState);
       
-      _dc.onmessage = (MessageEvent event)=>newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
+      _dc.onmessage = (MessageEvent event){
+        _log.finest("Message received from DataChannel");
+        
+        newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
+      };
       
       _rtcPeerConnection.createOffer((sdp_offer){
         _log.fine("create sdp offer");

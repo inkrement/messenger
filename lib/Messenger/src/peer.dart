@@ -15,7 +15,7 @@ class Peer{
   ///root logging object
   static final Logger parent_log = new Logger("Peer");
   
-  Logger log;
+  Logger _log;
   
   StreamController<NewConnectionEvent> newConnectionController;
   
@@ -24,6 +24,8 @@ class Peer{
   
   ///name of this peer instance
   String name;
+  
+  Level _loglevel;
   
   ///new message event stream
   StreamController<NewMessageEvent> newMessageController;
@@ -42,7 +44,7 @@ class Peer{
    * constuctor
    * 
    */
-  Peer([String name="", Level logLevel=Level.FINE]){
+  Peer([String name="", Level loglevel=Level.FINE]){
     //set name of this peer instance
     this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     
@@ -52,9 +54,9 @@ class Peer{
     
     //setup logger
     hierarchicalLoggingEnabled = true;
-    log = new Logger("Peer.${this.runtimeType}.${this.name}");
-    log.level = logLevel;   
-    log.onRecord.listen((LogRecord rec) {
+    _log = new Logger("Peer.${this.runtimeType}.${this.name}");
+    _log.level = loglevel;   
+    _log.onRecord.listen((LogRecord rec) {
       print('${rec.loggerName} (${rec.level.name}): ${rec.message}');
     });
     
@@ -66,8 +68,8 @@ class Peer{
     listen_completer = new Completer<String>();
     connection_completer = new Completer<String>();
     
-    log.info("new peer: #${num.toString()} ${this.name} ");
-    
+    _log.info("new peer: #${num.toString()} ${this.name} ");
+    _loglevel = loglevel;
 
     peers.add(this);
   }
@@ -108,20 +110,20 @@ class Peer{
    * @param Peer other
    */
   Stream<NewConnectionEvent> listen(SignalingChannel sc){
-    JsWebRtcConnection c = new JsWebRtcConnection(sc);
+    JsWebRtcConnection c = new JsWebRtcConnection(sc, _log);
     Future<int> f = c.listen();
     
     //add to list of connections. index is identity of other peer
     //TODO: test if identity is unique
     f.then((int id){
       _connections[id] = c;
-      log.info("new connection added! (now: ${connections.length.toString()})");
+      _log.info("new connection added! (now: ${connections.length.toString()})");
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
       c.newMessageController.stream.listen((NewMessageEvent e){
         
-        log.info("message redirected");
+        _log.info("message redirected");
         newMessageController.add(e);
       });
     });
@@ -135,18 +137,18 @@ class Peer{
    * @param Peer other
    */
   Stream<NewConnectionEvent> connect(SignalingChannel sc){
-    JsWebRtcConnection c = new JsWebRtcConnection(sc);
+    JsWebRtcConnection c = new JsWebRtcConnection(sc, _log);
     Future<int> f = c.connect();
     
     f.then((int id) {
       _connections[id] = c;
-      log.info("new connection added! (now: ${connections.length.toString()})");
+      _log.info("new connection added! (now: ${connections.length.toString()})");
       newConnectionController.add(new NewConnectionEvent(c));
       
       //redirect messages
       c.newMessageController.stream.listen((NewMessageEvent e){
         
-        log.info("message redirected");
+        _log.info("message redirected");
         newMessageController.add(e);
       });
     });

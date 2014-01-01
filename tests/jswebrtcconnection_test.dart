@@ -17,7 +17,7 @@ void main() {
     test('JSWebrtc create components',(){
       Peer alice = new Peer("alice", Level.OFF);
       MessagePassing alice_sc = new MessagePassing();
-      JsWebRtcConnection alice_cn = new JsWebRtcConnection(alice_sc);
+      JsWebRtcConnection alice_cn = new JsWebRtcConnection(alice_sc, new Logger("testlogger"));
     });
     
     
@@ -187,9 +187,9 @@ void main() {
       
       
       test('3 clients send messages', (){
-        Peer alice = new Peer("alice_s3", Level.ALL);
-        Peer bob = new Peer("bob_s3", Level.ALL);
-        Peer clark = new Peer("clark_s3", Level.ALL);
+        Peer alice = new Peer("alice_s3", Level.INFO);
+        Peer bob = new Peer("bob_s3", Level.INFO);
+        Peer clark = new Peer("clark_s3", Level.INFO);
         
         //setup signaling channels
         MessagePassing alice_bob_sc = new MessagePassing();
