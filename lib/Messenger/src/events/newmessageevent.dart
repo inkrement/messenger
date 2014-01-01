@@ -19,6 +19,21 @@ class NewMessageEvent implements Event{
   var matchingTarget;
   var timeStamp;
   
+  /**
+   * @ TODO: implement
+   */
+  void stopImmediatePropagation(){}
+  
+  /**
+   * @ TODO: implement
+   */
+  void preventDefault(){}
+  
+  /**
+   * @ TODO: implement
+   */
+  void stopPropagation(){}
+  
   final Message data;
   
   NewMessageEvent(this.data);

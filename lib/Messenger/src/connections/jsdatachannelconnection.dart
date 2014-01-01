@@ -1,6 +1,6 @@
 part of messenger.connections;
 
-class JsWebRtcConnection extends Connection{
+class JsDataChannelConnection extends Connection{
   js.Proxy _rtcPeerConnection;
   js.Proxy _dc;
   
@@ -9,7 +9,7 @@ class JsWebRtcConnection extends Connection{
   Map dataChannelOptions = {};
   
   
-  JsWebRtcConnection(SignalingChannel sc, Logger log):super(sc, log){
+  JsDataChannelConnection(SignalingChannel sc, Logger log):super(sc, log){
     _log.fine("created PeerConnection");
     _dc=null;
     
@@ -47,12 +47,12 @@ class JsWebRtcConnection extends Connection{
    * gotSignalingMessage callback
    */
   gotSignalingMessage(NewMessageEvent mevent){
-    switch(mevent.data.getMessageType()){
+    switch(mevent.getMessage().getMessageType()){
       case MessageType.ICE_CANDIDATE:
         //log.info("got ice candidate");
         
         //deserialize
-        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(mevent.data.toString()));
+        var iceCandidate = new js.Proxy(js.context.RTCIceCandidate, js.context.JSON.parse(mevent.getMessage().toString()));
         
         //add candidate
         _rtcPeerConnection.addIceCandidate(iceCandidate);
@@ -80,7 +80,7 @@ class JsWebRtcConnection extends Connection{
         _log.fine("received sdp offer");
         
         //deserialize
-        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.data.toString()));
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
         
         _rtcPeerConnection.setRemoteDescription(sdp);
         
@@ -91,7 +91,7 @@ class JsWebRtcConnection extends Connection{
         _log.fine("received sdp answer");
         
         //deserialize
-        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.data.toString()));
+        var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
 
         _rtcPeerConnection.setRemoteDescription(sdp);
         

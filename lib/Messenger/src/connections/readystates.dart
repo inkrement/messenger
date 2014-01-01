@@ -1,5 +1,14 @@
 part of messenger.connections;
 
+/**
+ * 
+ * 
+ * states:
+ *  NEW: Connection is new
+ *  CONNECTING: Connection is currently connecting. Messages will be piped
+ *  CONNECTED: Connection is usable. 
+ *  CLOSED: Connection is closed.
+ */
 class ReadyState{
   final String name;
   final int value;

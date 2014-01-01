@@ -21,4 +21,4 @@ export 'signaling.dart';
 part 'connections/readystates.dart';
 part 'connections/connection.dart';
 part 'connections/connectionstate.dart';
-part 'connections/jswebrtcconnection.dart';
+part 'connections/jsdatachannelconnection.dart';
