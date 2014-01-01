@@ -97,7 +97,7 @@ class Peer{
    * @returns number of connections
    */
   
-  int countConnections([ReadyState filter=null]){
+  int countConnections([ConnectionState filter=null]){
     int i=0;
     
     _connections.forEach((k,v){

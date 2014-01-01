@@ -38,15 +38,15 @@ class JsDataChannelConnection extends Connection{
       };
       
       _dc.onopen = (_){
-        changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+        changeReadyState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _listen_completer.complete(sc.id);
       };
       
-      _dc.onclose = (_)=>changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      _dc.onclose = (_)=>changeReadyState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
       _dc.onerror = (x)=>_log.shout("rtc error callback: " + x.toString());
       
       //set state to current DC_State
-      changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+      changeReadyState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
     };
   }
   
@@ -76,7 +76,7 @@ class JsDataChannelConnection extends Connection{
         //listen_completer.complete(sc.id);
         
         _sc.send(new Message(this.hashCode.toString(), MessageType.AKN_PEER_ID));
-        changeReadyState(ReadyState.CONNECTED);
+        changeReadyState(ConnectionState.CONNECTED);
         
         break;
       case MessageType.AKN_PEER_ID:
@@ -103,8 +103,8 @@ class JsDataChannelConnection extends Connection{
         _rtcPeerConnection.setRemoteDescription(sdp);
         
         //send if open
-        readyStateEvent.stream.listen((ReadyState rs){
-          if (rs == ReadyState.DC_OPEN){
+        readyStateEvent.stream.listen((ConnectionState rs){
+          if (rs == ConnectionState.CONNECTED){
             _log.info("send PEER_ID");
             _sc.send(new Message(this.hashCode.toString(), MessageType.PEER_ID));
           }
@@ -181,12 +181,14 @@ class JsDataChannelConnection extends Connection{
       _log.fine('created new data channel');
       
       _dc.onopen = (_){
-        changeReadyState(new ReadyState.fromDataChannel(_dc.readyState));
+        changeReadyState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _connection_completer.complete(_sc.id);
-        
-        changeReadyState(ReadyState.CONNECTED);
       };
-      _dc.onclose = (_)=>changeReadyState(_dc.readyState);
+      _dc.onclose = (_){
+        _log.info("datachannel closed!");
+        
+        changeReadyState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
+      };
       
       _dc.onmessage = (MessageEvent event){
         _log.finest("Message received from DataChannel");

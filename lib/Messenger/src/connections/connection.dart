@@ -9,8 +9,8 @@ part of messenger.connections;
 
 abstract class Connection{
   final SignalingChannel _sc;
-  ReadyState readyState;
-  final StreamController<ReadyState> readyStateEvent;
+  ConnectionState readyState;
+  final StreamController<ConnectionState> readyStateEvent;
   ///new message event stream
   final StreamController<NewMessageEvent> newMessageController;
   final Logger _log;
@@ -21,7 +21,7 @@ abstract class Connection{
   
   
   Connection(SignalingChannel sc, Logger log):
-    readyStateEvent=new StreamController<ReadyState>.broadcast(), 
+    readyStateEvent=new StreamController<ConnectionState>.broadcast(), 
     _listen_completer = new Completer<int>(),
     _connection_completer = new Completer<int>(),
     newMessageController = new StreamController<NewMessageEvent>(),
@@ -35,7 +35,7 @@ abstract class Connection{
    * 
    * @ TODO: make private
    */
-  changeReadyState(ReadyState readyState){
+  changeReadyState(ConnectionState readyState){
     //break if nothing will change
     if (this.readyState == readyState) return;
     
