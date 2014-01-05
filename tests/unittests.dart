@@ -9,6 +9,7 @@ import 'jsdatachannelconnection_test.dart' as js_rtc;
 import 'signaling.messagepassing_test.dart' as sig_mp;
 
 import 'connectionstates_test.dart' as con_states;
+import 'messenger_test.dart' as messenger;
 
 void main() {
   
@@ -46,6 +47,12 @@ void main() {
    * peer
    */
   
+  
+  /*
+   * messenger
+   */
+  
+  messenger.main();
   /// run hello world tests
   
   

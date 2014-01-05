@@ -4,15 +4,12 @@ import 'src/peer.dart';
 export 'src/peer.dart';
 
 class Messenger{
-  Peer _peer;
-  Messenger _msgr;
-   
-  Messenger._create();
+  static final Peer _peer = new Peer("local peer");
+  static final Messenger _msgr=new Messenger._init();
+  
+  Messenger._init();
   
   factory Messenger(){
-    if(_msgr == null)
-      _msgr = new Messenger._create();
-    
     return _msgr;
   }
 }
