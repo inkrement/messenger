@@ -111,4 +111,7 @@ abstract class Connection{
    * 
    */
   _init_send_worker();
+  
+  
+  close();
 }

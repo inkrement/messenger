@@ -273,6 +273,16 @@ class JsDataChannelConnection extends Connection{
     
   }
 
+  /**
+   * shutdown RTCPeerConnection and RTCDataChannel
+   * 
+   * RTCPeerConnection should close the RTCDataChannel automatically
+   * but it's done explicit for clearer structure.
+   */
+  close(){
+    if(_dc != null) _dc.close();
+    if(_rpc != null) _rpc.close();
+  }
  
   
 }

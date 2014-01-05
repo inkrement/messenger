@@ -209,24 +209,52 @@ class Peer{
   String get getName => this.name;
   
   /**
-   * disconnect Peer
+   * shutdow specific connection
    */
-  disconnect(Peer o){
+  disconnect(Connection c){
     //TODO: abort rtc connection
     //close Datachannel
     
-    _connections.remove(o);
+    _connections.remove(c);
   }
   
   
   
   /**
-   * close Connection
+   * close all connection
    * 
    * TODO: implementation
    */
   close(){
-    //_connections.forEach((Peer p, Connection c)=>disconnect(p));
+    
+    _connections.forEach((int, Connection c) {
+      c.close();
+    });
+    
+    //run garbage collector
+    
+    _gc();
   }
   
+  
+  /**
+   * garbage collector
+   */
+  
+  _gc(){
+    
+    List<Connection> garbage = new List<Connection>();
+    
+    // find closed or undefined connections
+    _connections.forEach((int, Connection c){
+      if(c.readyState == ConnectionState.CLOSED || c.readyState == ConnectionState.ERROR)
+        garbage.add(c);
+    });
+    
+    //remove them
+    garbage.forEach((Connection c){
+      _connections.remove(c);
+    });
+    
+  }
 }
