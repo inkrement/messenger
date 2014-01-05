@@ -71,6 +71,7 @@ class JsDataChannelConnection extends Connection{
       
       //set state to current DC_State
       _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
+      
     };
   }
   
@@ -91,31 +92,12 @@ class JsDataChannelConnection extends Connection{
         //add candidate
         _rpc.addIceCandidate(iceCandidate);
         break;
-      case MessageType.STRING:
-        //new Message. pass it!
-        break;
         
-        /**
-         * TODO: change peer_id and akn_peer_id to syn and akn or use it for key exchange
-         */
-      case MessageType.PEER_ID:
-        _log.fine("PEER_ID received: connection established");
-        //listen_completer.complete(sc.id);
-        
-        _sc.send(new Message(this.hashCode.toString(), MessageType.AKN_PEER_ID));
-        _setCommunicationState(ConnectionState.CONNECTED);
-        
-        break;
-      case MessageType.AKN_PEER_ID:
-        _log.fine("AKN_PEER_ID received:  connection established");
-        
-        break;
       case MessageType.WEBRTC_OFFER:
         _log.fine("received sdp offer");
         
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
-        
         _rpc.setRemoteDescription(sdp);
         
         createAnswer();
@@ -123,20 +105,15 @@ class JsDataChannelConnection extends Connection{
         
       case MessageType.WEBRTC_ANSWER:
         _log.fine("received sdp answer");
-        
+
         //deserialize
         var sdp = new js.Proxy(js.context.RTCSessionDescription, js.context.JSON.parse(mevent.getMessage().toString()));
-
         _rpc.setRemoteDescription(sdp);
+        break;
         
-        //send if open
-        onStateChange.listen((ConnectionState rs){
-          if (rs == ConnectionState.CONNECTED){
-            _log.info("send PEER_ID");
-            _sc.send(new Message(this.hashCode.toString(), MessageType.PEER_ID));
-          }
-        });
-        
+      default:
+        _log.info("New undefined signaling channel message");
+        break;
     }
   }
   
@@ -273,18 +250,29 @@ class JsDataChannelConnection extends Connection{
     
     return _connection_completer.future;
   }
-
-  send(Message msg){
-    //serialize
-    if(_dc == null){
-      _log.warning("could not send message. No DataChannel open!");
-      return;
-    }
+  
+  /**
+   * init send worker
+   * 
+   * sends all buffered messages
+   */
+  _init_send_worker(){
     
-    //TODO: not ready, pipe message.
-    _log.info("send message to : ${_sc.id.toString()}");
-    _dc.send(Message.serialize(msg));
+    //serialize
+    if(_dc == null)
+      throw new StateError("could not send message. No DataChannel exists!");
+ 
+    if(this.readyState != ConnectionState.CONNECTED)
+      throw new StateError("could not send message. DataChannel is not open!");
+    
+    _sendController.stream.listen((Message msg){
+      _log.info("send message to : ${_sc.id.toString()}");
+      
+      _dc.send(Message.serialize(msg));
+    });
+    
   }
+
  
   
 }

@@ -21,6 +21,9 @@ abstract class Connection{
   //signaling channel for connecting process
   final SignalingChannel _sc;
   
+  //send buffer
+  final StreamController<Message> _sendController;
+  
   //private logger
   final Logger _log;
   
@@ -38,6 +41,7 @@ abstract class Connection{
     _connection_completer = new Completer<int>(),
     _newMessageController = new StreamController<NewMessageEvent>(),
     _sc = sc,
+    _sendController = new StreamController<Message>(),
     _log = log{
       if(_log == null) throw new StateError("Logger should not be null!");
     }
@@ -69,6 +73,13 @@ abstract class Connection{
     
     this.readyState = readyState;
     _CSStreamController.add(readyState);
+    
+    // do some connectionstate specific operations
+    switch(readyState){
+      case ConnectionState.CONNECTED:
+        _init_send_worker();
+        break;
+    }
   }
   
   /**
@@ -88,10 +99,16 @@ abstract class Connection{
   /**
    * send
    * 
-   * send Message over communcation channel
-   * 
-   * @ TODO: pipe message if not open!
+   * pipe message 
    */
-  send(Message msg);
+  send(Message msg){
+    _log.fine("new message added to buffer");
+    
+    _sendController.add(msg);
+  }
   
+  /**
+   * 
+   */
+  _init_send_worker();
 }
