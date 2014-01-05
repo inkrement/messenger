@@ -202,6 +202,14 @@ void main() {
       
       
       test('3 clients send messages', (){
+        logMessage("start 3 clients send messages");
+        
+        
+        Logger.root.level = Level.ALL;
+        Logger.root.onRecord.listen((LogRecord rec) {
+          print('${rec.level.name}: ${rec.time}: ${rec.message}');
+        });
+        
         Peer alice = new Peer("alice_s3", Level.INFO);
         Peer bob = new Peer("bob_s3", Level.INFO);
         Peer clark = new Peer("clark_s3", Level.INFO);
@@ -228,68 +236,79 @@ void main() {
         
         //set callbacks
         
-        String s = "some random string";
-        Message tm = new Message(s);
+        String s_alice = "some random string from alice";
+        String s_bob = "some random string from bob";
+        String s_clark = "some random string from clark";
+        Message tm_alice = new Message(s_alice);
+        Message tm_bob = new Message(s_bob);
+        Message tm_clark = new Message(s_clark);
         
         //each sould receive two messages
-        alice.newMessageController.stream.listen(
+        alice.onReceive.listen(
             expectAsync1((NewMessageEvent e){
-              logMessage("alice received message");
+              logMessage("alice received message: ${e.data.toString()}");
               
-              expect(e.data.toString(), s);
+              expect(e.data.toString(), isIn([s_bob, s_clark]));
             }, count: 2)
         );
 
-        bob.newMessageController.stream.listen(
+        bob.onReceive.listen(
             expectAsync1((NewMessageEvent e){
-              logMessage("bob received message");
+              logMessage("bob received message: ${e.data.toString()}");
               
-              expect(e.data.toString(), s);
+              expect(e.data.toString(), isIn([s_alice, s_clark]));
             }, count: 2)
         );
         
-        clark.newMessageController.stream.listen(
+        
+        clark.onReceive.listen(
             expectAsync1((NewMessageEvent e){
-              logMessage("clark received message");
+              logMessage("clark received message: ${e.data.toString()}");
               
-              expect(e.data.toString(), s);
+              expect(e.data.toString(), isIn([s_alice, s_bob]));
             }, count: 2)
         );
         
+        /*
+         * send messages
+         */
+        alice.newConnectionController.stream.listen((_){
+          if(alice.connections.length == 2){
+            logMessage("connected to exactly 2 client. looks quite good");
+            
+            alice.multicast(tm_alice);
+          }
+        });
         
         bob.newConnectionController.stream.listen((_){
-          if(bob.connections.length > 1){
-            logMessage("connected to more than 1 client. looks quite good");
+          if(bob.connections.length == 2){
+            logMessage("connected to exactly 2 client. looks quite good");
             
-            bob.multicast(tm);
+            bob.multicast(tm_bob);
           }
         });
         
         clark.newConnectionController.stream.listen((_){
-          if(clark.connections.length > 1){
-            logMessage("connected to more than 1 client. looks quite good");
+          if(clark.connections.length == 2){
+            logMessage("connected to exactly 2 client. looks quite good");
             
-            clark.multicast(tm);
+            clark.multicast(tm_clark);
           }
         });
         
-        alice.newConnectionController.stream.listen((_){
-          if(alice.connections.length > 1){
-            logMessage("connected to more than 1 client. looks quite good");
-            
-            alice.multicast(tm);
-          }
-        });
         
-        //create connections
-        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc, Peer.parent_log);
-        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc, Peer.parent_log);
         
-        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc, Peer.parent_log);
-        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc, Peer.parent_log);
+        /*
+         * create connections
+         */
+        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc, Logger.root);
+        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc, Logger.root);
         
-        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc, Peer.parent_log);
-        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc, Peer.parent_log);
+        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc, Logger.root);
+        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc, Logger.root);
+        
+        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc, Logger.root);
+        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc, Logger.root);
         
         
         //connect clark/bob bob/clark

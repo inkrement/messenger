@@ -188,9 +188,14 @@ class Peer{
    * send message to multiple peers
    */
   broadcast(Iterable<int> receiverIds, Message msg){
+    int num = 0;
+    
     receiverIds.forEach((int id){
       this.send(id, msg);
+      num++;
     });
+    
+    _log.info("Broadcast: ${num} messages where sent!");
   }
   
   /**

@@ -1,0 +1,242 @@
+Peer.Peer.alice_s3 (INFO): new peer: #0 alice_s3 
+INFO: 2014-01-05 13:38:16.369: new peer: #0 alice_s3 
+Peer.Peer.bob_s3 (INFO): new peer: #0 bob_s3 
+INFO: 2014-01-05 13:38:16.395: new peer: #0 bob_s3 
+Peer.Peer.clark_s3 (INFO): new peer: #0 clark_s3 
+INFO: 2014-01-05 13:38:16.407: new peer: #0 clark_s3 
+FINEST: 2014-01-05 13:38:16.420: created PeerConnection
+FINEST: 2014-01-05 13:38:16.427: created PeerConnection
+FINEST: 2014-01-05 13:38:16.447: created PeerConnection
+FINEST: 2014-01-05 13:38:16.464: created PeerConnection
+FINEST: 2014-01-05 13:38:16.476: created PeerConnection
+FINEST: 2014-01-05 13:38:16.482: created PeerConnection
+FINEST: 2014-01-05 13:38:16.489: start listening
+FINEST: 2014-01-05 13:38:16.495: try to connect
+FINEST: 2014-01-05 13:38:16.502: start listening
+FINEST: 2014-01-05 13:38:16.509: created new data channel
+FINEST: 2014-01-05 13:38:16.516: start listening
+FINEST: 2014-01-05 13:38:16.531: try to connect
+FINEST: 2014-01-05 13:38:16.541: start listening
+FINEST: 2014-01-05 13:38:16.557: created new data channel
+FINEST: 2014-01-05 13:38:16.567: start listening
+FINEST: 2014-01-05 13:38:16.574: try to connect
+FINEST: 2014-01-05 13:38:16.580: start listening
+FINEST: 2014-01-05 13:38:16.595: created new data channel
+FINEST: 2014-01-05 13:38:16.617: create sdp offer
+FINE: 2014-01-05 13:38:16.628: received sdp offer
+FINEST: 2014-01-05 13:38:16.635: create sdp offer
+FINE: 2014-01-05 13:38:16.643: received sdp offer
+FINEST: 2014-01-05 13:38:16.653: created sdp answer
+FINE: 2014-01-05 13:38:16.668: sdp answer sent
+FINE: 2014-01-05 13:38:16.684: received sdp answer
+FINEST: 2014-01-05 13:38:16.695: new ice candidate received
+FINE: 2014-01-05 13:38:16.712: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.717: got ice candidate
+FINEST: 2014-01-05 13:38:16.723: new ice candidate received
+FINE: 2014-01-05 13:38:16.728: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.734: got ice candidate
+FINEST: 2014-01-05 13:38:16.739: new ice candidate received
+FINE: 2014-01-05 13:38:16.744: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.749: got ice candidate
+FINEST: 2014-01-05 13:38:16.764: create sdp offer
+FINE: 2014-01-05 13:38:16.772: received sdp offer
+FINEST: 2014-01-05 13:38:16.780: new ice candidate received
+FINE: 2014-01-05 13:38:16.785: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.796: got ice candidate
+FINEST: 2014-01-05 13:38:16.809: new ice candidate received
+FINE: 2014-01-05 13:38:16.815: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.820: got ice candidate
+FINEST: 2014-01-05 13:38:16.825: new ice candidate received
+FINE: 2014-01-05 13:38:16.840: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.852: got ice candidate
+FINEST: 2014-01-05 13:38:16.868: created sdp answer
+FINE: 2014-01-05 13:38:16.886: sdp answer sent
+FINE: 2014-01-05 13:38:16.894: received sdp answer
+FINEST: 2014-01-05 13:38:16.917: new ice candidate received
+FINE: 2014-01-05 13:38:16.929: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.934: got ice candidate
+FINEST: 2014-01-05 13:38:16.951: new ice candidate received
+FINE: 2014-01-05 13:38:16.956: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:16.972: got ice candidate
+FINEST: 2014-01-05 13:38:16.994: created sdp answer
+FINE: 2014-01-05 13:38:17.010: sdp answer sent
+FINE: 2014-01-05 13:38:17.027: received sdp answer
+FINEST: 2014-01-05 13:38:17.041: new ice candidate received
+FINE: 2014-01-05 13:38:17.054: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.070: got ice candidate
+FINEST: 2014-01-05 13:38:17.077: new ice candidate received
+FINE: 2014-01-05 13:38:17.082: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.095: got ice candidate
+FINEST: 2014-01-05 13:38:17.109: new ice candidate received
+FINE: 2014-01-05 13:38:17.122: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.126: got ice candidate
+FINEST: 2014-01-05 13:38:17.143: new ice candidate received
+FINE: 2014-01-05 13:38:17.150: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.155: got ice candidate
+FINEST: 2014-01-05 13:38:17.167: new ice candidate received
+FINE: 2014-01-05 13:38:17.173: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.187: got ice candidate
+FINEST: 2014-01-05 13:38:17.197: new ice candidate received
+FINE: 2014-01-05 13:38:17.202: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.217: got ice candidate
+FINEST: 2014-01-05 13:38:17.230: new ice candidate received
+FINE: 2014-01-05 13:38:17.242: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.257: got ice candidate
+FINEST: 2014-01-05 13:38:17.267: new ice candidate received
+FINEST: 2014-01-05 13:38:17.272: new ice candidate received
+FINE: 2014-01-05 13:38:17.277: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.288: got ice candidate
+FINEST: 2014-01-05 13:38:17.301: new ice candidate received
+FINE: 2014-01-05 13:38:17.310: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.320: got ice candidate
+FINEST: 2014-01-05 13:38:17.328: new ice candidate received
+FINE: 2014-01-05 13:38:17.335: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.340: got ice candidate
+FINEST: 2014-01-05 13:38:17.354: new ice candidate received
+FINE: 2014-01-05 13:38:17.361: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.366: got ice candidate
+FINEST: 2014-01-05 13:38:17.373: new ice candidate received
+FINEST: 2014-01-05 13:38:17.386: new ice candidate received
+FINE: 2014-01-05 13:38:17.396: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.402: got ice candidate
+FINEST: 2014-01-05 13:38:17.409: new ice candidate received
+FINE: 2014-01-05 13:38:17.414: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.419: got ice candidate
+FINEST: 2014-01-05 13:38:17.433: new ice candidate received
+FINE: 2014-01-05 13:38:17.444: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.451: got ice candidate
+FINEST: 2014-01-05 13:38:17.458: new ice candidate received
+FINE: 2014-01-05 13:38:17.465: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.470: got ice candidate
+FINEST: 2014-01-05 13:38:17.476: new ice candidate received
+FINE: 2014-01-05 13:38:17.481: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.486: got ice candidate
+FINEST: 2014-01-05 13:38:17.491: new ice candidate received
+FINE: 2014-01-05 13:38:17.498: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.504: got ice candidate
+FINEST: 2014-01-05 13:38:17.518: new ice candidate received
+FINE: 2014-01-05 13:38:17.529: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.533: got ice candidate
+FINEST: 2014-01-05 13:38:17.547: new ice candidate received
+FINE: 2014-01-05 13:38:17.555: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.569: got ice candidate
+FINEST: 2014-01-05 13:38:17.579: new ice candidate received
+FINE: 2014-01-05 13:38:17.590: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.595: got ice candidate
+FINEST: 2014-01-05 13:38:17.609: new ice candidate received
+FINEST: 2014-01-05 13:38:17.621: new ice candidate received
+FINE: 2014-01-05 13:38:17.637: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.647: got ice candidate
+FINEST: 2014-01-05 13:38:17.660: new ice candidate received
+FINE: 2014-01-05 13:38:17.669: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.680: got ice candidate
+FINEST: 2014-01-05 13:38:17.697: new ice candidate received
+FINE: 2014-01-05 13:38:17.710: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.719: got ice candidate
+FINEST: 2014-01-05 13:38:17.731: new ice candidate received
+FINE: 2014-01-05 13:38:17.745: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.757: got ice candidate
+FINEST: 2014-01-05 13:38:17.765: new ice candidate received
+INFO: 2014-01-05 13:38:17.770: datachannel received
+FINE: 2014-01-05 13:38:17.781: change state: CONNECTED
+FINE: 2014-01-05 13:38:17.789: change state: CONNECTED
+Peer.Peer.bob_s3 (INFO): new connection added! (now: 1)
+INFO: 2014-01-05 13:38:17.797: new connection added! (now: 1)
+FINEST: 2014-01-05 13:38:17.815: new ice candidate received
+FINE: 2014-01-05 13:38:17.823: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.829: got ice candidate
+FINEST: 2014-01-05 13:38:17.840: new ice candidate received
+FINE: 2014-01-05 13:38:17.845: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.849: got ice candidate
+FINEST: 2014-01-05 13:38:17.893: new ice candidate received
+FINE: 2014-01-05 13:38:17.903: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.919: got ice candidate
+FINEST: 2014-01-05 13:38:17.934: new ice candidate received
+FINE: 2014-01-05 13:38:17.948: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.953: got ice candidate
+FINEST: 2014-01-05 13:38:17.967: new ice candidate received
+FINE: 2014-01-05 13:38:17.974: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:17.988: got ice candidate
+FINEST: 2014-01-05 13:38:18.006: new ice candidate received
+FINE: 2014-01-05 13:38:18.021: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.026: got ice candidate
+FINEST: 2014-01-05 13:38:18.032: new ice candidate received
+Peer.Peer.alice_s3 (INFO): new connection added! (now: 1)
+INFO: 2014-01-05 13:38:18.038: new connection added! (now: 1)
+FINEST: 2014-01-05 13:38:18.055: new ice candidate received
+FINE: 2014-01-05 13:38:18.069: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.077: got ice candidate
+FINEST: 2014-01-05 13:38:18.087: new ice candidate received
+FINE: 2014-01-05 13:38:18.095: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.109: got ice candidate
+FINEST: 2014-01-05 13:38:18.117: new ice candidate received
+FINE: 2014-01-05 13:38:18.122: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.126: got ice candidate
+FINEST: 2014-01-05 13:38:18.163: new ice candidate received
+FINE: 2014-01-05 13:38:18.176: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.188: got ice candidate
+FINEST: 2014-01-05 13:38:18.194: new ice candidate received
+FINE: 2014-01-05 13:38:18.199: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.203: got ice candidate
+FINEST: 2014-01-05 13:38:18.210: new ice candidate received
+FINE: 2014-01-05 13:38:18.224: new ice candidate serialized and sent to other peer
+FINEST: 2014-01-05 13:38:18.237: got ice candidate
+FINEST: 2014-01-05 13:38:18.249: new ice candidate received
+FINE: 2014-01-05 13:38:18.260: change state: CONNECTED
+Peer.Peer.clark_s3 (INFO): new connection added! (now: 1)
+INFO: 2014-01-05 13:38:18.265: new connection added! (now: 1)
+INFO: 2014-01-05 13:38:18.285: datachannel received
+FINE: 2014-01-05 13:38:18.297: change state: CONNECTED
+Peer.Peer.alice_s3 (INFO): new connection added! (now: 2)
+INFO: 2014-01-05 13:38:18.309: new connection added! (now: 2)
+connected to exactly 2 client. looks quite good
+FINE: 2014-01-05 13:38:18.332: new message added to buffer
+FINE: 2014-01-05 13:38:18.349: new message added to buffer
+Peer.Peer.alice_s3 (INFO): Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:18.369: Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:18.393: send message to : 542439454
+INFO: 2014-01-05 13:38:18.413: send message to : 865969576
+FINEST: 2014-01-05 13:38:18.427: Message received from DataChannel
+Peer.Peer.bob_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:18.438: message redirected
+bob received message
+FINEST: 2014-01-05 13:38:18.459: Message received from DataChannel
+Peer.Peer.clark_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:18.464: message redirected
+clark received message
+FINE: 2014-01-05 13:38:19.157: change state: CONNECTED
+Peer.Peer.clark_s3 (INFO): new connection added! (now: 2)
+INFO: 2014-01-05 13:38:19.171: new connection added! (now: 2)
+connected to exactly 2 client. looks quite good
+FINE: 2014-01-05 13:38:19.188: new message added to buffer
+FINE: 2014-01-05 13:38:19.208: new message added to buffer
+Peer.Peer.clark_s3 (INFO): Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:19.215: Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:19.234: send message to : 821405927
+INFO: 2014-01-05 13:38:19.240: send message to : 161494882
+INFO: 2014-01-05 13:38:19.257: datachannel received
+FINE: 2014-01-05 13:38:19.267: change state: CONNECTED
+Peer.Peer.bob_s3 (INFO): new connection added! (now: 2)
+INFO: 2014-01-05 13:38:19.272: new connection added! (now: 2)
+connected to exactly 2 client. looks quite good
+FINE: 2014-01-05 13:38:19.285: new message added to buffer
+FINE: 2014-01-05 13:38:19.292: new message added to buffer
+Peer.Peer.bob_s3 (INFO): Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:19.308: Broadcast: 2 messages where sent!
+INFO: 2014-01-05 13:38:19.319: send message to : 147911106
+INFO: 2014-01-05 13:38:19.338: send message to : 242351880
+FINEST: 2014-01-05 13:38:19.346: Message received from DataChannel
+Peer.Peer.alice_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:19.361: message redirected
+alice received message
+FINEST: 2014-01-05 13:38:19.383: Message received from DataChannel
+Peer.Peer.bob_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:19.396: message redirected
+bob received message
+FINEST: 2014-01-05 13:38:19.414: Message received from DataChannel
+Peer.Peer.alice_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:19.420: message redirected
+alice received message
+FINEST: 2014-01-05 13:38:19.486: Message received from DataChannel
+Peer.Peer.clark_s3 (INFO): message redirected
+INFO: 2014-01-05 13:38:19.491: message redirected
