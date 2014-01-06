@@ -247,11 +247,11 @@ class JsDataChannelConnection extends Connection{
         _sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
         
       }, (e){
-        _connection_completer.completeError(e, e.stackTrace);
+        _connection_completer.completeError(e);
       }, {});
 
     } catch (e) {
-      _connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
+      _connection_completer.completeError("could not complete connect: ${e}");
     }
     
     return _connection_completer.future;
