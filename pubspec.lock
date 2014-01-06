@@ -5,6 +5,10 @@ packages:
     description: browser
     source: hosted
     version: "0.9.0"
+  browser_detect:
+    description: browser_detect
+    source: hosted
+    version: "0.1.0+2"
   js:
     description: js
     source: hosted

@@ -13,6 +13,8 @@ class JsDataChannelConnection extends Connection{
   //peer connection constraints (currently unused)
   var pcConstraint = {};
   
+  var mediaConstraints = {};
+  
   //RTCDataChannel options
   Map _dcOptions = {};
   
@@ -29,8 +31,12 @@ class JsDataChannelConnection extends Connection{
     _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */
-    _rpc = new js.Proxy(js.context.webkitRTCPeerConnection, 
-        js.map(iceServers)); //TODO: add pcConstraints
+    if(browser.isChrome)
+      _rpc = new js.Proxy(js.context.webkitRTCPeerConnection, js.map(iceServers)); //TODO: add pcConstraints
+    else if(browser.isFirefox)
+      _rpc = new js.Proxy(js.context.mozRTCPeerConnection, js.map(iceServers)); //TODO: add pcConstraints
+    else
+      throw new StateError("unsupported browser! please use firefox or chrome");
     
     /*
      * listen for incoming RTCDataChannels
@@ -135,7 +141,7 @@ class JsDataChannelConnection extends Connection{
       _sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       
       _log.fine("sdp answer sent");
-    });
+    }, null, mediaConstraints);
   }
   
   /**

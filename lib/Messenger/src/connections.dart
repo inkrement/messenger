@@ -15,6 +15,8 @@ import 'package:logging/logging.dart';
 import 'package:js/js.dart' as js;
 import 'dart:html';
 
+import 'package:browser_detect/browser_detect.dart';
+
 /*
  * homebrew libs
  */
