@@ -24,8 +24,8 @@ abstract class Connection{
   //send buffer
   final StreamController<Message> _sendController;
   
-  //private logger
-  final Logger _log;
+  
+  static final _log = new Logger("messenger.Connection");
   
   //completer for connection
   //TODO: maybe one. only one will be used
@@ -35,14 +35,14 @@ abstract class Connection{
   /**
    * constructor
    */
-  Connection(SignalingChannel sc, Logger log):
+  Connection(SignalingChannel sc):
     _CSStreamController=new StreamController<ConnectionState>.broadcast(), 
     _listen_completer = new Completer<int>(),
     _connection_completer = new Completer<int>(),
     _newMessageController = new StreamController<NewMessageEvent>(),
     _sc = sc,
-    _sendController = new StreamController<Message>(),
-    _log = log{
+    _sendController = new StreamController<Message>()
+    {
       if(_log == null) throw new StateError("Logger should not be null!");
     }
     

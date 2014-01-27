@@ -6,14 +6,12 @@
 
 part of messenger.connections;
 
-class JsDataChannelConnection extends Connection{
+class WebRtcDataChannel extends Connection{
   //map of ice providers
   Map iceServers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]};
   
   //peer connection constraints (currently unused)
   var pcConstraint = {};
-  
-  var mediaConstraints = {};
   
   //RTCDataChannel options
   Map _dcOptions = {};
@@ -24,21 +22,14 @@ class JsDataChannelConnection extends Connection{
   //JavaScript Proxy of RTCDataChannel
   js.Proxy _dc;
   
-  static final _log = new Logger("messenger.JsDataChannelConnection");
-  
   /**
    * constructor
    */
-  JsDataChannelConnection(SignalingChannel sc):super(sc), _dc=null{
+  WebRtcDataChannel(SignalingChannel sc, Logger log):super(sc, log), _dc=null{
     _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */
-    if(browser.isChrome)
-      _rpc = new js.Proxy(js.context.webkitRTCPeerConnection, js.map(iceServers)); //TODO: add pcConstraints
-    else if(browser.isFirefox)
-      _rpc = new js.Proxy(js.context.mozRTCPeerConnection, js.map(iceServers)); //TODO: add pcConstraints
-    else
-      throw new StateError("unsupported browser! please use firefox or chrome");
+    _rpc = new R
     
     /*
      * listen for incoming RTCDataChannels
@@ -143,7 +134,7 @@ class JsDataChannelConnection extends Connection{
       _sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
       
       _log.fine("sdp answer sent");
-    }, null, mediaConstraints);
+    });
   }
   
   /**
@@ -164,15 +155,6 @@ class JsDataChannelConnection extends Connection{
      */
     _rpc.onicecandidate = (event) {
       _log.finest("new ice candidate received");
-      
-      //HOTFIX: only add if description set
-      //http://stackoverflow.com/questions/17346616
-      
-     if (!["have-remote-offer", "have-local-pranswer", "have-remote-pranswer"].contains(_rpc.signalingState)){
-       _log.warning("ice candidate received before remote description was set");
-       return;
-     }
-       
       
       if(event.candidate != null){
         try{
@@ -258,11 +240,11 @@ class JsDataChannelConnection extends Connection{
         _sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
         
       }, (e){
-        _connection_completer.completeError(e);
+        _connection_completer.completeError(e, e.stackTrace);
       }, {});
 
     } catch (e) {
-      _connection_completer.completeError("could not complete connect: ${e}");
+      _connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
     }
     
     return _connection_completer.future;
