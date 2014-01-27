@@ -163,6 +163,15 @@ class JsDataChannelConnection extends Connection{
     _rpc.onicecandidate = (event) {
       _log.finest("new ice candidate received");
       
+      //HOTFIX: only add if description set
+      //http://stackoverflow.com/questions/17346616
+      
+     if (!["have-remote-offer", "have-local-pranswer", "have-remote-pranswer"].contains(_rpc.signalingState)){
+       _log.warning("ice candidate received before remote description was set");
+       return;
+     }
+       
+      
       if(event.candidate != null){
         try{
           var proxy = new js.Proxy.fromBrowserObject(event).candidate;
