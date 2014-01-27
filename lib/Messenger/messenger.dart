@@ -5,7 +5,7 @@ export 'src/peer.dart';
 
 class Messenger{
   Peer _peer;
-  Messenger _msgr;
+  static Messenger _msgr;
    
   Messenger._create();
   
