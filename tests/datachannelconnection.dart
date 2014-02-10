@@ -1,4 +1,4 @@
-library unittest.jsrtcpeer;
+library unittest.rtcpeer;
 
 import 'package:unittest/unittest.dart';
 import 'package:logging/logging.dart';
@@ -7,7 +7,7 @@ import 'package:webrtc/Messenger/src/peer.dart';
 
 void main() {
   
-  group('Jswebrtc Connection', () {
+  group('WebRTC Connection', () {
     
     
     /**
@@ -17,7 +17,7 @@ void main() {
     test('JSWebrtc create components',(){
       Peer alice = new Peer("alice", Level.OFF);
       MessagePassing alice_sc = new MessagePassing();
-      JsDataChannelConnection alice_cn = new JsDataChannelConnection(alice_sc);
+      WebRtcDataChannel alice_cn = new WebRtcDataChannel(alice_sc);
     });
     
     
@@ -25,7 +25,7 @@ void main() {
      * 3 New Peer should not have a datachannel.
      * Therefore readyState is initialized with "none"
      */
-    test('JSWebrtc datachannel status',(){
+    test('WebRTC datachannel status',(){
       Peer alice = new Peer("alice", Level.OFF);
   
       expect(alice.countConnections(), 0);
@@ -41,7 +41,7 @@ void main() {
     /**
      * Test connection
      */
-    test('JSWebrtc connect',(){
+    test('WebRTC connect',(){
       
       
       Peer alice = new Peer("alice_c", Level.OFF);
@@ -56,8 +56,8 @@ void main() {
       bob_sc.connect(alice_sc.identityMap());
       
       //connect peer
-      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc);
-      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc);
+      WebRtcDataChannel alice_c = new WebRtcDataChannel(bob_sc);
+      WebRtcDataChannel bob_c = new WebRtcDataChannel(alice_sc);
       Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
       Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
       
@@ -91,8 +91,8 @@ void main() {
           );
       
       //connect peer
-      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc);
-      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc);
+      WebRtcDataChannel alice_c = new WebRtcDataChannel(bob_sc);
+      WebRtcDataChannel bob_c = new WebRtcDataChannel(alice_sc);
       Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
       Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
     });
@@ -123,8 +123,8 @@ void main() {
           );
       
       //connect peer
-      JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc);
-      JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc);
+      WebRtcDataChannel alice_c = new WebRtcDataChannel(bob_sc);
+      WebRtcDataChannel bob_c = new WebRtcDataChannel(alice_sc);
       Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
       Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
     });
@@ -176,14 +176,14 @@ void main() {
         );
         
         //create connections
-        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc);
-        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc);
+        WebRtcDataChannel a_b_c = new WebRtcDataChannel(alice_bob_sc);
+        WebRtcDataChannel a_c_c = new WebRtcDataChannel(alice_clark_sc);
         
-        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc );
-        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc);
+        WebRtcDataChannel b_a_c = new WebRtcDataChannel(bob_alice_sc );
+        WebRtcDataChannel b_c_c = new WebRtcDataChannel(bob_clark_sc);
         
-        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc);
-        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc);
+        WebRtcDataChannel c_a_c = new WebRtcDataChannel(clark_alice_sc);
+        WebRtcDataChannel c_b_c = new WebRtcDataChannel(clark_bob_sc);
         
         
         //connect clark/bob bob/clark
@@ -301,14 +301,14 @@ void main() {
         /*
          * create connections
          */
-        JsDataChannelConnection a_b_c = new JsDataChannelConnection(alice_bob_sc);
-        JsDataChannelConnection a_c_c = new JsDataChannelConnection(alice_clark_sc);
+        WebRtcDataChannel a_b_c = new WebRtcDataChannel(alice_bob_sc);
+        WebRtcDataChannel a_c_c = new WebRtcDataChannel(alice_clark_sc);
         
-        JsDataChannelConnection b_a_c = new JsDataChannelConnection(bob_alice_sc);
-        JsDataChannelConnection b_c_c = new JsDataChannelConnection(bob_clark_sc);
+        WebRtcDataChannel b_a_c = new WebRtcDataChannel(bob_alice_sc);
+        WebRtcDataChannel b_c_c = new WebRtcDataChannel(bob_clark_sc);
         
-        JsDataChannelConnection c_a_c = new JsDataChannelConnection(clark_alice_sc);
-        JsDataChannelConnection c_b_c = new JsDataChannelConnection(clark_bob_sc);
+        WebRtcDataChannel c_a_c = new WebRtcDataChannel(clark_alice_sc);
+        WebRtcDataChannel c_b_c = new WebRtcDataChannel(clark_bob_sc);
         
         
         //connect clark/bob bob/clark

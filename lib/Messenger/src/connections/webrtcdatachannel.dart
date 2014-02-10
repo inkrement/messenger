@@ -25,7 +25,7 @@ class WebRtcDataChannel extends Connection{
   /**
    * constructor
    */
-  WebRtcDataChannel(SignalingChannel sc, Logger log):super(sc, log), _dc=null{
+  WebRtcDataChannel(SignalingChannel sc, Logger log):super(sc), _dc=null{
     _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */

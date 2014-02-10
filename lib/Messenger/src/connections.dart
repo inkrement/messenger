@@ -29,3 +29,4 @@ export 'signaling.dart';
 part 'connections/connectionstate.dart';
 part 'connections/connection.dart';
 part 'connections/jsdatachannelconnection.dart';
+part 'connections/webrtcdatachannel.dart';
