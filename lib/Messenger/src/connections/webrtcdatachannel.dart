@@ -16,26 +16,28 @@ class WebRtcDataChannel extends Connection{
   //RTCDataChannel options
   Map _dcOptions = {};
   
+  static final _log = new Logger("messenger.JsDataChannelConnection");
+  
   //JavaScript Proxy of RTCPeerConnection
-  js.Proxy _rpc;
+  RtcPeerConnection _rpc;
   
   //JavaScript Proxy of RTCDataChannel
-  js.Proxy _dc;
+  RtcDataChannel _dc;
   
   /**
    * constructor
    */
-  WebRtcDataChannel(SignalingChannel sc, Logger log):super(sc, log), _dc=null{
+  WebRtcDataChannel(SignalingChannel sc):super(sc), _dc=null{
     _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */
-    _rpc = new R
+    _rpc = new RtcPeerConnection(iceServers);
     
     /*
      * listen for incoming RTCDataChannels
      */
     
-    _rpc.ondatachannel = (RtcDataChannelEvent event){
+    _rpc.onDataChannel.listen((RtcDataChannelEvent event){
       _log.info("datachannel received");
       
       //set RTCDataChannel
@@ -46,32 +48,32 @@ class WebRtcDataChannel extends Connection{
        */
       
       //onMessage
-      _dc.onmessage = (MessageEvent event){
+      _dc.onMessage.listen((MessageEvent event){
         _log.finest("Message received from DataChannel");
         
         _newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
-      };
+      });
       
       //onOpen
-      _dc.onopen = (_){
+      _dc.onOpen.listen((_){
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _listen_completer.complete(sc.id);
-      };
+      });
       
       //onClose
-      _dc.onclose = (_){
+      _dc.onClose.listen((_){
         _setCommunicationState(
             new ConnectionState.fromRTCDataChannelState(_dc.readyState)
             );
-      };
+      });
       
       //onError TODO: error state!
-      _dc.onerror = (x)=>_log.shout("rtc error callback: " + x.toString());
+      _dc.onError.listen((x)=>_log.shout("rtc error callback: " + x.toString()));
       
       //set state to current DC_State
       _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
       
-    };
+    });
   }
   
   /**
@@ -89,7 +91,9 @@ class WebRtcDataChannel extends Connection{
           );
         
         //add candidate
-        _rpc.addIceCandidate(iceCandidate);
+        _rpc.addIceCandidate(iceCandidate,
+            ()=>_log.info("ice candidate added"), 
+            (error)=>_log.warning(error.toString()));
         break;
         
       case MessageType.WEBRTC_OFFER:
@@ -122,7 +126,7 @@ class WebRtcDataChannel extends Connection{
    * creates new SDP Answer and sends it over signalingChannel
    */
   createAnswer(){
-    _rpc.createAnswer((sdp_answer){
+    _rpc.createAnswer().then((RtcSessionDescription sdp_answer){
       _log.finest("created sdp answer");
       
       _rpc.setLocalDescription(sdp_answer);
@@ -153,7 +157,7 @@ class WebRtcDataChannel extends Connection{
     /*
      * New IceCandidate Callback
      */
-    _rpc.onicecandidate = (event) {
+    _rpc.onIceCandidate.listen((event) {
       _log.finest("new ice candidate received");
       
       if(event.candidate != null){
@@ -173,7 +177,7 @@ class WebRtcDataChannel extends Connection{
         
       }
         
-    }; 
+    });
     
     return _listen_completer.future;
   }
@@ -196,7 +200,7 @@ class WebRtcDataChannel extends Connection{
      */
     
     try {
-      _dc = _rpc.createDataChannel("sendDataChannel", js.map(_dcOptions));
+      _dc = _rpc.createDataChannel("sendDataChannel", _dcOptions);
       _log.finest('created new data channel');
       
       /*
@@ -204,17 +208,17 @@ class WebRtcDataChannel extends Connection{
        */
       
       //onOpen
-      _dc.onopen = (_){
+      _dc.onOpen.listen((_){
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
         _connection_completer.complete(_sc.id);
-      };
+      });
       
       //onClose
-      _dc.onclose = (_){
+      _dc.onClose.listen((_){
         _log.info("datachannel closed!");
         
         _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
-      };
+      });
       
       //onMessage
       _dc.onmessage = (MessageEvent event){
@@ -228,7 +232,7 @@ class WebRtcDataChannel extends Connection{
       /*
        * create SDP OFFER of RTCPeerConnection
        */
-      _rpc.createOffer((sdp_offer){
+      _rpc.createOffer().then(( sdp_offer){
         _log.finest("create sdp offer");
         
         _rpc.setLocalDescription(sdp_offer);
@@ -239,9 +243,7 @@ class WebRtcDataChannel extends Connection{
         //send serialized string to other peer
         _sc.send(new Message(jsonString, MessageType.WEBRTC_OFFER));
         
-      }, (e){
-        _connection_completer.completeError(e, e.stackTrace);
-      }, {});
+      });
 
     } catch (e) {
       _connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
