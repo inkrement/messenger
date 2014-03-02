@@ -25,10 +25,6 @@ packages:
     description: path
     source: hosted
     version: "1.0.0"
-  serialization:
-    description: serialization
-    source: hosted
-    version: "0.9.1"
   stack_trace:
     description: stack_trace
     source: hosted

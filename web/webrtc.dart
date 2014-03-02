@@ -1,5 +1,5 @@
 //import 'dart:html';
-import "package:webrtc/Messenger/messenger.dart";
+import "package:WebRTCMessenger/WebRTCMessenger/messenger.dart";
 
 
 void main() {
@@ -8,8 +8,8 @@ void main() {
  * TODO
  */
   
-  //Messenger msg = new Messenger();
-  
+  Messenger msg = new Messenger();
+  /*
   Peer alice = new Peer("alice_c");
   Peer bob = new Peer("bob_c");
   
@@ -22,10 +22,10 @@ void main() {
   bob_sc.connect(alice_sc.identityMap());
   
   //connect peer
-  JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc, Peer.parent_log);
-  JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc, Peer.parent_log);
+  JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc);
+  JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc);
   Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
   Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
-  
+  */
   
 }
