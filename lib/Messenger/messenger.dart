@@ -3,16 +3,23 @@ library messenger;
 import 'src/peer.dart';
 export 'src/peer.dart';
 
-class Messenger{
-  Peer _peer;
-  static Messenger _msgr;
-   
-  Messenger._create();
+Peer peer;
+
+main(){
   
-  factory Messenger(){
-    if(_msgr == null)
-      _msgr = new Messenger._create();
+  peer = new Peer();
+  
+  //connect receive to stdout
+  peer.onReceive.listen((msg){
     
-    return _msgr;
-  }
+  });
+}
+
+
+/*
+ * JS callback hooks
+ */
+
+void send(String msg){
+  
 }

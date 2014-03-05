@@ -42,7 +42,3 @@ class Message{
   
 }
 
-//result.nextPageToken = identity();
-//result.items = map(Event.parse)(json["items"]);
-//result.kind = identity(json["kind"]);
-
