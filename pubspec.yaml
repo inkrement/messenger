@@ -1,4 +1,4 @@
-name: WebRTCMessenger
+name: webrtcmessenger
 version: 0.0.1
 author: Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
 description: A Webrtc Messenger
@@ -6,8 +6,8 @@ homepage: https://github.com/inkrement/messenger
 environment:
   sdk: '>0.8.7'
 dependencies:
-  browser: any
-  json: any
+  browser: ">=0.10.0 <0.11.0"
+  json: ">=0.9.1 <0.10.0"
 dev_dependencies:
   logging: any
   unittest: any
