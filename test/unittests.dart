@@ -2,7 +2,6 @@ library unittest;
 
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_enhanced_config.dart';
-import 'connections/jsdatachannel.dart' as js_rtc;
 import 'connections/datachannel.dart' as rtc;
 import 'signaling/messagepassing.dart' as sig_mp;
 import 'connectionstates.dart' as con_states;
@@ -48,7 +47,6 @@ void main() {
   
   group('connection',(){
     rtc.main();
-    js_rtc.main();
   });
 
   

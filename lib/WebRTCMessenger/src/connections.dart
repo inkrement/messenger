@@ -13,10 +13,7 @@ import 'dart:async';
 export 'dart:async';
 import 'dart:convert';
 import 'package:logging/logging.dart';
-import 'package:js/js.dart' as js;
 import 'dart:html';
-
-import 'package:browser_detect/browser_detect.dart';
 
 /*
  * homebrew libs
@@ -29,5 +26,4 @@ export 'signaling.dart';
  */
 part 'connections/connectionstate.dart';
 part 'connections/connection.dart';
-part 'connections/jsdatachannelconnection.dart';
 part 'connections/webrtcdatachannel.dart';
