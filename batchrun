@@ -1,4 +1,0 @@
-#!/bin/sh
-#dart -p packages tests/unittests.dart
-
-dartium ./web/unittest.html
