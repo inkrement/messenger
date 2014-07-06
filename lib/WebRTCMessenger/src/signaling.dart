@@ -8,9 +8,11 @@
 library messenger.signaling;
 
 import 'dart:async';
+import 'dart:js';
 
 import 'events.dart';
 export 'events.dart';
 
 part 'signaling/messagepassing.dart';
 part 'signaling/signalingchannel.dart';
+part 'signaling/jscallbacksignaling.dart';

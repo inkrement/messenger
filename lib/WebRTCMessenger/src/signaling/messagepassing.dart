@@ -19,7 +19,7 @@ class MessagePassing extends SignalingChannel{
    * @ TODO: add custom Exceptions
    *  * prevent self-connections
    */
-  Future connect(Map<String, MessagePassing> options){
+  void connect(Map<String, MessagePassing> options){
     if(options.isEmpty)
       throw new StateError("empty option set excatly one value expected. none found!");
     if(options.values.first == null)

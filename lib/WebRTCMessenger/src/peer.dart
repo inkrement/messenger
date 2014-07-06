@@ -50,7 +50,7 @@ class Peer{
    * constuctor
    * 
    */
-  Peer([String name="", Level loglevel=Level.FINE]){
+  Peer([String name="", Level loglevel=Level.WARNING]){
     //set name of this peer instance
     this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     

@@ -31,7 +31,7 @@ abstract class SignalingChannel{
   /**
    * establish connection
    */
-  Future connect(Map options);
+  void connect(var options);
   
   /**
    * send String to other side of Channel
