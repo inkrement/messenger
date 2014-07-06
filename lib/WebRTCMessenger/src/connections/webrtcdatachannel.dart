@@ -53,7 +53,7 @@ class WebRtcDataChannel extends Connection{
       _dc.onMessage.listen((MessageEvent event){
         _log.finest("Message received from DataChannel");
         
-        _newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
+        _newMessageController.add(new NewMessageEvent(Message.fromString(event.data)));
       });
       
       //onOpen
@@ -250,7 +250,7 @@ class WebRtcDataChannel extends Connection{
       _dc.onMessage.listen((MessageEvent event){
         _log.finest("Message received from DataChannel");
         
-        _newMessageController.add(new NewMessageEvent(new Message.fromString(event.data)));
+        _newMessageController.add(new NewMessageEvent(Message.fromString(event.data)));
       });
       
       //TODO: onERROR

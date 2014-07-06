@@ -32,7 +32,7 @@ class Message{
     return JSON.encode(result);
   }
   
-  factory Message.fromString(String data){
+  static Message fromString(String data){
     if (data == null) return null;
     
     Map<String, String> json = JSON.decode(data);
