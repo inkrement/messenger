@@ -11,15 +11,31 @@
     
     <script type="text/javascript">
     
-    /*
-    var console = {
-                   panel: $('sample_container_id'),
-                   log: function(m){
-                     this.panel.prepend('<div>'+m+'</div>');
-                   }       
+    /**
+     * add Text to log element
+     *
+     * this function is used for logging purposes
+     */
+    function addText(text) {
+        var div = document.getElementById('logs');
+        var dt = new Date();
 
-    };
-    */
+        div.innerHTML = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds() + ':' + dt.getMilliseconds() + ' <b>' + text + '</b><br/>' + div.innerHTML;
+
+    }
+
+    /**
+     * Bypass log
+     *
+     * bypass std log and redirect it into an html element
+     */
+    (function() {
+        var oldLog = console.log;
+        console.log = function(message) {
+            addText(message);
+            oldLog.apply(console, arguments);
+        };
+    })();
     </script>
   </head>
   <body>
@@ -27,10 +43,9 @@
     
     <p>Hello world from Dart!</p>
     
-    <div id="sample_container_id">
+    <div id="logs">
     </div>
-
-    <script type="application/dart" src="webrtc.dart"></script>
+    <script type="application/dart" src="webrtc_test.dart"></script>
     <script src="packages/browser/dart.js"></script>
   </body>
 </html>
