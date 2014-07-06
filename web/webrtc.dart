@@ -1,31 +1,74 @@
 //import 'dart:html';
-import "package:WebRTCMessenger/WebRTCMessenger/messenger.dart";
+import "package:WebRTCMessenger/WebRTCMessenger/webrtcmessenger.dart";
+import 'package:logging/logging.dart';
 
 
 void main() {
   
 /**
- * TODO
+ * test call function to inspect js-output
  */
   
-  Messenger msg = new Messenger();
-  /*
-  Peer alice = new Peer("alice_c");
-  Peer bob = new Peer("bob_c");
-  
-  //setup signaling channel
-  MessagePassing alice_sc = new MessagePassing();
-  MessagePassing bob_sc = new MessagePassing();
-  
-  //connect signaling channel
-  alice_sc.connect(bob_sc.identityMap());
-  bob_sc.connect(alice_sc.identityMap());
-  
-  //connect peer
-  JsDataChannelConnection alice_c = new JsDataChannelConnection(bob_sc);
-  JsDataChannelConnection bob_c = new JsDataChannelConnection(alice_sc);
-  Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
-  Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
-  */
+
+          Logger.root.level = Level.ALL;
+          Logger.root.onRecord.listen((LogRecord rec) {
+            print('${rec.level.name}: ${rec.time}: ${rec.message}');
+          });
+          
+          Peer alice = new Peer("alice_s3", Level.ALL);
+          Peer bob = new Peer("bob_s3", Level.ALL);
+          Peer clark = new Peer("clark_s3", Level.ALL);
+          
+          //setup signaling channels
+          MessagePassing alice_bob_sc = new MessagePassing();
+          MessagePassing bob_alice_sc = new MessagePassing();
+          
+          
+          alice_bob_sc.connect(bob_alice_sc.identityMap());
+          bob_alice_sc.connect(alice_bob_sc.identityMap());
+          
+          
+          //set callbacks
+          
+          String s_alice = "some random string from alice";
+          String s_bob = "some random string from bob";
+          Message tm_alice = new Message(s_alice);
+          Message tm_bob = new Message(s_bob);
+          
+          //each sould receive two messages
+          alice.onReceive.listen((NewMessageEvent mevent){
+            print("alice revceived message: " + mevent.getMessage().toString());
+          });
+
+          bob.onReceive.listen((NewMessageEvent mevent){
+            print("bob revceived message: " + mevent.getMessage().toString());
+          });
+          
+          /*
+           * send messages
+           */
+          alice.newConnectionController.stream.listen((_){
+            if(alice.connections.length == 2){
+              alice.multicast(tm_alice);
+            }
+          });
+          
+          bob.newConnectionController.stream.listen((_){
+            if(bob.connections.length == 2){
+              bob.multicast(tm_bob);
+            }
+          });
+          
+          
+          /*
+           * create connections
+           */
+          WebRtcDataChannel a_b_c = new WebRtcDataChannel(alice_bob_sc);
+          WebRtcDataChannel b_a_c = new WebRtcDataChannel(bob_alice_sc);
+        
+          //connect alice/bob bob/alice
+          alice.listen(b_a_c);
+          bob.connect(a_b_c);
+          
   
 }
