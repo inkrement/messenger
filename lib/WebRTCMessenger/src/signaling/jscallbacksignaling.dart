@@ -23,11 +23,15 @@ class JSCallbackSignaling extends SignalingChannel{
    */
   void connect(var options){
     // register callback
-    context.callMethod('JSRegisterRecCallback', [recCallback]);
+    
+    //FIXME: generates "Uncaught TypeError: Cannot read property 'apply' of undefined"
+    //context.callMethod('JSRegisterRecCallback', [recCallback]);
   }
   
   /**
    * send message
+   * 
+   * TODO: test if function exists
    */
   send(Message message) => context.callMethod('JSSignalingsend', [Message.serialize(message)]);
   
