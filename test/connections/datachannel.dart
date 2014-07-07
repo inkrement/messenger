@@ -63,8 +63,8 @@ void main() {
       Stream<NewConnectionEvent> s_a = alice.listen(alice_c);
       Stream<NewConnectionEvent> s_b = bob.connect(bob_c);
       
-      s_a.listen(expectAsync1((_){}));
-      s_b.listen(expectAsync1((_){}));
+      s_a.listen(expectAsync((_){}));
+      s_b.listen(expectAsync((_){}));
     });
     
     
@@ -85,11 +85,11 @@ void main() {
       
       //set callbacks
       alice.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(alice.connections.length, 1))
+          expectAsync((_)=>expect(alice.connections.length, 1))
           );
       
       bob.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(bob.connections.length, 1))
+          expectAsync((_)=>expect(bob.connections.length, 1))
           );
       
       //connect peer
@@ -117,11 +117,11 @@ void main() {
       
       //set callbacks
       alice.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(alice.connections.keys.first, bob_sc.id))
+          expectAsync((_)=>expect(alice.connections.keys.first, bob_sc.id))
           );
       
       bob.newConnectionController.stream.listen(
-          expectAsync1((_)=>expect(bob.connections.keys.first, alice_sc.id))
+          expectAsync((_)=>expect(bob.connections.keys.first, alice_sc.id))
           );
       
       //connect peer
@@ -166,15 +166,15 @@ void main() {
         int clark_c = 1;
         
         alice.newConnectionController.stream.listen(
-            expectAsync1((_)=>expect(alice.connections.length, alice_c++), count:2)
+            expectAsync((_)=>expect(alice.connections.length, alice_c++), count:2)
         );
         
         bob.newConnectionController.stream.listen(
-            expectAsync1((_)=>expect(bob.connections.length, bob_c++), count:2)
+            expectAsync((_)=>expect(bob.connections.length, bob_c++), count:2)
         );
         
         clark.newConnectionController.stream.listen(
-            expectAsync1((_)=>expect(clark.connections.length, clark_c++), count:2)
+            expectAsync((_)=>expect(clark.connections.length, clark_c++), count:2)
         );
         
         //create connections
@@ -247,7 +247,7 @@ void main() {
         
         //each sould receive two messages
         alice.onReceive.listen(
-            expectAsync1((NewMessageEvent e){
+            expectAsync((NewMessageEvent e){
               logMessage("alice received message: ${e.data.toString()}");
               
               expect(e.data.toString(), isIn([s_bob, s_clark]));
@@ -255,7 +255,7 @@ void main() {
         );
 
         bob.onReceive.listen(
-            expectAsync1((NewMessageEvent e){
+            expectAsync((NewMessageEvent e){
               logMessage("bob received message: ${e.data.toString()}");
               
               expect(e.data.toString(), isIn([s_alice, s_clark]));
@@ -264,7 +264,7 @@ void main() {
         
         
         clark.onReceive.listen(
-            expectAsync1((NewMessageEvent e){
+            expectAsync((NewMessageEvent e){
               logMessage("clark received message: ${e.data.toString()}");
               
               expect(e.data.toString(), isIn([s_alice, s_bob]));

@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="webrtc.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     
-    <script src="https://apprtc.appspot.com/js/adapter.js"></script>
-    
+    <script src="https://apprtc.appspot.com/js/adapter.js"></script>  
     <script type="text/javascript">
     
     /**
@@ -37,6 +36,8 @@
         };
     })();
     </script>
+    
+    
   </head>
   <body>
     <h1>Webrtc</h1>
@@ -45,7 +46,9 @@
     
     <div id="logs">
     </div>
-    <script type="application/dart" src="webrtc_test.dart"></script>
-    <script src="packages/browser/dart.js"></script>
+    <!-- <script type="application/dart" src="webrtc.dart"></script> 
+    <script src="packages/browser/dart.js"></script> -->
+
+    <script type="text/javascript" src="webrtc.dart.precompiled.js"></script>
   </body>
 </html>

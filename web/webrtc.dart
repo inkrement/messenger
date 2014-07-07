@@ -1,5 +1,5 @@
 //import 'dart:html';
-import "package:WebRTCMessenger/WebRTCMessenger/webrtcmessenger.dart";
+import "package:webrtcmessenger/webrtcmessenger/webrtcmessenger.dart";
 
 
 /**
@@ -7,6 +7,8 @@ import "package:WebRTCMessenger/WebRTCMessenger/webrtcmessenger.dart";
  */
 
 void main() {
+  print("testapp. listen. just listen");
+  
   Peer alice = new Peer("alice");
   String s_alice = "some random string from alice";  
   Message tm_alice = new Message(s_alice);
