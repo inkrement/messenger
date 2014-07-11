@@ -1,7 +1,7 @@
 library unittest.signaling.messagepassing;
 
 import 'package:unittest/unittest.dart';
-import 'package:WebRTCMessenger/WebRTCMessenger/src/signaling.dart';
+import 'package:messenger/messenger/src/signaling.dart';
 
 void main() {
   

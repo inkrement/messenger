@@ -1,8 +1,8 @@
-name: webrtcmessenger
+name: messenger
 version: 0.0.2
 author: Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
-description: A Webrtc Messenger
-homepage: https://github.com/inkrement/WebRTCMessenger
+description: A massaging library for dart. incl. TCP Signaling and WebRTC communication.
+homepage: https://github.com/inkrement/messenger
 environment:
   sdk: '>0.8.7'
 dependencies:

@@ -3,7 +3,7 @@ library unittest.rtcpeer;
 import 'package:unittest/unittest.dart';
 import 'package:logging/logging.dart';
 
-import 'package:WebRTCMessenger/WebRTCMessenger/src/peer.dart';
+import 'package:messenger/messenger/src/peer.dart';
 
 void main() {
   

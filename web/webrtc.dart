@@ -1,5 +1,5 @@
 //import 'dart:html';
-import "package:webrtcmessenger/webrtcmessenger/webrtcmessenger.dart";
+import "package:messenger/messenger.dart";
 
 
 /**

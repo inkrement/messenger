@@ -1,7 +1,7 @@
 library messenger;
 
-import 'src/peer.dart';
-export 'src/peer.dart';
+import 'messenger/src/peer.dart';
+export 'messenger/src/peer.dart';
 
 class Messenger{
   static final Peer _peer = new Peer("local peer");
