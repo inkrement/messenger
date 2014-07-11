@@ -1,7 +1,7 @@
 library unittest.messenger;
 
 import 'package:unittest/unittest.dart';
-import 'package:WebRTCMessenger/WebRTCMessenger/webrtcmessenger.dart';
+import 'package:messenger/messenger.dart';
 
 main() {
   

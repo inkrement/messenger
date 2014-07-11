@@ -8,7 +8,7 @@
 library unittest.connectionstates;
 
 import 'package:unittest/unittest.dart';
-import 'package:WebRTCMessenger/WebRTCMessenger/src/connections.dart';
+import 'package:messenger/messenger/src/connections.dart';
 
 
 void main(){

@@ -7,30 +7,53 @@
     <link rel="stylesheet" href="webrtc.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     
-    <script src="https://apprtc.appspot.com/js/adapter.js"></script>
-    
+    <script src="https://apprtc.appspot.com/js/adapter.js"></script>  
     <script type="text/javascript">
     
-    /*
-    var console = {
-                   panel: $('sample_container_id'),
-                   log: function(m){
-                     this.panel.prepend('<div>'+m+'</div>');
-                   }       
+    /**
+     * add Text to log element
+     *
+     * this function is used for logging purposes
+     */
+    function addText(text) {
+        var div = document.getElementById('logs');
+        var dt = new Date();
 
-    };
-    */
+        div.innerHTML = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds() + ':' + dt.getMilliseconds() + ' <b>' + text + '</b><br/>' + div.innerHTML;
+
+    }
+
+    /**
+     * Bypass log
+     *
+     * bypass std log and redirect it into an html element
+     */
+    (function() {
+        var oldLog = console.log;
+        console.log = function(message) {
+            addText(message);
+            oldLog.apply(console, arguments);
+        };
+    })();
+    
+    
+    function JSSignalingsend(test){
+      console.log(test);
+    }
     </script>
+    
+    
   </head>
   <body>
     <h1>Webrtc</h1>
     
     <p>Hello world from Dart!</p>
     
-    <div id="sample_container_id">
+    <div id="logs">
     </div>
+    <!-- <script type="application/dart" src="webrtc.dart"></script> 
+    <script src="packages/browser/dart.js"></script> -->
 
-    <script type="application/dart" src="webrtc.dart"></script>
-    <script src="packages/browser/dart.js"></script>
+    <script type="text/javascript" src="webrtc.dart.precompiled.js"></script>
   </body>
 </html>

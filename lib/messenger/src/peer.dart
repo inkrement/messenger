@@ -112,11 +112,15 @@ class Peer{
   
   
   /**
-   * listen for incoming connections
+   *  (depreciated) listen for incoming connections
+   * 
+   * Attention: please use add(Connection) instead
    * 
    * @param Peer other
    */
   Stream<NewConnectionEvent> listen(Connection c){
+    _log.warning("Peer.listen() is deprecated! please use add() instead");
+    
     Future<int> f = c.listen();
     
     //add to list of connections. index is identity of other peer
@@ -138,11 +142,15 @@ class Peer{
   }
   
   /**
-   * connect to another peer
+   * (deprecated) connect to another peer
+   * 
+   * Attention: please use add(Connection) instead. 
    * 
    * @param Peer other
    */
   Stream<NewConnectionEvent> connect(Connection c){
+    _log.warning("Peer.connect() is deprecated! please use add() instead");
+    
     Future<int> f = c.connect();
     
     f.then((int id) {
@@ -160,6 +168,30 @@ class Peer{
     
     return newConnectionController.stream;
   }
+  
+  
+  /**
+   * addConnection
+   * 
+   * Attention: this function should replace connect/listen for semantic purposes. These functions
+   * are very similar and should not call the connect/listen methods on their Connection.
+   * This Methods should be called explicit before the Connection gets passed.
+   */
+  Stream<NewConnectionEvent> add(int id, Connection c){
+        _connections[id] = c;
+        _log.info("new connection added! (now: ${connections.length.toString()})");
+        newConnectionController.add(new NewConnectionEvent(c));
+        
+        //redirect messages
+        c.onMessage.listen((NewMessageEvent e){
+          
+          _log.info("message redirected");
+          newMessageController.add(e);
+        });
+
+      
+      return newConnectionController.stream;
+    }
   
   /**
    * send Message to other peer
