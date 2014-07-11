@@ -15,6 +15,11 @@ The messenger library consists of 5 sublibraries (message, events, signaling, co
 messenger <- peer <- connections <- signaling <- events <- message
 
 
+Build
+-----
+
+To build the library just run `build.sh`.
+
 Links
 =====
 
