@@ -1,5 +1,6 @@
 messenger
 ======
+[![Build Status](https://drone.io/github.com/inkrement/messenger/status.png)](https://drone.io/github.com/inkrement/messenger/latest)
 
 a simple messaging framework for dart. it will support webrtc and some sort of local message passing.
 
