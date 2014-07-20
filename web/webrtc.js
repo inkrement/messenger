@@ -2715,7 +2715,7 @@ var $$ = {};
     static: {"^": "JSInvocationMirror_METHOD,JSInvocationMirror_GETTER,JSInvocationMirror_SETTER"}
   },
   ReflectionInfo: {
-    "^": "Object;jsFunction,data,isAccessor,requiredParameterCount,optionalParameterCount,areOptionalParametersNamed,functionType,cachedSortedIndices",
+    "^": "Object;jsFunction,data>,isAccessor,requiredParameterCount,optionalParameterCount,areOptionalParametersNamed,functionType,cachedSortedIndices",
     parameterName$1: function(parameter) {
       var metadataIndex = this.data[parameter + this.optionalParameterCount + 3];
       return init.metadata[metadataIndex];
@@ -3239,6 +3239,10 @@ var $$ = {};
     "^": "ChromeObject;jsProxy",
     get$socketId: function() {
       return J.$index$asx(this.jsProxy, "socketId");
+    },
+    get$data: function(_) {
+      var t1 = J.$index$asx(this.jsProxy, "data");
+      return t1 == null ? null : new Z.ArrayBuffer(t1);
     }
   },
   ReceiveErrorInfo: {
@@ -7579,8 +7583,12 @@ var $$ = {};
     "%": "HTMLButtonElement"
   },
   CharacterData: {
-    "^": "Node;length=",
+    "^": "Node;data=,length=",
     "%": "CDATASection|CharacterData|Comment|ProcessingInstruction|Text"
+  },
+  CompositionEvent: {
+    "^": "UIEvent;data=",
+    "%": "CompositionEvent"
   },
   DomError: {
     "^": "Interceptor;message=,name=",
@@ -7619,7 +7627,7 @@ var $$ = {};
   Event: {
     "^": "Interceptor;",
     $isEvent: true,
-    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CompositionEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|DragEvent|FocusEvent|HashChangeEvent|IDBVersionChangeEvent|InstallEvent|InstallPhaseEvent|KeyboardEvent|MIDIConnectionEvent|MIDIMessageEvent|MSPointerEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MessageEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PointerEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|RTCIceCandidateEvent|ResourceProgressEvent|SVGZoomEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|StorageEvent|TextEvent|TouchEvent|TrackEvent|TransitionEvent|UIEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|WheelEvent|XMLHttpRequestProgressEvent;Event|InputEvent"
+    "%": "AudioProcessingEvent|AutocompleteErrorEvent|BeforeLoadEvent|BeforeUnloadEvent|CSSFontFaceLoadEvent|CloseEvent|CustomEvent|DeviceMotionEvent|DeviceOrientationEvent|HashChangeEvent|IDBVersionChangeEvent|InstallEvent|InstallPhaseEvent|MIDIConnectionEvent|MediaKeyNeededEvent|MediaStreamEvent|MediaStreamTrackEvent|MutationEvent|OfflineAudioCompletionEvent|OverflowEvent|PageTransitionEvent|PopStateEvent|ProgressEvent|RTCDTMFToneChangeEvent|RTCDataChannelEvent|RTCIceCandidateEvent|ResourceProgressEvent|SecurityPolicyViolationEvent|SpeechInputEvent|SpeechRecognitionEvent|StorageEvent|TrackEvent|TransitionEvent|WebGLContextEvent|WebKitAnimationEvent|WebKitTransitionEvent|XMLHttpRequestProgressEvent;Event|InputEvent"
   },
   EventTarget: {
     "^": "Interceptor;",
@@ -7642,7 +7650,7 @@ var $$ = {};
     "%": "HTMLIFrameElement"
   },
   ImageData: {
-    "^": "Interceptor;",
+    "^": "Interceptor;data=",
     $isImageData: true,
     "%": "ImageData"
   },
@@ -7675,6 +7683,13 @@ var $$ = {};
     "^": "Event;message=",
     "%": "MediaKeyMessageEvent"
   },
+  MessageEvent: {
+    "^": "Event;",
+    get$data: function(receiver) {
+      return P.convertNativeToDart_AcceptStructuredClone(receiver.data, true);
+    },
+    "%": "MessageEvent"
+  },
   MetaElement: {
     "^": "HtmlElement;name=",
     "%": "HTMLMetaElement"
@@ -7682,6 +7697,10 @@ var $$ = {};
   MeterElement: {
     "^": "HtmlElement;value=",
     "%": "HTMLMeterElement"
+  },
+  MidiMessageEvent: {
+    "^": "Event;data=",
+    "%": "MIDIMessageEvent"
   },
   NavigatorUserMediaError: {
     "^": "Interceptor;message=,name=",
@@ -7697,7 +7716,7 @@ var $$ = {};
     "%": "Document|DocumentFragment|DocumentType|HTMLDocument|Notation|ShadowRoot|XMLDocument;Node"
   },
   ObjectElement: {
-    "^": "HtmlElement;name=",
+    "^": "HtmlElement;data=,name=",
     "%": "HTMLObjectElement"
   },
   OptionElement: {
@@ -7735,6 +7754,14 @@ var $$ = {};
   TextAreaElement: {
     "^": "HtmlElement;name=,value=",
     "%": "HTMLTextAreaElement"
+  },
+  TextEvent: {
+    "^": "UIEvent;data=",
+    "%": "TextEvent"
+  },
+  UIEvent: {
+    "^": "Event;",
+    "%": "DragEvent|FocusEvent|KeyboardEvent|MSPointerEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|PointerEvent|SVGZoomEvent|TouchEvent|WheelEvent;UIEvent"
   },
   Window: {
     "^": "EventTarget;name=",
@@ -8389,6 +8416,10 @@ var $$ = {};
 }],
 ["html_common", "dart:html_common", , P, {
   "^": "",
+  convertNativeToDart_AcceptStructuredClone: function(object, mustCopy) {
+    var copies = [];
+    return new P.convertNativeToDart_AcceptStructuredClone_walk(mustCopy, new P.convertNativeToDart_AcceptStructuredClone_findSlot([], copies), new P.convertNativeToDart_AcceptStructuredClone_readSlot(copies), new P.convertNativeToDart_AcceptStructuredClone_writeSlot(copies)).call$1(object);
+  },
   Device_isWebKit: function() {
     var t1 = $.Device__isWebKit;
     if (t1 == null) {
@@ -8401,6 +8432,93 @@ var $$ = {};
       $.Device__isWebKit = t1;
     }
     return t1;
+  },
+  convertNativeToDart_AcceptStructuredClone_findSlot: {
+    "^": "Closure:27;values_0,copies_1",
+    call$1: function(value) {
+      var t1, $length, i, t2;
+      t1 = this.values_0;
+      $length = t1.length;
+      for (i = 0; i < $length; ++i) {
+        t2 = t1[i];
+        if (t2 == null ? value == null : t2 === value)
+          return i;
+      }
+      t1.push(value);
+      this.copies_1.push(null);
+      return $length;
+    },
+    $isFunction: true
+  },
+  convertNativeToDart_AcceptStructuredClone_readSlot: {
+    "^": "Closure:55;copies_2",
+    call$1: function(i) {
+      var t1 = this.copies_2;
+      if (i >= t1.length)
+        return H.ioore(t1, i);
+      return t1[i];
+    },
+    $isFunction: true
+  },
+  convertNativeToDart_AcceptStructuredClone_writeSlot: {
+    "^": "Closure:56;copies_3",
+    call$2: function(i, x) {
+      var t1 = this.copies_3;
+      if (i >= t1.length)
+        return H.ioore(t1, i);
+      t1[i] = x;
+    },
+    $isFunction: true
+  },
+  convertNativeToDart_AcceptStructuredClone_walk: {
+    "^": "Closure:16;mustCopy_4,findSlot_5,readSlot_6,writeSlot_7",
+    call$1: function(e) {
+      var slot, copy, t1, key, $length, t2, i;
+      if (e == null)
+        return e;
+      if (typeof e === "boolean")
+        return e;
+      if (typeof e === "number")
+        return e;
+      if (typeof e === "string")
+        return e;
+      if (e instanceof Date)
+        return P.DateTime$fromMillisecondsSinceEpoch(e.getTime(), true);
+      if (e instanceof RegExp)
+        throw H.wrapException(P.UnimplementedError$("structured clone of RegExp"));
+      if (Object.getPrototypeOf(e) === Object.prototype) {
+        slot = this.findSlot_5.call$1(e);
+        copy = this.readSlot_6.call$1(slot);
+        if (copy != null)
+          return copy;
+        copy = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
+        this.writeSlot_7.call$2(slot, copy);
+        for (t1 = Object.keys(e), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
+          key = t1._current;
+          copy.$indexSet(0, key, this.call$1(e[key]));
+        }
+        return copy;
+      }
+      if (e instanceof Array) {
+        slot = this.findSlot_5.call$1(e);
+        copy = this.readSlot_6.call$1(slot);
+        if (copy != null)
+          return copy;
+        t1 = J.getInterceptor$asx(e);
+        $length = t1.get$length(e);
+        copy = this.mustCopy_4 ? new Array($length) : e;
+        this.writeSlot_7.call$2(slot, copy);
+        if (typeof $length !== "number")
+          return H.iae($length);
+        t2 = J.getInterceptor$ax(copy);
+        i = 0;
+        for (; i < $length; ++i)
+          t2.$indexSet(copy, i, this.call$1(t1.$index(e, i)));
+        return copy;
+      }
+      return e;
+    },
+    $isFunction: true
   }
 }],
 ["logging", "package:logging/logging.dart", , N, {
@@ -8460,6 +8578,12 @@ var $$ = {};
     },
     finest$1: function(message) {
       return this.finest$3(message, null, null);
+    },
+    fine$3: function(message, error, stackTrace) {
+      return this.log$4(C.Level_FINE_500, message, error, stackTrace);
+    },
+    fine$1: function(message) {
+      return this.fine$3(message, null, null);
     },
     info$3: function(message, error, stackTrace) {
       return this.log$4(C.Level_INFO_800, message, error, stackTrace);
@@ -8575,7 +8699,10 @@ var $$ = {};
     $isEvent: true
   },
   NewMessageEvent: {
-    "^": "Object;",
+    "^": "Object;path,defaultPrevented,currentTarget,clipboardData,cancelable,bubbles,type,eventPhase,target,matchingTarget,timeStamp,data>",
+    getMessage$0: function() {
+      return this.data;
+    },
     $isEvent: true
   }
 }],
@@ -8674,14 +8801,14 @@ var $$ = {};
       }}
   },
   Peer_closure: {
-    "^": "Closure:56;",
+    "^": "Closure:58;",
     call$1: [function(rec) {
       P.print(rec.get$loggerName() + " (" + rec.get$level().name + "): " + H.S(J.get$message$x(rec)));
-    }, "call$1", null, 2, 0, null, 55, "call"],
+    }, "call$1", null, 2, 0, null, 57, "call"],
     $isFunction: true
   },
   Peer_broadcast_closure: {
-    "^": "Closure:57;box_0,this_1,msg_2",
+    "^": "Closure:55;box_0,this_1,msg_2",
     call$1: function(id) {
       var t1 = this.this_1;
       if (!t1._connections.containsKey$1(id))
@@ -8740,19 +8867,24 @@ var $$ = {};
       J.$index$asx(J.$index$asx(t3, "sockets"), "tcp").callMethod$2("send", [t2, F.jsify(new Z.ArrayBuffer(t5)), completer._callback]);
     },
     ChromeAppTCPSignaling$0: function() {
-      var t1, t2, completer;
-      $.get$ChromeAppTCPSignaling__log().finest$1("instantiate new ChromeAppTCPSignaling object");
-      t1 = $.get$sockets().tcpServer;
-      t2 = $.get$chrome();
-      if (J.$index$asx(J.$index$asx(t2, "sockets"), "tcpServer") == null)
+      var t1, t2, t3, t4, completer;
+      t1 = $.get$ChromeAppTCPSignaling__log();
+      t1.finest$1("instantiate new ChromeAppTCPSignaling object");
+      t2 = $.get$sockets();
+      t3 = t2.tcpServer;
+      t4 = $.get$chrome();
+      if (J.$index$asx(J.$index$asx(t4, "sockets"), "tcpServer") == null)
         throw H.wrapException(R.ChromeApiNotAvailable$("chrome socket API not available"));
-      if (J.$index$asx(J.$index$asx(t2, "sockets"), "tcpServer") == null)
-        t1._throwNotAvailable$0();
+      t1.finest$1("setup tcp onreceive handler");
+      t1 = t2.tcp._onReceive._common$_controller;
+      H.setRuntimeTypeInfo(new P._BroadcastStream(t1), [H.getTypeArgumentByIndex(t1, 0)]).listen$1(new R.ChromeAppTCPSignaling_closure(this));
+      if (J.$index$asx(J.$index$asx(t4, "sockets"), "tcpServer") == null)
+        t3._throwNotAvailable$0();
       completer = F.ChromeCompleter$oneArg(A._createCreateInfo$closure(), A.CreateInfo);
-      J.$index$asx(J.$index$asx(t2, "sockets"), "tcpServer").callMethod$2("create", [F.jsify(null), completer._callback]);
-      completer._completer.future.then$1(new R.ChromeAppTCPSignaling_closure(this));
+      J.$index$asx(J.$index$asx(t4, "sockets"), "tcpServer").callMethod$2("create", [F.jsify(null), completer._callback]);
+      completer._completer.future.then$1(new R.ChromeAppTCPSignaling_closure0(this));
     },
-    static: {"^": "ChromeAppTCPSignaling__log", ChromeAppTCPSignaling$: function() {
+    static: {"^": "ChromeAppTCPSignaling_TAG,ChromeAppTCPSignaling__log", ChromeAppTCPSignaling$: function() {
         var t1 = P.String;
         t1 = new R.ChromeAppTCPSignaling(8543, 10, null, -1, null, "127.0.0.1", "127.0.0.1", null, H.setRuntimeTypeInfo(new P._AsyncCompleter(P._Future$(t1)), [t1]));
         t1.newMessageController = P.StreamController_StreamController$broadcast(null, null, false, O.NewMessageEvent);
@@ -8761,38 +8893,51 @@ var $$ = {};
       }}
   },
   ChromeAppTCPSignaling_closure: {
-    "^": "Closure:59;this_0",
+    "^": "Closure:60;this_0",
+    call$1: [function(info) {
+      var msg, t1;
+      msg = J.toString$0(J.get$data$x(info));
+      $.get$ChromeAppTCPSignaling__log().finest$1(C.JSString_methods.$add("new message received! (", msg) + ")");
+      t1 = this.this_0.newMessageController;
+      if (t1._state >= 4)
+        H.throwExpression(t1._addEventError$0());
+      t1._sendData$1(new O.NewMessageEvent(null, null, null, null, false, null, null, null, null, null, null, new O.MessengerMessage(msg, C.MessageType_STRING_1)));
+    }, "call$1", null, 2, 0, null, 59, "call"],
+    $isFunction: true
+  },
+  ChromeAppTCPSignaling_closure0: {
+    "^": "Closure:61;this_1",
     call$1: [function(info) {
       var t1;
       $.get$ChromeAppTCPSignaling__log().finest$1("new TCP Socket created");
-      t1 = this.this_0;
+      t1 = this.this_1;
       t1.socketId = info.get$socketId();
       t1._listen$1(t1.start_port).then$1(new R.ChromeAppTCPSignaling__closure(t1));
-    }, "call$1", null, 2, 0, null, 58, "call"],
+    }, "call$1", null, 2, 0, null, 59, "call"],
     $isFunction: true
   },
   ChromeAppTCPSignaling__closure: {
-    "^": "Closure:57;this_1",
+    "^": "Closure:55;this_2",
     call$1: [function(result) {
       var t1;
       $.get$ChromeAppTCPSignaling__log().finest$1("start accepting new connections... ");
       t1 = $.get$sockets().tcpServer._onAccept._common$_controller;
-      H.setRuntimeTypeInfo(new P._BroadcastStream(t1), [H.getTypeArgumentByIndex(t1, 0)]).listen$1(new R.ChromeAppTCPSignaling___closure(this.this_1));
-    }, "call$1", null, 2, 0, null, 60, "call"],
+      H.setRuntimeTypeInfo(new P._BroadcastStream(t1), [H.getTypeArgumentByIndex(t1, 0)]).listen$1(new R.ChromeAppTCPSignaling___closure(this.this_2));
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   ChromeAppTCPSignaling___closure: {
-    "^": "Closure:61;this_2",
+    "^": "Closure:63;this_3",
     call$1: [function(info) {
-      this.this_2.connection_socket = info.get$socketId();
-    }, "call$1", null, 2, 0, null, 58, "call"],
+      $.get$ChromeAppTCPSignaling__log().fine$1("new incoming connection started!");
+      this.this_3.connection_socket = info.get$socketId();
+    }, "call$1", null, 2, 0, null, 59, "call"],
     $isFunction: true
   },
   ChromeAppTCPSignaling__listen_closure: {
-    "^": "Closure:57;this_0,port_1,c_2",
+    "^": "Closure:55;this_0,port_1,c_2",
     call$1: [function(result) {
       var t1, t2;
-      P.print("#4");
       t1 = this.port_1;
       t2 = this.c_2;
       if (J.$lt$n(result, 0))
@@ -8804,11 +8949,11 @@ var $$ = {};
           H.throwExpression(P.StateError$("Future already completed"));
         t2._asyncComplete$1(t1);
       }
-    }, "call$1", null, 2, 0, null, 60, "call"],
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   ChromeAppTCPSignaling__listen__closure0: {
-    "^": "Closure:57;c_3",
+    "^": "Closure:55;c_3",
     call$1: [function(result) {
       var t1;
       $.get$ChromeAppTCPSignaling__log().info$1("try to listen on the next port");
@@ -8816,7 +8961,7 @@ var $$ = {};
       if (t1._state !== 0)
         H.throwExpression(P.StateError$("Future already completed"));
       t1._asyncComplete$1(result);
-    }, "call$1", null, 2, 0, null, 60, "call"],
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   ChromeAppTCPSignaling__listen_closure0: {
@@ -8829,7 +8974,7 @@ var $$ = {};
     $isFunction: true
   },
   ChromeAppTCPSignaling__listen__closure: {
-    "^": "Closure:57;c_7",
+    "^": "Closure:55;c_7",
     call$1: [function(result) {
       var t1;
       $.get$ChromeAppTCPSignaling__log().info$1("try to listen on the next port");
@@ -8837,7 +8982,7 @@ var $$ = {};
       if (t1._state !== 0)
         H.throwExpression(P.StateError$("Future already completed"));
       t1._asyncComplete$1(result);
-    }, "call$1", null, 2, 0, null, 60, "call"],
+    }, "call$1", null, 2, 0, null, 62, "call"],
     $isFunction: true
   },
   SignalingChannel: {
@@ -8861,17 +9006,17 @@ var $$ = {};
     H.setRuntimeTypeInfo(new P._BroadcastStream(t1), [H.getTypeArgumentByIndex(t1, 0)]).listen$1(new Y.main_closure1(alice, new O.MessengerMessage("some random string from alice", C.MessageType_STRING_1)));
   }, "call$0", "main$closure", 0, 0, 19],
   main_closure: {
-    "^": "Closure:56;",
+    "^": "Closure:58;",
     call$1: [function(rec) {
       P.print(rec.get$level().name + ": " + rec.get$time().toString$0(0) + ": " + H.S(J.get$message$x(rec)));
-    }, "call$1", null, 2, 0, null, 55, "call"],
+    }, "call$1", null, 2, 0, null, 57, "call"],
     $isFunction: true
   },
   main_closure0: {
-    "^": "Closure:63;",
+    "^": "Closure:65;",
     call$1: [function(mevent) {
-      P.print(C.JSString_methods.$add("alice revceived message: ", mevent.getMessage$0().toString$0(0)));
-    }, "call$1", null, 2, 0, null, 62, "call"],
+      P.print(C.JSString_methods.$add("alice revceived message: ", mevent.getMessage$0()._msg));
+    }, "call$1", null, 2, 0, null, 64, "call"],
     $isFunction: true
   },
   main_closure1: {
@@ -9148,6 +9293,9 @@ J.forEach$1$ax = function(receiver, a0) {
 J.get$_children$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$_children(receiver);
 };
+J.get$data$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$data(receiver);
+};
 J.get$error$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$error(receiver);
 };
@@ -9329,6 +9477,7 @@ C.JsonCodec_null_null = new P.JsonCodec(null, null);
 C.JsonEncoder_null_null = new P.JsonEncoder(null, null);
 C.Level_ALL_0 = new N.Level("ALL", 0);
 C.Level_FINEST_300 = new N.Level("FINEST", 300);
+C.Level_FINE_500 = new N.Level("FINE", 500);
 C.Level_INFO_800 = new N.Level("INFO", 800);
 C.Level_WARNING_900 = new N.Level("WARNING", 900);
 Isolate.makeConstantList = function(list) {
@@ -9539,10 +9688,12 @@ init.metadata = ["object",
 "each",
 {func: "dynamic__Symbol_dynamic", args: [P.Symbol, null]},
 {func: "String__int", ret: P.String, args: [P.$int]},
+{func: "dynamic__int", args: [P.$int]},
+{func: "dynamic__int_dynamic", args: [P.$int, null]},
 "rec",
 {func: "dynamic__LogRecord", args: [N.LogRecord]},
-{func: "dynamic__int", args: [P.$int]},
 "info",
+{func: "dynamic__ReceiveInfo", args: [A.ReceiveInfo]},
 {func: "dynamic__CreateInfo", args: [A.CreateInfo]},
 "result",
 {func: "dynamic__AcceptInfo", args: [A.AcceptInfo]},
@@ -10050,6 +10201,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   CharacterData.prototype = $desc;
+  CharacterData.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   CharacterData.prototype.get$length = function(receiver) {
     return receiver.length;
   };
@@ -10080,6 +10234,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   CompositionEvent.prototype = $desc;
+  CompositionEvent.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   function ContentElement() {
   }
   ContentElement.builtin$cls = "ContentElement";
@@ -10401,6 +10558,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ImageData.prototype = $desc;
+  ImageData.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   function ImageElement() {
   }
   ImageElement.builtin$cls = "ImageElement";
@@ -10665,6 +10825,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   MidiMessageEvent.prototype = $desc;
+  MidiMessageEvent.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   function ModElement() {
   }
   ModElement.builtin$cls = "ModElement";
@@ -10737,6 +10900,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ObjectElement.prototype = $desc;
+  ObjectElement.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   ObjectElement.prototype.get$name = function(receiver) {
     return receiver.name;
   };
@@ -11154,6 +11320,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   TextEvent.prototype = $desc;
+  TextEvent.prototype.get$data = function(receiver) {
+    return receiver.data;
+  };
   function TitleElement() {
   }
   TitleElement.builtin$cls = "TitleElement";
@@ -12851,6 +13020,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ReflectionInfo.prototype = $desc;
+  ReflectionInfo.prototype.get$data = function(receiver) {
+    return this.data;
+  };
   function ReflectionInfo_sortedIndex_closure(box_0, this_1, positions_2) {
     this.box_0 = box_0;
     this.this_1 = this_1;
@@ -15136,6 +15308,50 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   NativeTypedArray_ListMixin_FixedLengthListMixin0.prototype = $desc;
+  function convertNativeToDart_AcceptStructuredClone_findSlot(values_0, copies_1) {
+    this.values_0 = values_0;
+    this.copies_1 = copies_1;
+  }
+  convertNativeToDart_AcceptStructuredClone_findSlot.builtin$cls = "convertNativeToDart_AcceptStructuredClone_findSlot";
+  if (!"name" in convertNativeToDart_AcceptStructuredClone_findSlot)
+    convertNativeToDart_AcceptStructuredClone_findSlot.name = "convertNativeToDart_AcceptStructuredClone_findSlot";
+  $desc = $collectedClasses.convertNativeToDart_AcceptStructuredClone_findSlot;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  convertNativeToDart_AcceptStructuredClone_findSlot.prototype = $desc;
+  function convertNativeToDart_AcceptStructuredClone_readSlot(copies_2) {
+    this.copies_2 = copies_2;
+  }
+  convertNativeToDart_AcceptStructuredClone_readSlot.builtin$cls = "convertNativeToDart_AcceptStructuredClone_readSlot";
+  if (!"name" in convertNativeToDart_AcceptStructuredClone_readSlot)
+    convertNativeToDart_AcceptStructuredClone_readSlot.name = "convertNativeToDart_AcceptStructuredClone_readSlot";
+  $desc = $collectedClasses.convertNativeToDart_AcceptStructuredClone_readSlot;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  convertNativeToDart_AcceptStructuredClone_readSlot.prototype = $desc;
+  function convertNativeToDart_AcceptStructuredClone_writeSlot(copies_3) {
+    this.copies_3 = copies_3;
+  }
+  convertNativeToDart_AcceptStructuredClone_writeSlot.builtin$cls = "convertNativeToDart_AcceptStructuredClone_writeSlot";
+  if (!"name" in convertNativeToDart_AcceptStructuredClone_writeSlot)
+    convertNativeToDart_AcceptStructuredClone_writeSlot.name = "convertNativeToDart_AcceptStructuredClone_writeSlot";
+  $desc = $collectedClasses.convertNativeToDart_AcceptStructuredClone_writeSlot;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  convertNativeToDart_AcceptStructuredClone_writeSlot.prototype = $desc;
+  function convertNativeToDart_AcceptStructuredClone_walk(mustCopy_4, findSlot_5, readSlot_6, writeSlot_7) {
+    this.mustCopy_4 = mustCopy_4;
+    this.findSlot_5 = findSlot_5;
+    this.readSlot_6 = readSlot_6;
+    this.writeSlot_7 = writeSlot_7;
+  }
+  convertNativeToDart_AcceptStructuredClone_walk.builtin$cls = "convertNativeToDart_AcceptStructuredClone_walk";
+  if (!"name" in convertNativeToDart_AcceptStructuredClone_walk)
+    convertNativeToDart_AcceptStructuredClone_walk.name = "convertNativeToDart_AcceptStructuredClone_walk";
+  $desc = $collectedClasses.convertNativeToDart_AcceptStructuredClone_walk;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  convertNativeToDart_AcceptStructuredClone_walk.prototype = $desc;
   function Logger(name, parent, _level, _children, children, _logging$_controller) {
     this.name = name;
     this.parent = parent;
@@ -15239,7 +15455,19 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   NewConnectionEvent.prototype = $desc;
-  function NewMessageEvent() {
+  function NewMessageEvent(path, defaultPrevented, currentTarget, clipboardData, cancelable, bubbles, type, eventPhase, target, matchingTarget, timeStamp, data) {
+    this.path = path;
+    this.defaultPrevented = defaultPrevented;
+    this.currentTarget = currentTarget;
+    this.clipboardData = clipboardData;
+    this.cancelable = cancelable;
+    this.bubbles = bubbles;
+    this.type = type;
+    this.eventPhase = eventPhase;
+    this.target = target;
+    this.matchingTarget = matchingTarget;
+    this.timeStamp = timeStamp;
+    this.data = data;
   }
   NewMessageEvent.builtin$cls = "NewMessageEvent";
   if (!"name" in NewMessageEvent)
@@ -15248,6 +15476,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   NewMessageEvent.prototype = $desc;
+  NewMessageEvent.prototype.get$data = function(receiver) {
+    return this.data;
+  };
   function ChromeApiNotAvailable(cause) {
     this.cause = cause;
   }
@@ -15384,8 +15615,18 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ChromeAppTCPSignaling_closure.prototype = $desc;
-  function ChromeAppTCPSignaling__closure(this_1) {
+  function ChromeAppTCPSignaling_closure0(this_1) {
     this.this_1 = this_1;
+  }
+  ChromeAppTCPSignaling_closure0.builtin$cls = "ChromeAppTCPSignaling_closure0";
+  if (!"name" in ChromeAppTCPSignaling_closure0)
+    ChromeAppTCPSignaling_closure0.name = "ChromeAppTCPSignaling_closure0";
+  $desc = $collectedClasses.ChromeAppTCPSignaling_closure0;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  ChromeAppTCPSignaling_closure0.prototype = $desc;
+  function ChromeAppTCPSignaling__closure(this_2) {
+    this.this_2 = this_2;
   }
   ChromeAppTCPSignaling__closure.builtin$cls = "ChromeAppTCPSignaling__closure";
   if (!"name" in ChromeAppTCPSignaling__closure)
@@ -15394,8 +15635,8 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ChromeAppTCPSignaling__closure.prototype = $desc;
-  function ChromeAppTCPSignaling___closure(this_2) {
-    this.this_2 = this_2;
+  function ChromeAppTCPSignaling___closure(this_3) {
+    this.this_3 = this_3;
   }
   ChromeAppTCPSignaling___closure.builtin$cls = "ChromeAppTCPSignaling___closure";
   if (!"name" in ChromeAppTCPSignaling___closure)
@@ -15486,7 +15727,7 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   main_closure1.prototype = $desc;
-  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlDocument, HtmlHtmlElement, IFrameElement, ImageData, ImageElement, InputElement, InstallEvent, InstallPhaseEvent, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, XmlDocument, _Attr, _DocumentType, _HTMLAppletElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _Notation, _XMLHttpRequestProgressEvent, KeyRange, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedNumberList, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, DiscardElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GeometryElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, NativeByteBuffer, NativeTypedData, NativeByteData, NativeFloat32List, NativeFloat64List, NativeInt16List, NativeInt32List, NativeInt8List, NativeUint16List, NativeUint32List, NativeUint8ClampedList, NativeUint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _IsolateContext_handlePing_respond, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, IsolateNatives__startIsolate_runStartFunction, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _WorkerSendPort, RawReceivePortImpl, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, CapabilityImpl, JSInvocationMirror, ReflectionInfo, ReflectionInfo_sortedIndex_closure, Primitives_functionNoSuchMethod_closure, Primitives_applyFunction_closure, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, TearOffClosure, BoundClosure, RuntimeError, RuntimeType, RuntimeFunctionType, DynamicRuntimeType, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, ChromeSockets, ChromeSocketsTcp, ChromeSocketsTcp$__closure, CreateInfo, SendInfo, ReceiveInfo, ReceiveErrorInfo, ChromeSocketsTcpServer, ChromeSocketsTcpServer$__closure, AcceptInfo, AcceptErrorInfo, ChromeSocketsUdp, ChromeSocketsUdp$__closure, ChromeCompleter, ChromeCompleter$oneArg_closure, ChromeStreamController, ChromeStreamController$oneArg_closure, ChromeObject, ChromeApi, ArrayBuffer, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, FixedLengthListMixin, Symbol0, _AsyncRun__scheduleImmediateJsOverride_internalCallback, _AsyncError, _BroadcastStream, _BroadcastSubscription, _BroadcastStreamController, _SyncBroadcastStreamController, _SyncBroadcastStreamController__sendData_closure, _SyncBroadcastStreamController__sendError_closure, _AsyncBroadcastStreamController, Future, _Completer, _AsyncCompleter, _Future, _Future__addListener_closure, _Future__chainForeignFuture_closure, _Future__chainForeignFuture_closure0, _Future__asyncComplete_closure, _Future__asyncComplete_closure0, _Future__asyncCompleteError_closure, _Future__propagateToListeners_handleValueCallback, _Future__propagateToListeners_handleError, _Future__propagateToListeners_handleWhenCompleteCallback, _Future__propagateToListeners_handleWhenCompleteCallback_closure, _Future__propagateToListeners_handleWhenCompleteCallback_closure0, _AsyncCallbackEntry, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendError_sendError, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedError, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _DoneStreamSubscription, _cancelAndError_closure, _cancelAndErrorClosure_closure, _ForwardingStream, _ForwardingStreamSubscription, _MapStream, _Zone, _rootHandleUncaughtError_closure, _RootZone, _RootZone_bindCallback_closure, _RootZone_bindCallback_closure0, _HashMap, _HashMap_values_closure, _IdentityHashMap, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, SetMixin, SetBase, Codec, Converter, Encoding, JsonUnsupportedObjectError, JsonCyclicError, JsonCodec, JsonEncoder, _JsonStringifier, _JsonStringifier_stringifyJsonValue_closure, Utf8Codec, Utf8Encoder, _Utf8Encoder, Function__toMangledNames_closure, NoSuchMethodError_toString_closure, bool, Comparable, DateTime, $double, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, NoSuchMethodError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, IntegerDivisionByZeroException, Expando, $int, Iterator, List, Null, num, Object, StackTrace, String, StringBuffer, Symbol, _DOMWindowCrossFrame, Capability, JsObject, JsObject__convertDataTree__convert, JsFunction, JsArray, JsObject_ListMixin, _convertToJS_closure, _convertToJS_closure0, _wrapToDart_closure, _wrapToDart_closure0, _wrapToDart_closure1, UnmodifiableMapView, DelegatingMap_UnmodifiableMapMixin, UnmodifiableMapMixin, DelegatingMap, NativeTypedArray, NativeTypedArrayOfDouble, NativeTypedArray_ListMixin, NativeTypedArray_ListMixin_FixedLengthListMixin, NativeTypedArrayOfInt, NativeTypedArray_ListMixin0, NativeTypedArray_ListMixin_FixedLengthListMixin0, Logger, Logger_Logger_closure, Level, LogRecord, Connection, NewConnectionEvent, NewMessageEvent, ChromeApiNotAvailable, NotConnected, TooManyConnectionAttempts, MessengerMessage, MessageType, Peer, Peer_closure, Peer_broadcast_closure, ChromeAppTCPSignaling, ChromeAppTCPSignaling_closure, ChromeAppTCPSignaling__closure, ChromeAppTCPSignaling___closure, ChromeAppTCPSignaling__listen_closure, ChromeAppTCPSignaling__listen__closure0, ChromeAppTCPSignaling__listen_closure0, ChromeAppTCPSignaling__listen__closure, SignalingChannel, main_closure, main_closure0, main_closure1];
+  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DomError, DomException, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlDocument, HtmlHtmlElement, IFrameElement, ImageData, ImageElement, InputElement, InstallEvent, InstallPhaseEvent, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiMessageEvent, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, XmlDocument, _Attr, _DocumentType, _HTMLAppletElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _Notation, _XMLHttpRequestProgressEvent, KeyRange, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedNumberList, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, DiscardElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GeometryElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement0, SetElement, StopElement, StyleElement0, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, NativeByteBuffer, NativeTypedData, NativeByteData, NativeFloat32List, NativeFloat64List, NativeInt16List, NativeInt32List, NativeInt8List, NativeUint16List, NativeUint32List, NativeUint8ClampedList, NativeUint8List, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _IsolateContext_handlePing_respond, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, IsolateNatives__startIsolate_runStartFunction, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _WorkerSendPort, RawReceivePortImpl, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, CapabilityImpl, JSInvocationMirror, ReflectionInfo, ReflectionInfo_sortedIndex_closure, Primitives_functionNoSuchMethod_closure, Primitives_applyFunction_closure, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, TearOffClosure, BoundClosure, RuntimeError, RuntimeType, RuntimeFunctionType, DynamicRuntimeType, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, ChromeSockets, ChromeSocketsTcp, ChromeSocketsTcp$__closure, CreateInfo, SendInfo, ReceiveInfo, ReceiveErrorInfo, ChromeSocketsTcpServer, ChromeSocketsTcpServer$__closure, AcceptInfo, AcceptErrorInfo, ChromeSocketsUdp, ChromeSocketsUdp$__closure, ChromeCompleter, ChromeCompleter$oneArg_closure, ChromeStreamController, ChromeStreamController$oneArg_closure, ChromeObject, ChromeApi, ArrayBuffer, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, FixedLengthListMixin, Symbol0, _AsyncRun__scheduleImmediateJsOverride_internalCallback, _AsyncError, _BroadcastStream, _BroadcastSubscription, _BroadcastStreamController, _SyncBroadcastStreamController, _SyncBroadcastStreamController__sendData_closure, _SyncBroadcastStreamController__sendError_closure, _AsyncBroadcastStreamController, Future, _Completer, _AsyncCompleter, _Future, _Future__addListener_closure, _Future__chainForeignFuture_closure, _Future__chainForeignFuture_closure0, _Future__asyncComplete_closure, _Future__asyncComplete_closure0, _Future__asyncCompleteError_closure, _Future__propagateToListeners_handleValueCallback, _Future__propagateToListeners_handleError, _Future__propagateToListeners_handleWhenCompleteCallback, _Future__propagateToListeners_handleWhenCompleteCallback_closure, _Future__propagateToListeners_handleWhenCompleteCallback_closure0, _AsyncCallbackEntry, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _ControllerStream, _ControllerSubscription, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendError_sendError, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedError, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _DoneStreamSubscription, _cancelAndError_closure, _cancelAndErrorClosure_closure, _ForwardingStream, _ForwardingStreamSubscription, _MapStream, _Zone, _rootHandleUncaughtError_closure, _RootZone, _RootZone_bindCallback_closure, _RootZone_bindCallback_closure0, _HashMap, _HashMap_values_closure, _IdentityHashMap, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, _HashSetBase, IterableBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, SetMixin, SetBase, Codec, Converter, Encoding, JsonUnsupportedObjectError, JsonCyclicError, JsonCodec, JsonEncoder, _JsonStringifier, _JsonStringifier_stringifyJsonValue_closure, Utf8Codec, Utf8Encoder, _Utf8Encoder, Function__toMangledNames_closure, NoSuchMethodError_toString_closure, bool, Comparable, DateTime, $double, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, NoSuchMethodError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, IntegerDivisionByZeroException, Expando, $int, Iterator, List, Null, num, Object, StackTrace, String, StringBuffer, Symbol, _DOMWindowCrossFrame, Capability, JsObject, JsObject__convertDataTree__convert, JsFunction, JsArray, JsObject_ListMixin, _convertToJS_closure, _convertToJS_closure0, _wrapToDart_closure, _wrapToDart_closure0, _wrapToDart_closure1, UnmodifiableMapView, DelegatingMap_UnmodifiableMapMixin, UnmodifiableMapMixin, DelegatingMap, NativeTypedArray, NativeTypedArrayOfDouble, NativeTypedArray_ListMixin, NativeTypedArray_ListMixin_FixedLengthListMixin, NativeTypedArrayOfInt, NativeTypedArray_ListMixin0, NativeTypedArray_ListMixin_FixedLengthListMixin0, convertNativeToDart_AcceptStructuredClone_findSlot, convertNativeToDart_AcceptStructuredClone_readSlot, convertNativeToDart_AcceptStructuredClone_writeSlot, convertNativeToDart_AcceptStructuredClone_walk, Logger, Logger_Logger_closure, Level, LogRecord, Connection, NewConnectionEvent, NewMessageEvent, ChromeApiNotAvailable, NotConnected, TooManyConnectionAttempts, MessengerMessage, MessageType, Peer, Peer_closure, Peer_broadcast_closure, ChromeAppTCPSignaling, ChromeAppTCPSignaling_closure, ChromeAppTCPSignaling_closure0, ChromeAppTCPSignaling__closure, ChromeAppTCPSignaling___closure, ChromeAppTCPSignaling__listen_closure, ChromeAppTCPSignaling__listen__closure0, ChromeAppTCPSignaling__listen_closure0, ChromeAppTCPSignaling__listen__closure, SignalingChannel, main_closure, main_closure0, main_closure1];
 }
 
 //# sourceMappingURL=webrtc.js.map

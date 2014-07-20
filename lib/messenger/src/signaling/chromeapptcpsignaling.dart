@@ -9,6 +9,7 @@
 part of messenger.signaling;
 
 class ChromeAppTCPSignaling extends SignalingChannel{
+  static final String TAG = 'ChromeAppTCPSignaling';
   static final Logger _log = new Logger("ChromeAppTCPSignaling");
   int start_port = 8543;
   int max_attempts = 10;
@@ -25,6 +26,17 @@ class ChromeAppTCPSignaling extends SignalingChannel{
     if (!sockets.tcpServer.available)
       throw new ChromeApiNotAvailable('chrome socket API not available');
     
+    //set onreceive handler
+    _log.finest('setup tcp onreceive handler');
+    
+    sockets.tcp.onReceive.listen((ReceiveInfo info){
+      String msg = info.data.toString();
+      
+      _log.finest('new message received! (' + msg + ')');
+      
+      newMessageController.add(new NewMessageEvent(new MessengerMessage(msg)));
+    });
+    
     sockets.tcpServer.create().then((CreateInfo info){
       _log.finest('new TCP Socket created');
       
@@ -35,9 +47,10 @@ class ChromeAppTCPSignaling extends SignalingChannel{
         _log.finest("start accepting new connections... ");
         
         sockets.tcpServer.onAccept.listen((AcceptInfo info){
+          _log.fine('new incoming connection started!');
+          
           connection_socket = info.socketId;
-          
-          
+        
         });
         
       });
