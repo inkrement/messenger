@@ -15,11 +15,11 @@ class ChromeAppTCPSignaling extends SignalingChannel{
   int socketId;
   int connection_socket = -1;
   int c_port;
-  String c_host="localhost";
+  String c_host="127.0.0.1";
+  String l_host="127.0.0.1";
   
   ChromeAppTCPSignaling(){
     _log.finest('instantiate new ChromeAppTCPSignaling object');
-    
     
     //test if api available
     if (!sockets.tcpServer.available)
@@ -31,6 +31,8 @@ class ChromeAppTCPSignaling extends SignalingChannel{
       socketId = info.socketId;
       
       _listen(start_port).then((int result){
+        
+        _log.finest("start accepting new connections... ");
         
         sockets.tcpServer.onAccept.listen((AcceptInfo info){
           connection_socket = info.socketId;
@@ -48,22 +50,19 @@ class ChromeAppTCPSignaling extends SignalingChannel{
   Future<int> _listen(int port){
     final c = new Completer<int>();
     
-    sockets.tcpServer.listen(socketId, "localhost", port).then((int result){
-      
+    //limit listen retries
+    if ( max_attempts + start_port <= port){
+        c.complete();
+        throw new TooManyConnectionAttempts('could not listen. too many unsuccessful attempts');
+    }
+    
+    sockets.tcpServer.listen(socketId, l_host, port).then((int result){
       if (result < 0){
         //some error occurred
-        
-        //limit listen retries
-        if ( max_attempts + start_port >= port){
-          _log.warning('could not listen. chrome sockets api error code: ' + result.toString() );
-          c.complete();
-          throw new TooManyConnectionAttempts('could not listen. too many unsuccessful attempts');
-        }
         
         //try next port.
         _listen(port + 1).then((int result){
           _log.info('try to listen on the next port');
-          
           c.complete(result);
         });
         
@@ -71,10 +70,22 @@ class ChromeAppTCPSignaling extends SignalingChannel{
         _log.info('now listening on port ' + port.toString());
         c.complete(port);
       }
+    }).catchError((e){
+      
+      _log.warning('could not listen on port ' + port.toString() + ': ' + e.toString() );
+      //try next port.
+      _listen(port + 1).then((int result){
+        _log.info('try to listen on the next port');
+        c.complete(result);
+      });
     });
     
+      
     return c.future;
   }
+  
+  
+  
   
   void _connection_established(){
     
@@ -89,6 +100,7 @@ class ChromeAppTCPSignaling extends SignalingChannel{
    *  * prevent self-connections
    */
   void connect(Map options){
+    
     if(options.containsKey("host"))
       c_host = options["host"];
     
@@ -98,10 +110,13 @@ class ChromeAppTCPSignaling extends SignalingChannel{
     if(connection_socket != -1)
       throw new BadConnectionState('socket already connected!');
     
+    
+    _log.info('connect to ' + c_host + ' ' + c_port.toString());
+    
     sockets.tcp.create().then((CreateInfo info){
       connection_socket = info.socketId;
       
-      sockets.tcp.connect(connection_socket, c_host, c_port).then((int result){
+      sockets.tcp.connect(connection_socket, c_host, c_port.toInt()).then((int result){
         
       });
     });
