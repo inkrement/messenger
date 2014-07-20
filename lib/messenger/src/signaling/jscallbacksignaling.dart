@@ -12,7 +12,7 @@ class JSCallbackSignaling extends SignalingChannel{
   
   
   void recCallback(String message){
-      newMessageController.add(new NewMessageEvent(Message.fromString(message)));
+      newMessageController.add(new NewMessageEvent(MessengerMessage.fromString(message)));
     }
   
   /**
@@ -33,7 +33,7 @@ class JSCallbackSignaling extends SignalingChannel{
    * 
    * TODO: test if function exists
    */
-  send(Message message) => context.callMethod('JSSignalingsend', [Message.serialize(message)]);
+  send(MessengerMessage message) => context.callMethod('JSSignalingsend', [MessengerMessage.serialize(message)]);
   
   /**
    * close
@@ -41,6 +41,5 @@ class JSCallbackSignaling extends SignalingChannel{
   close(){
     connection_completer.complete("connection closed");
   }
-
   
 }

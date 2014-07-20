@@ -18,8 +18,8 @@ void main() {
           //set callbacks
           String s_alice = "some random string from alice";
           String s_bob = "some random string from bob";
-          Message tm_alice = new Message(s_alice);
-          Message tm_bob = new Message(s_bob);
+          MessengerMessage tm_alice = new MessengerMessage(s_alice);
+          MessengerMessage tm_bob = new MessengerMessage(s_bob);
           
           //each sould receive two messages
           alice.onReceive.listen((NewMessageEvent mevent){

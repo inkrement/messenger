@@ -37,10 +37,10 @@ class NewMessageEvent implements Event{
    */
   void stopPropagation(){}
   
-  final Message data;
+  final MessengerMessage data;
   
   NewMessageEvent(this.data);
   
-  Message getMessage() => data;
+  MessengerMessage getMessage() => data;
 }
 

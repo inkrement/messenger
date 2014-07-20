@@ -53,7 +53,7 @@ class WebRtcDataChannel extends Connection{
       _dc.onMessage.listen((MessageEvent event){
         _log.finest("Message received from DataChannel");
         
-        _newMessageController.add(new NewMessageEvent(Message.fromString(event.data)));
+        _newMessageController.add(new NewMessageEvent(MessengerMessage.fromString(event.data)));
       });
       
       //onOpen
@@ -153,7 +153,7 @@ class WebRtcDataChannel extends Connection{
       });
       
       //send ice candidate to other peer
-      _sc.send(new Message(jsonString, MessageType.WEBRTC_ANSWER));
+      _sc.send(new MessengerMessage(jsonString, MessageType.WEBRTC_ANSWER));
       
       _log.fine("sdp answer sent");
     }).catchError((e)=>_log.shout("could not create answer"));
@@ -193,7 +193,7 @@ class WebRtcDataChannel extends Connection{
               );
           
           //send ice candidate to other peer
-          _sc.send(new Message(serializedIceCandidate, MessageType.ICE_CANDIDATE));
+          _sc.send(new MessengerMessage(serializedIceCandidate, MessageType.ICE_CANDIDATE));
           
           _log.fine("new ice candidate serialized and sent to other peer");
         } catch(e){
@@ -250,7 +250,7 @@ class WebRtcDataChannel extends Connection{
       _dc.onMessage.listen((MessageEvent event){
         _log.finest("Message received from DataChannel");
         
-        _newMessageController.add(new NewMessageEvent(Message.fromString(event.data)));
+        _newMessageController.add(new NewMessageEvent(MessengerMessage.fromString(event.data)));
       });
       
       //TODO: onERROR
@@ -272,7 +272,7 @@ class WebRtcDataChannel extends Connection{
         _log.finest("sdp_string: " + sdp_string);
         
         //send serialized string to other peer
-        _sc.send(new Message(sdp_string, MessageType.WEBRTC_OFFER));
+        _sc.send(new MessengerMessage(sdp_string, MessageType.WEBRTC_OFFER));
         
       });
 
@@ -297,10 +297,10 @@ class WebRtcDataChannel extends Connection{
     if(this.readyState != ConnectionState.CONNECTED)
       throw new StateError("could not send message. DataChannel is not open!");
     
-    _sendController.stream.listen((Message msg){
+    _sendController.stream.listen((MessengerMessage msg){
       _log.info("send message to : ${_sc.id.toString()}");
       
-      _dc.send(Message.serialize(msg));
+      _dc.send(MessengerMessage.serialize(msg));
     });
     
   }

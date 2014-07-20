@@ -32,7 +32,7 @@ void main() {
       alice.onReceive.listen(expectAsync(_callback));
       
       //send
-      bob.send(new Message(message));
+      bob.send(new MessengerMessage(message));
     });
   });
   

@@ -34,7 +34,7 @@ class MessagePassing extends SignalingChannel{
    * creates new message and sends it to 
    * the other MessagePassing object
    */
-  send(Message message){
+  send(MessengerMessage message){
     otherside.newMessageController.add(new NewMessageEvent(message));
   }
   

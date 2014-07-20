@@ -22,7 +22,7 @@ abstract class Connection{
   final SignalingChannel _sc;
   
   //send buffer
-  final StreamController<Message> _sendController;
+  final StreamController<MessengerMessage> _sendController;
   
   
   static final _log = new Logger("messenger.Connection");
@@ -41,7 +41,7 @@ abstract class Connection{
     _connection_completer = new Completer<int>(),
     _newMessageController = new StreamController<NewMessageEvent>(),
     _sc = sc,
-    _sendController = new StreamController<Message>();
+    _sendController = new StreamController<MessengerMessage>();
     
     /**
      * connect to other peer
@@ -98,7 +98,7 @@ abstract class Connection{
    * 
    * pipe message 
    */
-  send(Message msg){
+  send(MessengerMessage msg){
     _log.fine("new message added to buffer");
     
     _sendController.add(msg);

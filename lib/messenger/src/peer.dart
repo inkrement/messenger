@@ -204,7 +204,7 @@ class Peer{
    * 
    * @ TODO: check if datachannel open. else throw exception
    */
-  send(int id, Message msg){
+  send(int id, MessengerMessage msg){
     if(!_connections.containsKey(id))
       throw new StateError("list of connections does not contain peer ${name}");
     
@@ -214,12 +214,12 @@ class Peer{
   /**
    * send string to other peer
    */
-  sendString(int receiverId, String msg) => send(receiverId, new Message(msg));
+  sendString(int receiverId, String msg) => send(receiverId, new MessengerMessage(msg));
   
   /**
    * send message to multiple peers
    */
-  broadcast(Iterable<int> receiverIds, Message msg){
+  broadcast(Iterable<int> receiverIds, MessengerMessage msg){
     int num = 0;
     
     receiverIds.forEach((int id){
@@ -233,7 +233,7 @@ class Peer{
   /**
    * send message to all known peers
    */
-  multicast(Message msg) => broadcast(_connections.keys, msg);
+  multicast(MessengerMessage msg) => broadcast(_connections.keys, msg);
   
   /**
    * getter: onstream event channel (stream)

@@ -241,9 +241,9 @@ void main() {
         String s_alice = "some random string from alice";
         String s_bob = "some random string from bob";
         String s_clark = "some random string from clark";
-        Message tm_alice = new Message(s_alice);
-        Message tm_bob = new Message(s_bob);
-        Message tm_clark = new Message(s_clark);
+        MessengerMessage tm_alice = new MessengerMessage(s_alice);
+        MessengerMessage tm_bob = new MessengerMessage(s_bob);
+        MessengerMessage tm_clark = new MessengerMessage(s_clark);
         
         //each sould receive two messages
         alice.onReceive.listen(

@@ -7,6 +7,7 @@ environment:
   sdk: '>0.8.7'
 dependencies:
   browser: '>=0.10.0 <0.11.0'
+  chrome: any
   json: '>=0.9.1 <0.10.0'
 dev_dependencies:
   logging: any

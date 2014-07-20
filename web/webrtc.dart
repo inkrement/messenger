@@ -11,11 +11,15 @@ void main() {
   
   Peer alice = new Peer("alice");
   String s_alice = "some random string from alice";  
-  Message tm_alice = new Message(s_alice);
+  MessengerMessage tm_alice = new MessengerMessage(s_alice);
   
   //setup signaling channels and configure connection
-  JSCallbackSignaling signalingChannel = new JSCallbackSignaling();
-  signalingChannel.connect(null);
+  ChromeAppTCPSignaling signalingChannel = new ChromeAppTCPSignaling();
+  
+  signalingChannel.connect({
+    "host":"localhost", 
+    "port": 8756
+    });
   
   alice.onReceive.listen((NewMessageEvent mevent){
     print("alice revceived message: " + mevent.getMessage().toString());

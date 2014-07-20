@@ -10,11 +10,11 @@ import 'dart:convert';
 
 part 'message/messagetype.dart';
 
-class Message{
+class MessengerMessage{
   final String _msg;
   final MessageType _mtype;
   
-  Message(String this._msg, [MessageType this._mtype = MessageType.STRING]);
+  MessengerMessage(String this._msg, [MessageType this._mtype = MessageType.STRING]);
   
   String toString(){
     return _msg;
@@ -22,7 +22,7 @@ class Message{
   
   MessageType getMessageType() => _mtype;
   
-  static Object serialize(Message value) {
+  static Object serialize(MessengerMessage value) {
     if (value == null) return null;
     
     final Map<String, String>result = {};
@@ -32,12 +32,12 @@ class Message{
     return JSON.encode(result);
   }
   
-  static Message fromString(String data){
+  static MessengerMessage fromString(String data){
     if (data == null) return null;
     
     Map<String, String> json = JSON.decode(data);
     
-    return new Message(json["msg"], new MessageType.fromString(json["mtype"]));
+    return new MessengerMessage(json["msg"], new MessageType.fromString(json["mtype"]));
   }
   
 }
