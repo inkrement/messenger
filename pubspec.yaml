@@ -1,5 +1,5 @@
 name: messenger
-version: 0.0.2
+version: 0.0.4
 author: Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
 description: A massaging library for dart. incl. TCP Signaling and WebRTC communication.
 homepage: https://github.com/inkrement/messenger

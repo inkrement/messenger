@@ -12,6 +12,7 @@ import 'dart:async';
 import 'dart:js';
 import 'exceptions.dart';
 import 'message.dart';
+import 'helpers/tcphelpers.dart';
 
 import 'package:logging/logging.dart';
 import 'package:chrome/chrome_app.dart';

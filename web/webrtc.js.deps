@@ -38,10 +38,6 @@ file:///Users/chris/Documents/code/messenger/web/packages/chrome/src/common.dart
 file:///Users/chris/Documents/code/messenger/web/packages/chrome/src/common_exp.dart
 file:///Users/chris/Documents/code/messenger/web/packages/chrome/src/files.dart
 file:///Users/chris/Documents/code/messenger/web/packages/chrome/src/files_exp.dart
-file:///Users/chris/Documents/code/messenger/web/packages/collection/src/canonicalized_map.dart
-file:///Users/chris/Documents/code/messenger/web/packages/collection/src/unmodifiable_wrappers.dart
-file:///Users/chris/Documents/code/messenger/web/packages/collection/src/utils.dart
-file:///Users/chris/Documents/code/messenger/web/packages/collection/wrappers.dart
 file:///Users/chris/Documents/code/messenger/web/packages/logging/logging.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/connections.dart
@@ -57,6 +53,7 @@ file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/sr
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/exceptions/chromeapinotavailable.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/exceptions/notconnected.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/exceptions/toomanyconnectionattempts.dart
+file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/helpers/tcphelpers.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/message.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/message/messagetype.dart
 file:///Users/chris/Documents/code/messenger/web/packages/messenger/messenger/src/peer.dart
