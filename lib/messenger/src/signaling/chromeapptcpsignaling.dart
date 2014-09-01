@@ -28,7 +28,6 @@ class ChromeAppTCPSignaling extends SignalingChannel{
       throw new ChromeApiNotAvailable('chrome socket API not available');
         
     
-    
     TcpServer.createServerSocket(37123).then((TcpServer s) {
       s.onAccept.listen((TcpClient c){
         c.stream.listen((List<int> data){
@@ -37,52 +36,11 @@ class ChromeAppTCPSignaling extends SignalingChannel{
           MessengerMessage msg = new MessengerMessage(UTF8.decode(data), MessageType.SIGNAL);
           newMessageController.add(new NewMessageEvent(msg));
           
-          sendString("received something. thx");
-          
         });
       });
       
     });
   }
-  
-  /*
-  Future<int> _listen(int port){
-    final c = new Completer<int>();
-    
-    //limit listen retries
-    if ( max_attempts + start_port <= port){
-        c.complete();
-        throw new TooManyConnectionAttempts('could not listen. too many unsuccessful attempts');
-    }
-    
-    sockets.tcpServer.listen(socketId, l_host, port).then((int result){
-      if (result < 0){
-        //some error occurred
-        
-        //try next port.
-        _listen(port + 1).then((int result){
-          _log.info('try to listen on the next port');
-          c.complete(result);
-        });
-        
-      }else{
-        _log.info('now listening on port ' + port.toString());
-        c.complete(port);
-      }
-    }).catchError((e){
-      
-      _log.warning('could not listen on port ' + port.toString() + ': ' + e.toString() );
-      //try next port.
-      _listen(port + 1).then((int result){
-        _log.info('try to listen on the next port');
-        c.complete(result);
-      });
-    });
-    
-      
-    return c.future;
-  }
-  */
   
   
   /**
@@ -99,19 +57,25 @@ class ChromeAppTCPSignaling extends SignalingChannel{
     if(!options.containsKey("port"))
         throw new BadConfiguration('TCPSignaling channel needs a port configuration');
     
-    if(connection_socket_id != -1)
-      throw new BadConnectionState('socket already connected!');
+    c_port = int.parse(options["port"]);
+    
+    if(client != null) client.dispose();
     
     
     _log.info('connect to ' + c_host + ' ' + c_port.toString());
     
-    sockets.tcp.create().then((CreateInfo info){
-      connection_socket_id = info.socketId;
-      
-      sockets.tcp.connect(connection_socket_id, c_host, c_port.toInt()).then((int result){
+    
+    
+    TcpClient.createClient(c_host, c_port).then((TcpClient c) {
+        client = c;
         
+        c.stream.listen((List<int> data){
+          
+          MessengerMessage msg = new MessengerMessage(UTF8.decode(data), MessageType.SIGNAL);
+          newMessageController.add(new NewMessageEvent(msg));
+          
+        });
       });
-    });
   }
   
   /**
@@ -135,6 +99,8 @@ class ChromeAppTCPSignaling extends SignalingChannel{
    * close
    */
   close(){
+    if (client != null) client.dispose();
+    
     connection_completer.complete("connection closed");
   }
 
