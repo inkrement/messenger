@@ -1,4 +1,6 @@
-pubspec.lock
+**/build/
+**.lock
 packages/*
 build/*
-web/webrtc.dart.*
+**.dart.*
+**/packages/

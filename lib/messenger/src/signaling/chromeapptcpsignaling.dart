@@ -27,9 +27,16 @@ class ChromeAppTCPSignaling extends SignalingChannel{
     if (!sockets.tcpServer.available)
       throw new ChromeApiNotAvailable('chrome socket API not available');
         
+    newEventsController.add(SignalingChannelEvents.CREATED);
     
     TcpServer.createServerSocket(37123).then((TcpServer s) {
+      
+      newEventsController.add(SignalingChannelEvents.LISTENING);
+      
       s.onAccept.listen((TcpClient c){
+        
+        newEventsController.add(SignalingChannelEvents.NEW_INCOMING_CONNECTION);
+        
         c.stream.listen((List<int> data){
           client = c;
           
@@ -67,6 +74,8 @@ class ChromeAppTCPSignaling extends SignalingChannel{
     
     
     TcpClient.createClient(c_host, c_port).then((TcpClient c) {
+      newEventsController.add(SignalingChannelEvents.NEW_OUTGOING_CONNECTION);
+      
         client = c;
         
         c.stream.listen((List<int> data){
@@ -75,7 +84,9 @@ class ChromeAppTCPSignaling extends SignalingChannel{
           newMessageController.add(new NewMessageEvent(msg));
           
         });
-      });
+      }).catchError((var error){
+        newEventsController.add(SignalingChannelEvents.NOT_ABLE_TO_LISTEN);
+    });
   }
   
   /**

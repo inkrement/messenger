@@ -25,3 +25,4 @@ part 'signaling/messagepassing.dart';
 part 'signaling/signalingchannel.dart';
 part 'signaling/jscallbacksignaling.dart';
 part 'signaling/chromeapptcpsignaling.dart';
+part 'signaling/signalingchannelevents.dart';

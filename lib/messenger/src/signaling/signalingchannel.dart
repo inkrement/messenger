@@ -13,7 +13,8 @@ part of messenger.signaling;
 
 abstract class SignalingChannel{
   StreamController<NewMessageEvent> newMessageController;
-  Completer<String> connection_completer = new Completer<String>();
+  final Completer<String> connection_completer = new Completer<String>();
+  StreamController<SignalingChannelEvents> newEventsController;
   
   /**
    * constructor
@@ -21,6 +22,7 @@ abstract class SignalingChannel{
   SignalingChannel(){
     ///init
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
+    newEventsController = new StreamController<SignalingChannelEvents>.broadcast();
   }
   
   /**
@@ -42,6 +44,12 @@ abstract class SignalingChannel{
    * listen for incoming messages
    */
   Stream get onReceive => newMessageController.stream;
+  
+  
+  /**
+   * listen for incoming messages
+   */
+  Stream get onEvent => newEventsController.stream;
   
   /**
    * close connection and free ressources
