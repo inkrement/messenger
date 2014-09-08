@@ -24,7 +24,9 @@ void main() {
   debug("start listening on local port " + local_tcp_port.toString());
   
   
-  messenger.SignalingChannel sc = new messenger.ChromeAppTCPSignaling()
+  messenger.ChromeAppTCPSignaling sc = new messenger.ChromeAppTCPSignaling(local_tcp_port);
+  
+  sc
   ..onEvent.listen((messenger.SignalingChannelEvents e){
     debug("new SignalingChannel event: " + e.name);
     
@@ -32,8 +34,10 @@ void main() {
       case messenger.SignalingChannelEvents.CONNECTED:
         break;
       case messenger.SignalingChannelEvents.LISTENING:
+        uiListenOnTCPPort(sc);
         break;
       case messenger.SignalingChannelEvents.NEW_INCOMING_CONNECTION:
+        uiNewTCPConnection(sc);
         break;
       case messenger.SignalingChannelEvents.NEW_OUTGOING_CONNECTION:
     }
@@ -45,6 +49,38 @@ void main() {
   //messenger.WebRtcDataChannel
 }
 
+
+
+
+//UI Button Events and functions
+
+void uiListenOnTCPPort(messenger.ChromeAppTCPSignaling sc){
+  querySelector("#info").setInnerHtml("listening on port " + sc.c_port.toString());
+}
+
+void uiNewTCPConnection(messenger.ChromeAppTCPSignaling sc){
+  querySelector("#tcp_connect_form").classes.add('hidden');
+  querySelector("#tcp_send").classes.remove('hidden');
+  querySelector("#tcp_send_button").onClick.listen((_){
+    debug("send tcp message");
+    
+    TextAreaElement txt = querySelector("#tcp_message");
+    sc.sendString(txt.value + "\n");
+    txt.value = "";
+  });
+}
+
+ /**
+  * host should be "127.0.0.1" - localhost will not work until it's enabled by Manifest
+  */
+void uiConnectToTCP(messenger.SignalingChannel sc, String host, String port){
+  sc.connect({"host":host, "port":port});
+}
+
+
+
+
+// app specific helpers
 void resizeWindow(MouseEvent event) {
   chrome.ContentBounds bounds = chrome.app.window.current().getBounds();
 
@@ -55,18 +91,3 @@ void resizeWindow(MouseEvent event) {
 
   boundsChange *= -1;
 }
-
-
-//UI Button Events and functions
-
-void uiListenOnTCPPort(int port){
-  querySelector("#info").setInnerHtml("listening on port " + port.toString());
-}
-
- /**
-  * host should be "127.0.0.1" - localhost will not work until it's enabled by Manifest
-  */
-void uiConnectToTCP(messenger.SignalingChannel sc, String host, String port){
-  sc.connect({"host":host, "port":port});
-}
-

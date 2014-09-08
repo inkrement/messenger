@@ -20,25 +20,27 @@ class ChromeAppTCPSignaling extends SignalingChannel{
   String l_host="127.0.0.1";
   TcpClient client = null;
   
-  ChromeAppTCPSignaling(){
+  ChromeAppTCPSignaling(int port){
     _log.finest('instantiate new ChromeAppTCPSignaling object');
     
     //test if api available
     if (!sockets.tcpServer.available)
       throw new ChromeApiNotAvailable('chrome socket API not available');
+    
+    c_port = port;
         
     newEventsController.add(SignalingChannelEvents.CREATED);
     
-    TcpServer.createServerSocket(37123).then((TcpServer s) {
+    TcpServer.createServerSocket(port).then((TcpServer s) {
       
       newEventsController.add(SignalingChannelEvents.LISTENING);
       
       s.onAccept.listen((TcpClient c){
+        client = c;
         
         newEventsController.add(SignalingChannelEvents.NEW_INCOMING_CONNECTION);
         
         c.stream.listen((List<int> data){
-          client = c;
           
           MessengerMessage msg = new MessengerMessage(UTF8.decode(data), MessageType.SIGNAL);
           newMessageController.add(new NewMessageEvent(msg));

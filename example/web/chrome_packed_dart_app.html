@@ -23,7 +23,7 @@
                 <div class="page-header">
   <h1>TCP signaling <span id="info" class="label label-success"></span></h1>
 </div>
-                <div class="row">
+                <div id="tcp_connect_form" class="row">
                     <div class="col-xs-2">
                         <label class="control-label">remote h.</label>
                     </div>
@@ -37,11 +37,11 @@
                         <button id="connect" class="btn btn-primary" type="button" >connect</button>
                     </div>
                 </div>
-                <div id="inputdiv" class="row">
+                <div id="tcp_send" class="row hidden">
                     <form role="form">
                         <label for="input">TCP-Message</label>
-                        <textarea id="input" class="form-control" rows="3" cols="40"></textarea>
-                        <button id="send" class="btn" type="submit">send</button>
+                        <textarea id="tcp_message" class="form-control" rows="3" cols="40"></textarea>
+                        <button id="tcp_send_button" class="btn" type="submit">send</button>
                     </form>
                 </div>
             </div>
