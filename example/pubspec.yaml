@@ -1,0 +1,9 @@
+name: example
+description: A sample Chrome packaged application
+dependencies:
+  chrome: any
+  logging: any
+  messenger:
+    path: ..
+transformers:
+- chrome

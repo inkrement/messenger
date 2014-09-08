@@ -1,0 +1,36 @@
+{
+  "name": "Chrome packed dart app",
+  "version": "1",
+  
+  "manifest_version": 2,
+  
+  "icons": {"128": "dart_icon.png"},
+  
+  "permissions": [
+        "<all_urls>", {
+            "socket": [
+                "tcp-listen:*:*",
+                "tcp-connect:*:*",
+                "udp-bind:*:*",
+                "udp-send-to:*:*"
+            ]
+        },
+        "http://*/*",
+        "https://*/*",
+        "http://127.0.0.1/*"
+    ],
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+   "sockets": {
+        "udp": {},
+        "tcp": {
+            "connect": "127.0.0.1:*"
+        },
+        "tcpServer": {
+            "listen": "127.0.0.1:*"
+        }
+    }
+}
