@@ -21,7 +21,7 @@ void main() {
   MessengerMessage tm_alice = new MessengerMessage(s_alice);
   
   //setup signaling channels and configure connection
-  ChromeAppTCPSignaling signalingChannel = new ChromeAppTCPSignaling();
+  ChromeAppTCPSignaling signalingChannel = new ChromeAppTCPSignaling(8756);
   
   /*
   signalingChannel.connect({

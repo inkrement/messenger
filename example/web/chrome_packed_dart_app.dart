@@ -21,6 +21,12 @@ void main() {
   int local_tcp_port = 37123;
   
   
+  
+  
+  
+  
+  
+  
   debug("start listening on local port " + local_tcp_port.toString());
   
   
@@ -45,6 +51,11 @@ void main() {
   ..onReceive.listen((messenger.NewMessageEvent e){
     debug("received: " + e.data.toString());
   });
+  
+  
+  querySelector("#tcp_connect").onClick.listen((_){
+    uiConnectToTCP(sc, '127.0.0.1', '8080');
+      });
  
   //messenger.WebRtcDataChannel
 }
@@ -74,10 +85,11 @@ void uiNewTCPConnection(messenger.ChromeAppTCPSignaling sc){
   * host should be "127.0.0.1" - localhost will not work until it's enabled by Manifest
   */
 void uiConnectToTCP(messenger.SignalingChannel sc, String host, String port){
+  debug("try to connect to tcp server");
+  
   sc.connect({"host":host, "port":port});
+  uiNewTCPConnection(sc);
 }
-
-
 
 
 // app specific helpers
