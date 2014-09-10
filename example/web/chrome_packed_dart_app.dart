@@ -32,6 +32,8 @@ void main() {
   
   messenger.ChromeAppTCPSignaling sc = new messenger.ChromeAppTCPSignaling(local_tcp_port);
   
+  messenger.WebRtcDataChannel dc = new messenger.WebRtcDataChannel(sc);
+  
   sc
   ..onEvent.listen((messenger.SignalingChannelEvents e){
     debug("new SignalingChannel event: " + e.name);
@@ -54,16 +56,21 @@ void main() {
   
   
   querySelector("#tcp_connect").onClick.listen((_){
-    uiConnectToTCP(sc, '127.0.0.1', '8080');
-      });
+    debug("try to connect to tcp server");
+    
+    //TODO: Future return-value (connect)
+    sc.connect({"host":uiGetTCPHost(), "port":uiGetTCPPort().toString()});
+    uiNewTCPConnection(sc);
+  });
  
-  //messenger.WebRtcDataChannel
+  
 }
 
 
 
-
+//
 //UI Button Events and functions
+//
 
 void uiListenOnTCPPort(messenger.ChromeAppTCPSignaling sc){
   querySelector("#info").setInnerHtml("listening on port " + sc.c_port.toString());
@@ -81,14 +88,15 @@ void uiNewTCPConnection(messenger.ChromeAppTCPSignaling sc){
   });
 }
 
- /**
-  * host should be "127.0.0.1" - localhost will not work until it's enabled by Manifest
-  */
-void uiConnectToTCP(messenger.SignalingChannel sc, String host, String port){
-  debug("try to connect to tcp server");
-  
-  sc.connect({"host":host, "port":port});
-  uiNewTCPConnection(sc);
+
+int uiGetTCPPort(){
+  InputElement ie = querySelector("#localport");
+  return int.parse(ie.value);
+}
+
+String uiGetTCPHost(){
+  InputElement ie = querySelector("#host");
+  return ie.value;
 }
 
 
