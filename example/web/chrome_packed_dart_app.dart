@@ -23,10 +23,6 @@ void main() {
   
   
   
-  
-  
-  
-  
   debug("start listening on local port " + local_tcp_port.toString());
   
   
@@ -62,6 +58,18 @@ void main() {
     sc.connect({"host":uiGetTCPHost(), "port":uiGetTCPPort().toString()});
     uiNewTCPConnection(sc);
   });
+  
+  querySelector("#tcp_close_button").onClick.listen((_){
+      debug("close tcp connection");
+      
+      //FIXME: reconnection possible. but "Future already completed" error on re-closing already closed sc.
+      sc.close();
+      uiCloseTCP();
+    });
+  
+  
+  
+  
  
   
 }
@@ -86,6 +94,11 @@ void uiNewTCPConnection(messenger.ChromeAppTCPSignaling sc){
     sc.sendString(txt.value + "\n");
     txt.value = "";
   });
+}
+
+void uiCloseTCP(){
+   querySelector("#tcp_connect_form").classes.remove('hidden');
+   querySelector("#tcp_send").classes.add('hidden');
 }
 
 
