@@ -42,6 +42,7 @@ void main() {
         break;
       case messenger.SignalingChannelEvents.NEW_INCOMING_CONNECTION:
         uiNewTCPConnection(sc);
+        dc.connect().then(initWebRTCConnection);
         break;
       case messenger.SignalingChannelEvents.NEW_OUTGOING_CONNECTION:
     }
@@ -55,6 +56,7 @@ void main() {
     debug("try to connect to tcp server");
     
     //TODO: Future return-value (connect)
+    dc.listen().then(initWebRTCConnection);
     sc.connect({"host":uiGetTCPHost(), "port":uiGetTCPPort().toString()});
     uiNewTCPConnection(sc);
   });
@@ -67,13 +69,12 @@ void main() {
       uiCloseTCP();
     });
   
-  
-  
-  
- 
-  
 }
 
+
+void initWebRTCConnection(int status){
+  debug("webrtc connection initated.. status: " + status.toString());
+}
 
 
 //
