@@ -26,8 +26,10 @@ class UDPProxyLogic implements ServerLogicInterface<String>{
       this._socketId = info.socketId;
       
       chrome.sockets.udp.onReceive.listen((chrome.ReceiveInfo data){
-        if (data.socketId == this._socketId)
+        if (data.socketId == this._socketId){
           c.complete(data.data.toString());
+          chrome.sockets.udp.close(this._socketId); 
+        }
       }).onError((Error e) => c.completeError(e));
       
       chrome.sockets.udp.bind(this._socketId, '0.0.0.0', 0).then((int result){
