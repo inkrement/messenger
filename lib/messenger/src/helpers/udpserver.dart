@@ -16,6 +16,8 @@ class UDPServer<T extends ServerLogicInterface>{
             chrome.sockets.udp.onReceive.listen((chrome.ReceiveInfo data){
               if (data.socketId == this._socketId)
                 _logic.response(data.data.toString()).then((String response) => sendString(data, response));
+              
+              
                 
                 //send data.data
             }).onError((Error e) {});
@@ -29,6 +31,8 @@ class UDPServer<T extends ServerLogicInterface>{
     }
     
     void sendString(chrome.ReceiveInfo remoteInfo, String message){
+      
+      //TODO: get remote address and port. check which socket id to use
       chrome.sockets.udp.send(remoteInfo.socketId, new chrome.ArrayBuffer.fromBytes(UTF8.encode(message)), 
           remoteInfo, this.port).then((chrome.SendInfo info){
       }).catchError((Error e) {});
