@@ -17,7 +17,8 @@
         },
         "http://*/*",
         "https://*/*",
-        "http://127.0.0.1/*"
+        "http://127.0.0.1/*",
+        "http://0.0.0.0/*"
     ],
   "app": {
     "background": {
@@ -27,10 +28,10 @@
    "sockets": {
         "udp": {},
         "tcp": {
-            "connect": "127.0.0.1:*"
+            "connect": "*:*"
         },
         "tcpServer": {
-            "listen": "127.0.0.1:*"
+            "listen": "*:*"
         }
     }
 }
