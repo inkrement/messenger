@@ -20,6 +20,7 @@ import 'package:chrome/chrome_app.dart' as chrome;
 export 'package:chrome/chrome_app.dart' show SocketInfo;
 
 const LOCAL_HOST = '127.0.0.1';
+const ALL_HOSTS = '0.0.0.0';
 
 bool _checkSocketsAvailable() => js.context['chrome']['sockets'] != null;
 
@@ -187,7 +188,7 @@ class TcpServer {
 
     return chrome.sockets.tcpServer.create().then((chrome.CreateInfo info) {
       int socketId = info.socketId;
-      return chrome.sockets.tcpServer.listen(socketId, LOCAL_HOST, port, 5).then((int result) {
+      return chrome.sockets.tcpServer.listen(socketId, ALL_HOSTS, port, 5).then((int result) {
         if (result < 0) {
           chrome.sockets.tcpServer.close(socketId);
           throw new SocketException('unable to listen on port ${port}: ${result}');
