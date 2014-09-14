@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:chrome/chrome_app.dart' as chrome;
 import 'package:messenger/messenger.dart' as messenger;
+import 'package:logging/logging.dart';
 
 
 int boundsChange = 100;
@@ -16,12 +17,16 @@ void debug(String str){
 }
 
 
+void debug_log_msg(LogRecord r){
+  print("${r.loggerName} ${r.level} ${r.message}");
+}
+
 void main() {
   debug("loading ...");
   int local_tcp_port = 37123;
   
-  
-  
+  Logger.root.level = Level.FINE;
+  Logger.root.onRecord.listen(debug_log_msg);
   
   debug("start listening on local port " + local_tcp_port.toString());
   
