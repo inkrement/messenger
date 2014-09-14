@@ -33,8 +33,8 @@ class UDPServer<T extends ServerLogicInterface>{
     void sendString(chrome.ReceiveInfo remoteInfo, String message){
       
       //TODO: get remote address and port. check which socket id to use
-      chrome.sockets.udp.send(remoteInfo.socketId, new chrome.ArrayBuffer.fromBytes(UTF8.encode(message)), 
-          remoteInfo, this.port).then((chrome.SendInfo info){
-      }).catchError((Error e) {});
+     // chrome.sockets.udp.send(remoteInfo.socketId, new chrome.ArrayBuffer.fromBytes(UTF8.encode(message)), 
+      //    remoteInfo, this.port).then((chrome.SendInfo info){
+     // }).catchError((Error e) {});
     }
 }
