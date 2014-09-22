@@ -31,8 +31,6 @@ class Peer{
   ///name of this peer instance
   String name;
   
-  Level _loglevel;
-  
   ///new message event stream
   StreamController<NewMessageEvent> newMessageController;
   
@@ -50,21 +48,13 @@ class Peer{
    * constuctor
    * 
    */
-  Peer([String name="", Level loglevel=Level.WARNING]){
+  Peer([String name=""]){
     //set name of this peer instance
     this.name = (name.length < 1)?"peer" + (++num).toString():name; 
     
     //is name is unique?
     if(peers.contains(this))
       throw new StateError("peer with name ${this.name} already exists!");
-    
-    //setup logger
-    hierarchicalLoggingEnabled = true;
-    _log = new Logger("Peer.${this.runtimeType}.${this.name}");
-    _log.level = loglevel;   
-    _log.onRecord.listen((LogRecord rec) {
-      print('${rec.loggerName} (${rec.level.name}): ${rec.message}');
-    });
     
     //init
     newMessageController = new StreamController<NewMessageEvent>.broadcast();
@@ -76,7 +66,6 @@ class Peer{
     connection_completer = new Completer<String>();
     
     _log.info("new peer: #${num.toString()} ${this.name} ");
-    _loglevel = loglevel;
 
     peers.add(this);
   }
