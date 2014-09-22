@@ -38,6 +38,10 @@ class MessageType{
     return JSON.encode(result);
   }
   
+  String toString(){
+    return name;
+  }
+  
   /**
    * deserialize MessageType
    */
