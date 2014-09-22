@@ -87,6 +87,7 @@ class ChromeAppTCPSignaling extends SignalingChannel{
           
         });
       }).catchError((var error){
+        _log.warning(error.toString());
         newEventsController.add(SignalingChannelEvents.NOT_ABLE_TO_LISTEN);
     });
   }
