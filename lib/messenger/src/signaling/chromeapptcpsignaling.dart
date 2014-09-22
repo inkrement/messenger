@@ -10,7 +10,7 @@ part of messenger.signaling;
 
 class ChromeAppTCPSignaling extends SignalingChannel{
   static final String TAG = 'ChromeAppTCPSignaling';
-  static final Logger _log = new Logger("ChromeAppTCPSignaling");
+  static final Logger _log = new Logger("messenger.signaling.ChromeAppTCPSignaling");
   int start_port = 8543;
   int max_attempts = 10;
   int socketId;
@@ -42,7 +42,7 @@ class ChromeAppTCPSignaling extends SignalingChannel{
         
         c.stream.listen((List<int> data){
           
-          MessengerMessage msg = new MessengerMessage(UTF8.decode(data), MessageType.SIGNAL);
+          MessengerMessage msg = MessengerMessage.fromString(UTF8.decode(data));
           newMessageController.add(new NewMessageEvent(msg));
           
         });
