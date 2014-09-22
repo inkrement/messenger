@@ -59,6 +59,18 @@ void main() {
     debug("received: " + e.data.toString());
   });
   
+  dc.onStateChange.listen((messenger.ConnectionState cs){
+    uiSetWEBRTCStatus(cs.name.toLowerCase());
+    
+    if(cs == messenger.ConnectionState.CONNECTED){
+      dc.sendString("first webrtc message");
+    }
+  });
+  
+  dc.onMessage.listen((messenger.NewMessageEvent ev){
+    debug("received first webrtc message :" + ev.getMessage().getContent());
+  });
+  
   
   querySelector("#tcp_connect").onClick.listen((_){
     debug("try to connect to tcp server");
@@ -121,6 +133,10 @@ String uiGetTCPHost(){
   return ie.value;
 }
 
+
+uiSetWEBRTCStatus (String status){
+  querySelector("#rtcstatus").setInnerHtml(status);
+}
 
 // app specific helpers
 void resizeWindow(MouseEvent event) {

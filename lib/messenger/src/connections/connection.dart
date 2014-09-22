@@ -104,6 +104,11 @@ abstract class Connection{
     _sendController.add(msg);
   }
   
+  sendString(String message){
+    MessengerMessage msg = new MessengerMessage(message, MessageType.STRING);
+    send(msg);
+  }
+  
   /**
    * 
    */
