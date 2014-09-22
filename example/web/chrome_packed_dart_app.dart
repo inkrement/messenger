@@ -25,8 +25,11 @@ void main() {
   debug("loading ...");
   int local_tcp_port = 37123;
   
-  Logger.root.level = Level.FINE;
-  Logger.root.onRecord.listen(debug_log_msg);
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    print('${rec.level.name}: ${rec.time}: ${rec.loggerName}: ${rec.message}');
+  });
+  //Logger.root.onRecord.listen(debug_log_msg);
   
   debug("start listening on local port " + local_tcp_port.toString());
   

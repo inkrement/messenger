@@ -10,6 +10,7 @@ part of messenger.message;
  * some sort of enumeration
  */
 class MessageType{
+  static final Logger _log = new Logger("messenger.message.MessageType");
   final String name;
   final int value;
   
@@ -46,9 +47,11 @@ class MessageType{
    * deserialize MessageType
    */
   factory MessageType.fromString(String data) {
-    if (data == null) return null;
+    if (data == null) throw new Exception("can not create messagetype from null");
     
     final Map<String, String> json = JSON.decode(data);
+    
+    _log.info("json name enthält das: " + json["name"] );
     
     switch(json["name"]){
       case "DC_CONNECTING":

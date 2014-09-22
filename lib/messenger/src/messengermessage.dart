@@ -7,6 +7,7 @@
 library messenger.message;
 
 import 'dart:convert';
+import 'package:logging/logging.dart';
 
 part 'message/messagetype.dart';
 
@@ -20,6 +21,7 @@ class MessengerMessage{
     return _mtype.toString() + " (" + _msg + ")";
   }
   
+  String getContent() => _msg;
   MessageType getMessageType() => _mtype;
   
   static Object serialize(MessengerMessage value) {

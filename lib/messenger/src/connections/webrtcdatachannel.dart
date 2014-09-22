@@ -82,12 +82,14 @@ class WebRtcDataChannel extends Connection{
    * gotSignalingMessage callback
    */
   gotSignalingMessage(NewMessageEvent mevent){
+    
+    
     switch(mevent.getMessage().getMessageType()){
       case MessageType.ICE_CANDIDATE:
         _log.finest("got ice candidate");
         
         //deserialize
-        RtcIceCandidate iceCandidate = new RtcIceCandidate(JSON.decode(mevent.getMessage().toString()));
+        RtcIceCandidate iceCandidate = new RtcIceCandidate(JSON.decode(mevent.getMessage().getContent()));
         
         //add candidate
         _rpc.addIceCandidate(iceCandidate,
@@ -99,7 +101,7 @@ class WebRtcDataChannel extends Connection{
       case MessageType.WEBRTC_OFFER:
         _log.fine("received sdp offer");
         
-        final Map sdp_map = JSON.decode(mevent.getMessage().toString());
+        final Map sdp_map = JSON.decode(mevent.getMessage().getContent());
         
         //_log.fine("sdp_offer: " + sdp_map.toString());
 
@@ -116,9 +118,7 @@ class WebRtcDataChannel extends Connection{
       case MessageType.WEBRTC_ANSWER:
         _log.fine("received sdp answer");
         
-        final Map sdp_map = JSON.decode(mevent.getMessage().toString());
-        
-        //_log.fine("sdp_offer: " + sdp_map.toString());
+        final Map sdp_map = JSON.decode(mevent.getMessage().getContent());
 
         //deserialize
         RtcSessionDescription sdp = new RtcSessionDescription(sdp_map);
