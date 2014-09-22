@@ -7,8 +7,8 @@
 library messenger.events;
 
 import 'dart:html';
-import 'message.dart';
-export 'message.dart';
+import 'messengermessage.dart';
+export 'messengermessage.dart';
 
 //only import connection class
 import 'connections.dart';

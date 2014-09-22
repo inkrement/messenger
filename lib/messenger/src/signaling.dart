@@ -11,7 +11,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:js';
 import 'exceptions.dart';
-import 'message.dart';
+import 'messengermessage.dart';
 import 'helpers/tcphelpers.dart';
 
 import 'package:logging/logging.dart';
