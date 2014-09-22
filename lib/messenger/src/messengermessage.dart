@@ -17,7 +17,7 @@ class MessengerMessage{
   MessengerMessage(String this._msg, [MessageType this._mtype = MessageType.STRING]);
   
   String toString(){
-    return _msg;
+    return _mtype.toString() + " (" + _msg + ")";
   }
   
   MessageType getMessageType() => _mtype;
