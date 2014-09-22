@@ -16,7 +16,7 @@ class WebRtcDataChannel extends Connection{
   //RTCDataChannel options
   Map _dcOptions = {};
   
-  static final _log = new Logger("messenger.JsDataChannelConnection");
+  static final _log = new Logger("messenger.connections.WebRtcDataChannel");
   
   //JavaScript Proxy of RTCPeerConnection
   RtcPeerConnection _rpc;
@@ -130,7 +130,7 @@ class WebRtcDataChannel extends Connection{
         break;
         
       default:
-        _log.info("New undefined signaling channel message");
+        _log.info("New undefined signaling channel message: " + mevent.getMessage().toString());
         break;
     }
   }
