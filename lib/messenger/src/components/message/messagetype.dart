@@ -46,7 +46,7 @@ class MessageType{
   /**
    * deserialize MessageType
    */
-  factory MessageType.fromString(String data) {
+  factory MessageType.deserialize(String data) {
     if (data == null) throw new Exception("can not create messagetype from null");
     
     final Map<String, String> json = JSON.decode(data);

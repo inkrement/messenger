@@ -7,6 +7,8 @@
 library messenger.message;
 
 import 'dart:convert';
+import 'dart:html';
+
 import 'package:logging/logging.dart';
 
 part 'message/messagetype.dart';
@@ -24,22 +26,23 @@ class MessengerMessage{
   String getContent() => _msg;
   MessageType getMessageType() => _mtype;
   
-  static Object serialize(MessengerMessage value) {
+  static String serialize(MessengerMessage value) {
     if (value == null) return null;
     
     final Map<String, String>result = {};
-    result["msg"] = value._msg;
+    result["msg"] = window.btoa(value._msg);
     result["mtype"] = MessageType.serialize(value._mtype);
     
     return JSON.encode(result);
   }
   
-  static MessengerMessage fromString(String data){
+  static MessengerMessage deserialize(String data){
     if (data == null) return null;
     
-    Map<String, String> json = JSON.decode(data);
+    String base64 = window.atob(data);
+    Map<String, String> json = JSON.decode(base64);
     
-    return new MessengerMessage(json["msg"], new MessageType.fromString(json["mtype"]));
+    return new MessengerMessage(json["msg"], new MessageType.deserialize(json["mtype"]));
   }
   
 }
