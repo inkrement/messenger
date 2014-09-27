@@ -12,3 +12,6 @@ dependencies:
 dev_dependencies:
   logging: any
   unittest: any
+transformers: 
+- $dart2js: 
+    csp: true

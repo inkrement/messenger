@@ -10,16 +10,16 @@ library messenger.signaling;
 import 'dart:convert';
 import 'dart:async';
 import 'dart:js';
-import 'exceptions.dart';
-import 'messengermessage.dart';
+import 'components/exceptions.dart';
+import 'components/messengermessage.dart';
 import 'helpers/tcphelpers.dart';
 
 import 'package:logging/logging.dart';
 import 'package:chrome/chrome_app.dart';
 
 
-import 'events.dart';
-export 'events.dart';
+import 'components/events.dart';
+export 'components/events.dart';
 
 part 'signaling/messagepassing.dart';
 part 'signaling/signalingchannel.dart';
