@@ -25,6 +25,12 @@ Build
 
 To build the library just run `build.sh`.
 
+Try it out
+----------
+
+It's very easy to try it out. All you need is a dart installation for building and a chrome browser. 
+Open the console, jump into the subfolder `example` and build the application by running `pub build`. 
+Now you have to open your browser, go to the extention-manager and install a unpacked application (you have to choose the subfolder `example/build/web`).
 
 Links
 =====
