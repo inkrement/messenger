@@ -31,7 +31,7 @@ class MessengerMessage{
     if (value == null) return null;
     
     final Map<String, String>result = {};
-    result["msg"] = window.btoa(value._msg);
+    result["msg"] = value._msg;//window.btoa(value._msg);
     result["mtype"] = MessageType.serialize(value._mtype);
     
     String json = JSON.encode(result);
@@ -47,9 +47,10 @@ class MessengerMessage{
     _log.finest("deserializer: " + data);
     
     Map<String, String> json = JSON.decode(data);
-    String base64_msg = window.atob(json["msg"]);
+    //String base64_msg = window.atob(json["msg"]);
+    String msg = json["msg"];
     
-    return new MessengerMessage(base64_msg, MessageType.deserialize(json["mtype"]));
+    return new MessengerMessage(msg, MessageType.deserialize(json["mtype"]));
   }
   
 }
