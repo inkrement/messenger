@@ -5,11 +5,12 @@ export 'messenger/src/peer.dart';
 
 class Messenger{
   static final Peer _peer = new Peer("local peer");
-  static final Messenger _msgr=new Messenger._init();
+  static Messenger _msgr;
   
   Messenger._init();
   
   factory Messenger(){
+    if (_msgr == null) _msgr=new Messenger._init();
     return _msgr;
   }
 }

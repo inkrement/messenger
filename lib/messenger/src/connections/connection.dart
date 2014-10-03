@@ -99,7 +99,7 @@ abstract class Connection{
    * pipe message 
    */
   send(MessengerMessage msg){
-    _log.fine("new message added to buffer");
+    _log.fine("new message added to buffer: " + msg.getContent());
     
     _sendController.add(msg);
   }

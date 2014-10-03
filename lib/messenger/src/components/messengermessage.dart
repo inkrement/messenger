@@ -39,10 +39,10 @@ class MessengerMessage{
   static MessengerMessage deserialize(String data){
     if (data == null) return null;
     
-    String base64 = window.atob(data);
-    Map<String, String> json = JSON.decode(base64);
+    Map<String, String> json = JSON.decode(data);
+    String base64_msg = window.atob(json["msg"]);
     
-    return new MessengerMessage(json["msg"], new MessageType.deserialize(json["mtype"]));
+    return new MessengerMessage(base64_msg, new MessageType.deserialize(json["mtype"]));
   }
   
 }
