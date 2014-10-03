@@ -42,7 +42,7 @@ class ChromeAppTCPSignaling extends SignalingChannel{
         
         c.stream.listen((List<int> data){
           
-          MessengerMessage msg = MessengerMessage.fromString(UTF8.decode(data));
+          MessengerMessage msg = MessengerMessage.deserialize(UTF8.decode(data));
           _log.info("new Signaling Message: " + msg.toString());
           newMessageController.add(new NewMessageEvent(msg));
           
@@ -83,7 +83,7 @@ class ChromeAppTCPSignaling extends SignalingChannel{
         
         c.stream.listen((List<int> data){
           
-          MessengerMessage msg = MessengerMessage.fromString(UTF8.decode(data));
+          MessengerMessage msg = MessengerMessage.deserialize(UTF8.decode(data));
           _log.info("new Signaling Message: " + msg.toString());
           newMessageController.add(new NewMessageEvent(msg));
           

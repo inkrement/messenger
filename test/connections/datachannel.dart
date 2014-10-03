@@ -17,7 +17,7 @@ void main() {
      * RTCPeerConnection
      */
     test('JSWebrtc create components',(){
-      Peer alice = new Peer("alice", llevel);
+      Peer alice = new Peer("alice");
       MessagePassing alice_sc = new MessagePassing();
       WebRtcDataChannel alice_cn = new WebRtcDataChannel(alice_sc);
     });
@@ -28,7 +28,7 @@ void main() {
      * Therefore readyState is initialized with "none"
      */
     test('WebRTC datachannel status',(){
-      Peer alice = new Peer("alice", llevel);
+      Peer alice = new Peer("alice");
   
       expect(alice.countConnections(), 0);
       
@@ -46,8 +46,8 @@ void main() {
     test('WebRTC connect',(){
       
       
-      Peer alice = new Peer("alice_c", llevel);
-      Peer bob = new Peer("bob_c", llevel);
+      Peer alice = new Peer("alice_c");
+      Peer bob = new Peer("bob_c");
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
@@ -73,8 +73,8 @@ void main() {
      */
     
     test('check connection etablishment', (){
-      Peer alice = new Peer("alice_ce", llevel);
-      Peer bob = new Peer("bob_ce", llevel);
+      Peer alice = new Peer("alice_ce");
+      Peer bob = new Peer("bob_ce");
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
@@ -105,8 +105,8 @@ void main() {
      */
     
     test('check connection management', (){
-      Peer alice = new Peer("alice_ccm", llevel);
-      Peer bob = new Peer("bob_ccm", llevel);
+      Peer alice = new Peer("alice_ccm");
+      Peer bob = new Peer("bob_ccm");
       
       //setup signaling channel
       MessagePassing alice_sc = new MessagePassing();
@@ -135,9 +135,9 @@ void main() {
     group('multi connections', (){
       
       test('three connections at the same time', (){
-        Peer alice = new Peer("alice_m3", llevel);
-        Peer bob = new Peer("bob_m3", llevel);
-        Peer clark = new Peer("clark_m3", llevel);
+        Peer alice = new Peer("alice_m3");
+        Peer bob = new Peer("bob_m3");
+        Peer clark = new Peer("clark_m3");
         
         //setup signaling channels
         MessagePassing alice_bob_sc = new MessagePassing();
@@ -212,9 +212,9 @@ void main() {
           print('${rec.level.name}: ${rec.time}: ${rec.message}');
         });
         
-        Peer alice = new Peer("alice_s3", llevel);
-        Peer bob = new Peer("bob_s3", llevel);
-        Peer clark = new Peer("clark_s3", llevel);
+        Peer alice = new Peer("alice_s3");
+        Peer bob = new Peer("bob_s3");
+        Peer clark = new Peer("clark_s3");
         
         //setup signaling channels
         MessagePassing alice_bob_sc = new MessagePassing();

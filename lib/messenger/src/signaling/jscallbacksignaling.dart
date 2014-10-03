@@ -12,7 +12,7 @@ class JSCallbackSignaling extends SignalingChannel{
   
   
   void recCallback(String message){
-      newMessageController.add(new NewMessageEvent(MessengerMessage.fromString(message)));
+      newMessageController.add(new NewMessageEvent(MessengerMessage.deserialize(message)));
     }
   
   /**
