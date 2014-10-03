@@ -16,6 +16,7 @@ part 'message/messagetype.dart';
 class MessengerMessage{
   final String _msg;
   final MessageType _mtype;
+  static final Logger _log = new Logger("MessengerMessage");
   
   MessengerMessage(String this._msg, [MessageType this._mtype = MessageType.STRING]);
   
@@ -33,21 +34,22 @@ class MessengerMessage{
     result["msg"] = window.btoa(value._msg);
     result["mtype"] = MessageType.serialize(value._mtype);
     
-    return JSON.encode(result);
+    String json = JSON.encode(result);
+    
+    _log.finest("serialize:" + value.toString() + "to:" + json);
+    
+    return json;
   }
   
   static MessengerMessage deserialize(String data){
     if (data == null) return null;
     
+    _log.finest("deserializer: " + data);
+    
     Map<String, String> json = JSON.decode(data);
     String base64_msg = window.atob(json["msg"]);
     
-    return new MessengerMessage(base64_msg, new MessageType.deserialize(json["mtype"]));
+    return new MessengerMessage(base64_msg, MessageType.deserialize(json["mtype"]));
   }
   
 }
-
-//result.nextPageToken = identity();
-//result.items = map(Event.parse)(json["items"]);
-//result.kind = identity(json["kind"]);
-
