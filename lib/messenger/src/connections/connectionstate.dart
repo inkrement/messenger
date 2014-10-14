@@ -9,8 +9,6 @@
  *  ERROR: Connection is not usable. 
  *  CLOSED: Connection is closed.
  *  
- *  @ TODO: rename class
- *  
  *  @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
  */
 

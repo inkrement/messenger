@@ -9,7 +9,6 @@ library messenger.signaling;
 
 import 'dart:convert';
 import 'dart:async';
-import 'dart:js';
 import 'components/exceptions.dart';
 import 'components/messengermessage.dart';
 import 'helpers/tcphelpers.dart';
@@ -23,6 +22,5 @@ export 'components/events.dart';
 
 part 'signaling/messagepassing.dart';
 part 'signaling/signalingchannel.dart';
-part 'signaling/jscallbacksignaling.dart';
 part 'signaling/chromeapptcpsignaling.dart';
 part 'signaling/signalingchannelevents.dart';

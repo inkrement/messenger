@@ -1,10 +1,12 @@
+library messenger.message;
+
 /**
- * class Message
+ * MessengerMessage
+ * 
+ * represents a single Message object within this messenger library
  * 
  * @author Christian Hotz-Behofsits <chris.hotz.behofsits@gmail.com>
  */
-
-library messenger.message;
 
 import 'dart:convert';
 import 'dart:html';

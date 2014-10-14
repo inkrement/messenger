@@ -1,5 +1,9 @@
 library messenger.exceptions;
 
+/**
+ * This library includes all custom exceptions
+ */
+
 part 'exceptions/chromeapinotavailable.dart';
 part 'exceptions/toomanyconnectionattempts.dart';
 part 'exceptions/notconnected.dart';

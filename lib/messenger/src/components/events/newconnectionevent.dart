@@ -23,22 +23,10 @@ class NewConnectionEvent implements Event{
   var target;
   var matchingTarget;
   var timeStamp;
-  
-  /**
-   * @ TODO: implement
-   */
-  void stopImmediatePropagation(){}
-  
-  /**
-   * @ TODO: implement
-   */
+
   void preventDefault(){}
-  
-  /**
-   * @ TODO: implement
-   */
   void stopPropagation(){}
-  
+  stopImmediatePropagation(){}
   final Connection data;
   
   NewConnectionEvent(Connection this.data);

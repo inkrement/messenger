@@ -12,11 +12,6 @@ import 'dart:async';
 import 'connections.dart';
 export 'connections.dart';
 
-/*
- * @todo: 
- *  * ready Status enum instead of string
- */
-
 class Peer{
   ///root logging object
   static final Logger parent_log = new Logger("Peer");
@@ -238,8 +233,7 @@ class Peer{
    * shutdow specific connection
    */
   disconnect(Connection c){
-    //TODO: abort rtc connection
-    //close Datachannel
+    c.close();
     
     _connections.remove(c);
   }
@@ -247,9 +241,7 @@ class Peer{
   
   
   /**
-   * close all connection
-   * 
-   * TODO: implementation
+   * close all connections
    */
   close(){
     
@@ -258,7 +250,6 @@ class Peer{
     });
     
     //run garbage collector
-    
     _gc();
   }
   
