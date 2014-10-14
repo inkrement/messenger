@@ -10,13 +10,8 @@ part of messenger.signaling;
 
 class ChromeAppTCPSignaling extends SignalingChannel{
   static final Logger _log = new Logger("messenger.signaling.ChromeAppTCPSignaling");
-  int start_port = 8543;
-  int max_attempts = 10;
-  int socketId;
-  int connection_socket_id = -1;
   int c_port;
   String c_host="127.0.0.1";
-  String l_host="127.0.0.1";
   TcpClient client = null;
   
   ChromeAppTCPSignaling(int port){
