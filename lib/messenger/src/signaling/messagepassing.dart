@@ -40,10 +40,11 @@ class MessagePassing extends SignalingChannel{
   
   /**
    * close
+   * 
+   * closes this message-passing communication channel
    */
   close(){
-    //TODO: close newMessageController
-    
+    newMessageController.close();
     connection_completer.complete("connection closed");
   }
   
