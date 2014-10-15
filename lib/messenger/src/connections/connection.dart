@@ -25,7 +25,7 @@ abstract class Connection{
   final StreamController<MessengerMessage> _sendController;
   
   
-  static final _log = new Logger("messenger.Connection");
+  static final _log = new Logger("messenger.connections.Connection");
   
   //completer for connection
   //TODO: maybe one. only one will be used

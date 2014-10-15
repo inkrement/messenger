@@ -18,7 +18,7 @@ part 'message/messagetype.dart';
 class MessengerMessage{
   final String _msg;
   final MessageType _mtype;
-  static final Logger _log = new Logger("MessengerMessage");
+  static final Logger _log = new Logger("messenger.message.MessengerMessage");
   
   MessengerMessage(String this._msg, [MessageType this._mtype = MessageType.STRING]);
   
@@ -38,15 +38,13 @@ class MessengerMessage{
     
     String json = JSON.encode(result);
     
-    _log.finest("serialize:" + value.toString() + "to:" + json);
+    _log.finest("serialized following MessengerMessage:" + value.toString() + "to:" + json);
     
     return json;
   }
   
   static MessengerMessage deserialize(String data){
     if (data == null) return null;
-    
-    _log.finest("deserializer: " + data);
     
     Map<String, String> json = JSON.decode(data);
     //String base64_msg = window.atob(json["msg"]);

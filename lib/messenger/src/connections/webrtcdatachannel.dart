@@ -29,8 +29,6 @@ class WebRtcDataChannel extends Connection{
    */
 
   WebRtcDataChannel(SignalingChannel sc):super(sc), _dc=null{
-
-    _log.finest("created PeerConnection");
     
     /* create RTCPeerConnection */
     _rpc = new RtcPeerConnection(iceServers);
@@ -40,7 +38,7 @@ class WebRtcDataChannel extends Connection{
      */
     
     _rpc.onDataChannel.listen((RtcDataChannelEvent event){
-      _log.info("datachannel received");
+      _log.fine("incoming RtcDataChannel invitation received");
       
       //set RTCDataChannel
       _dc = event.channel;
@@ -51,7 +49,7 @@ class WebRtcDataChannel extends Connection{
       
       //onMessage
       _dc.onMessage.listen((MessageEvent event){
-        _log.finest("Message received from DataChannel");
+        _log.fine("Message received from RtCDataChannel");
         
         _newMessageController.add(new NewMessageEvent(MessengerMessage.deserialize(event.data)));
       });
@@ -69,8 +67,11 @@ class WebRtcDataChannel extends Connection{
             );
       });
       
-      //onError TODO: error state!
-      _dc.onError.listen((x)=>_log.shout("rtc error callback: " + x.toString()));
+      _dc.onError.listen((x){
+        _log.shout("RtcDatachannel error occured: " + x.toString());
+        _setCommunicationState(ConnectionState.ERROR);
+        this.close();
+      });
       
       //set state to current DC_State
       _setCommunicationState(new ConnectionState.fromRTCDataChannelState(_dc.readyState));
@@ -83,10 +84,9 @@ class WebRtcDataChannel extends Connection{
    */
   gotSignalingMessage(NewMessageEvent mevent){
     
-    
     switch(mevent.getMessage().getMessageType()){
       case MessageType.ICE_CANDIDATE:
-        _log.finest("got ice candidate");
+        _log.fine("new ICE Candidate received");
         
         //deserialize
         RtcIceCandidate iceCandidate = new RtcIceCandidate(JSON.decode(mevent.getMessage().getContent()));
@@ -99,24 +99,26 @@ class WebRtcDataChannel extends Connection{
       
       /** create answer **/
       case MessageType.WEBRTC_OFFER:
-        _log.fine("received sdp offer");
+        _log.fine("new SDP offer received");
         
         final Map sdp_map = JSON.decode(mevent.getMessage().getContent());
-        
-        //_log.fine("sdp_offer: " + sdp_map.toString());
 
         //deserialize
         RtcSessionDescription sdp = new RtcSessionDescription(sdp_map);
         
         _rpc.setRemoteDescription(sdp).then((_){
           createAnswer();
-        }).catchError((e)=>_log.shout("create answer: " + e.toString()));
+        }).catchError((e){
+          _log.shout("Not able to set remote SDP(-offer) description: " + e.toString());
+          _setCommunicationState(ConnectionState.ERROR);
+          this.close();
+        });
         
         break;
         
       /** finish **/
       case MessageType.WEBRTC_ANSWER:
-        _log.fine("received sdp answer");
+        _log.fine("new SDP answer received");
         
         final Map sdp_map = JSON.decode(mevent.getMessage().getContent());
 
@@ -124,14 +126,19 @@ class WebRtcDataChannel extends Connection{
         RtcSessionDescription sdp = new RtcSessionDescription(sdp_map);
         
         _rpc.setRemoteDescription(sdp).then((_){
-                  createAnswer();
-                }).catchError((e)=>_log.shout("finish connection establishment" + e.toString()));
+            createAnswer();
+          }).catchError((e){
+          _log.shout("not able to set remote sdp(-answer) description" + e.toString());
+          _setCommunicationState(ConnectionState.ERROR);
+          this.close();
+        });
         
         break;
         
       default:
-        _log.info("New undefined signaling channel message: " + mevent.getMessage().toString());
-        break;
+        _log.shout("new undefined signaling channel message received: " + mevent.getMessage().toString());
+        _setCommunicationState(ConnectionState.ERROR);
+        this.close();
     }
   }
   
@@ -142,7 +149,7 @@ class WebRtcDataChannel extends Connection{
    */
   createAnswer(){
     _rpc.createAnswer().then((RtcSessionDescription sdp_answer){
-      _log.finest("created sdp answer");
+      _log.fine("create new SDP answer");
       
       _rpc.setLocalDescription(sdp_answer);
       
@@ -155,8 +162,11 @@ class WebRtcDataChannel extends Connection{
       //send ice candidate to other peer
       _sc.send(new MessengerMessage(jsonString, MessageType.WEBRTC_ANSWER));
       
-      _log.fine("sdp answer sent");
-    }).catchError((e)=>_log.shout("could not create answer"));
+    }).catchError((e){
+      _log.shout("not able create SDP answer: " + e.toString());
+      _setCommunicationState(ConnectionState.ERROR);
+      this.close();
+    });
   }
   
   /**
@@ -167,7 +177,7 @@ class WebRtcDataChannel extends Connection{
    * @return Future
    */
   Future<int> listen(){
-    _log.finest("start listening");
+    _log.info("start listening");
     
     //process all incoming signaling messages
     _sc.onReceive.listen(gotSignalingMessage);
@@ -176,13 +186,12 @@ class WebRtcDataChannel extends Connection{
      * New IceCandidate Callback
      */
     _rpc.onIceCandidate.listen((RtcIceCandidateEvent event) {
-      _log.finest("new ice candidate received");
+      _log.fine("new ice candidate received");
       
       if(event.candidate != null){
         RtcIceCandidate ic = event.candidate;
         
         try{
-          
           //serialize ice candidate
           final String serializedIceCandidate = JSON.encode(
               {
@@ -197,11 +206,9 @@ class WebRtcDataChannel extends Connection{
           
           _log.fine("new ice candidate serialized and sent to other peer");
         } catch(e){
-          _log.warning("bob error: could not add ice candidate " + e.toString());
+          _log.shout("not able to send ice candidate to other peer" + e.toString());
         }
-        
       }
-        
     });
     
     return _listen_completer.future;
@@ -215,7 +222,7 @@ class WebRtcDataChannel extends Connection{
    * @return Future
    */
   Future<int> connect(){
-    _log.finest("try to connect");
+    _log.info("connect to other peer");
     
     //listen for incoming connection
     listen();
@@ -226,7 +233,7 @@ class WebRtcDataChannel extends Connection{
     
     try {
       _dc = _rpc.createDataChannel("sendDataChannel", _dcOptions);
-      _log.finest('created new data channel');
+      _log.fine('created new rtcdatachannel');
       
       /*
        * RTCDataChannel callbacks
@@ -248,28 +255,23 @@ class WebRtcDataChannel extends Connection{
       //onMessage
       
       _dc.onMessage.listen((MessageEvent event){
-        _log.finest("Message received from DataChannel");
+        _log.fine("Message received from DataChannel");
         
         _newMessageController.add(new NewMessageEvent(MessengerMessage.deserialize(event.data)));
       });
-      
-      //TODO: onERROR
       
       /*
        * create SDP OFFER of RTCPeerConnection
        */
       _rpc.createOffer().then(( sdp_offer){
-        _log.finest("create sdp offer");
+        _log.fine("create sdp offer");
         
         _rpc.setLocalDescription(sdp_offer);
-        
-        //serialize
-        _log.finest("create map");
         
         final Map sdp_map = {"sdp":sdp_offer.sdp, "type":sdp_offer.type};
         final String sdp_string = JSON.encode(sdp_map);
         
-        _log.finest("sdp_string: " + sdp_string);
+        _log.finest("serialized SDP message: " + sdp_string);
         
         //send serialized string to other peer
         _sc.send(new MessengerMessage(sdp_string, MessageType.WEBRTC_OFFER));
@@ -278,6 +280,8 @@ class WebRtcDataChannel extends Connection{
 
     } catch (e) {
       _connection_completer.completeError("could not complete connect: ${e}", e.stackTrace);
+      _setCommunicationState(ConnectionState.ERROR);
+      this.close();
     }
     
     return _connection_completer.future;
@@ -298,7 +302,7 @@ class WebRtcDataChannel extends Connection{
       throw new StateError("could not send message. DataChannel is not open!");
     
     _sendController.stream.listen((MessengerMessage msg){
-      _log.info("send message to : ${_sc.id.toString()}");
+      _log.finer("send message to : ${_sc.id.toString()}");
       
       _dc.send(MessengerMessage.serialize(msg));
     });
